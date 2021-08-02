@@ -1,0 +1,9 @@
+body {
+  background-color: grey;
+}
+
+#textBox {
+  background-color: darkslategray;
+  color: aqua;
+  font-size: 12px;
+}

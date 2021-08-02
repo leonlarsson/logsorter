@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <!-- Thanks to Zobtzler for the RegEx guidance -->
+  <!-- Thanks to the creator of FileSaver.js and the countless Stack Overflow threads re-teaching me JavaScript -->
+
+  <!-- Primary Meta Tags -->
+  <title>Mozzy's Log Sorter</title>
+  <meta name="title" content="Mozzy's Log Sorter">
+  <meta name="description" content="A website used for extracting Discord IDs from raw logs.">
+  <meta name="theme-color" content="#7289da">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://leonlarsson.com/projects/logsorter/">
+  <meta property="og:title" content="Mozzy's Log Sorter">
+  <meta property="og:description" content="A website used for extracting Discord IDs from raw logs.">
+  <meta property="og:image" content="https://leonlarsson.com/projects/logsorter/assets/images/embed.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://leonlarsson.com/projects/logsorter/">
+  <meta property="twitter:title" content="Mozzy's Log Sorter">
+  <meta property="twitter:description" content="A website used for extracting Discord IDs from raw logs.">
+  <meta property="twitter:image" content="https://leonlarsson.com/projects/logsorter/assets/images/embed.png">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link rel="icon" href="assets/images/icon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="assets/images/icon.ico" type="image/x-icon">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/codemirror/lib/codemirror.css">
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/jquery.color-animation/1/mainfile" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script src="assets/codemirror/lib/codemirror.js"></script>
+  <script src="assets/codemirror/lib/mark-selection.js"></script>
+  <script defer src="assets/js/ParseTextBox.js"></script>
+  <script defer src="assets/js/ParseFile.js"></script>
+  <script defer src="assets/js/FileSaver.js"></script>
+  
+</head>
+
+<body>
+
+  <div id="main">
+    <div id="topTitle">
+      <div id="titleMain"><a id="titleLink" href="https://twitter.com/MozzyFX">Mozzy's</a> Log Sorter</div>
+      <a id="changelogText" title="Opens the changelog." href="https://leonlarsson.com/projects/logsorter/changelog/">(changelog)</a>
+    </div>
+    <div id="topOptions">
+      <div class="optionText" id="firstText" title="Select the RegEx pattern you want to match for.">1. Select RegEx:
+      </div>
+      <select id="regexList" onchange="changeRegex()">
+        <optgroup label="Zeppelin:" alt="Zeppelin" title="Default Zeppelin log formats. 'ping_user:' doesn't matter.">
+          <option value="1" alt="Zeppelin" title="This matches both joins and leaves.">Joins/Leaves</option>
+          <option value="2" alt="Zeppelin" title="This matches only joins.">Joins</option>
+          <option value="3" alt="Zeppelin" title="This matches only leaves.">Leaves</option>
+        </optgroup>
+        <optgroup label="Aperture:" alt="Aperture" title="Default Aperture log formats.">
+          <option value="1" alt="Aperture" title="This matches both joins and leaves.">Joins/Leaves</option>
+          <option value="2" alt="Aperture" title="This matches only joins.">Joins</option>
+          <option value="3" alt="Aperture" title="This matches only leaves.">Leaves</option>
+        </optgroup>
+        <optgroup label="Auttaja (Compact Logs):" alt="Auttaja" title="Default (compact) Auttaja log formats.">
+          <option value="1" alt="Auttaja" title="This matches both joins and leaves.">Joins/Leaves</option>
+          <option value="2" alt="Auttaja" title="This matches only joins.">Joins</option>
+          <option value="3" alt="Auttaja" title="This matches only leaves.">Leaves</option>
+        </optgroup>
+        <optgroup label="Utilibot(!):" alt="Utilibot"
+          title="Default Utilibot log formats. &#013;&#013;This SHOULD only match joins and leaves, but I haven't seen every form of Utilibot format.">
+          <option value="4" alt="Utilibot" title="This matches both joins and leaves.">Joins/Leaves</option>
+          <option value="5" alt="Utilibot" title="This matches only joins.">Joins</option>
+          <option value="6" alt="Utilibot" title="This matches only leaves.">Leaves</option>
+        </optgroup>
+        <optgroup label="Mee6/GiselleBot/Dyno/Carl-bot(!):" alt="EmbedBotsEw"
+          title="This only grabs the ID (from any log message that has 'ID:' in it.) &#013;&#013;I do not recommend using this as you can't split the logging channels on all bots.">
+          <option value="98" alt="EmbedBotsEw" title="IDs">All IDs</option>
+        </optgroup>
+        <optgroup label="Other:" alt="Misc.">
+          <option value="99"
+            title="Select if you want to use your own RegEx. &#013;&#013;The contents of Capturing group 1 will be output."
+            alt="Misc.">Custom - Group 1</option>
+        </optgroup>
+        <optgroup label="Embed logs are bad" title="It's true..."></a></optgroup>
+        <optgroup label="Don't use them :)" title="And you know it."></optgroup>
+      </select>
+      <div id="dynamicRegexPrefixText" class="optionText"
+        title="Select the beginning numbers of the IDs. &#013;&#013;Example: (991)82302885588992">2. IDs begin with:
+      </div>
+      <div id="dynamicRegexPrefix" class="optionText" style="margin: 0px;">/</div>
+      <input type="number" id="customEntry">
+      <div id="dynamicRegexSuffix" class="optionText" style="margin-left: 0px;">/g</div>
+
+      <label class="optionText" id="checkBoxUseNewlinesText" style="cursor: pointer;"
+        title="Select if you want the IDs to be separated by newlines instead of spaces."><input
+          style="cursor: pointer;" type="checkbox" id="checkBoxUseNewlines">Use newline separator</label>
+      <label class="optionText" id="checkBoxUseVerboseLogsText" style="cursor: pointer;"
+        title="Select if you want extra logging at the top of the results. &#013;&#013;Does not look good if you remove duplicates."><input
+          style="cursor: pointer;" type="checkbox" id="checkBoxUseVerboseLogs">Verbose logs</label>
+
+      <input type="file" class="optionText" id="files" name="files[]" onclick="this.value=null" accept="text/plain"
+        style="display: none;">
+    </div>
+
+    <div id="bottomOptions">
+      <!-- Perhaps move the 2 load button above and make them green? -->
+      <button class="buttonBlue" id="matchTextButton" title="Parses the left textbox into the right one.">Match
+        "Input"</button><span class="optionText">/</span>
+      <button class="buttonBlue" id="loadFileButton" title="Opens the file browser to select a txt file."
+        onclick="clickOpenFileButton()">Load .txt file</button>
+      <button class="buttonBlue" id="saveFileButton"
+        title="Prompts you to enter a filename, and then saves it as 'yourfilename'.txt" onclick="saveFile()">Save
+        .txtfile</button>
+      <button class="buttonBlue" id="copyOutputButton"
+        title="Copies the content of the output textbox to your clipboard." onclick="copyText()">Copy output</button>
+      <button class="buttonRed" id="clearOutputButton" title="Clears the output textbox." onclick="clearText()">Clear
+        output</button>
+      <button class="buttonRed" id="removeDupesButton"
+        title="Removes duplicates. It splits by spaces and determines from there. &#013;&#013;Using this with 'Verbose logs' results in the Verbose log being destroyed. Sorry."
+        onclick="removeDuplicates()">Remove duplicates</button>
+    </div>
+    <hr>
+    <div id="textBoxTitleText">
+      <div class="optionText" id="textBoxTitleTextLeft" title="Paste text into this textbox.">Input</div>
+      <div class="optionText" id="textBoxTitleTextRight" title="The output will be appended to this textbox.">
+        Output<span id="outputStatusText" style="color: #43b581;"></span></div>
+    </div>
+
+    <div id="textBoxArea">
+      <textarea id="textBoxInput" rows="40" cols="80" style="resize:none"></textarea>
+      <span class="optionText" style="align-self: center; font-size: 30px;" title="No, I'm not a button.">></span>
+      <textarea id="textBoxOutput" rows="40" cols="80" readonly style="resize:none"></textarea>
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+
+  <script> // Initializes CodeMirror
+    var editorRight = CodeMirror.fromTextArea(document.getElementById("textBoxOutput"), {
+      mode: "text/html",
+      lineNumbers: true,
+      readOnly: "noCursor",
+      lineWrapping: true,
+      styleSelectedText: true,
+    });
+  </script>
+
+  <script> // This creates a custom matcher for Select2. Thanks to user 'willbradley' on SO for providing this custom matcher.
+    function modelMatcher(params, data) {
+      data.parentText = data.parentText || "";
+
+      // Always return the object if there is nothing to compare
+      if ($.trim(params.term) === '') {
+        return data;
+      }
+
+      // Do a recursive check for options with children
+      if (data.children && data.children.length > 0) {
+        // Clone the data object if there are children
+        // This is required as we modify the object to remove any non-matches
+        var matchRegex = $.extend(true, {}, data);
+
+        // Check each child of the option
+        for (var c = data.children.length - 1; c >= 0; c--) {
+          var child = data.children[c];
+          child.parentText += data.parentText + " " + data.text;
+
+          var matchesRegex = modelMatcher(params, child);
+
+          // If there wasn't a match, remove the object in the array
+          if (matchesRegex == null) {
+            matchRegex.children.splice(c, 1);
+          }
+        }
+
+        // If any children matched, return the new object
+        if (matchRegex.children.length > 0) {
+          return matchRegex;
+        }
+
+        // If there were no matching children, check just the plain object
+        return modelMatcher(params, matchRegex);
+      }
+
+      // If the typed-in term matches the text of this term, or the text from any
+      // parent term, then it's a match.
+      var original = (data.parentText + ' ' + data.text).toUpperCase();
+      var term = params.term.toUpperCase();
+
+      // Check if the text contains the term
+      if (original.indexOf(term) > -1) {
+        return data;
+      }
+
+      // If it doesn't contain the term, don't return anything
+      return null;
+    }
+  </script>
+
+  <script> // Custom RegEx. If Custom is selected, change type number to text, change text and add the visual RegEx open and close
+
+    $("#regexList").select2({ // Makes the RegEx selector a searchable Select2 box
+      dropdownAutoWidth: true,
+      width: "style",
+      matcher: modelMatcher,
+    });
+
+    $("#dynamicRegexPrefix").hide();
+    $("#dynamicRegexSuffix").hide();
+    function changeRegex() {
+      if ($("#regexList").val() == 99) {
+        $("#dynamicRegexPrefixText").text("2. Custom RegEx:")
+        $("#dynamicRegexPrefixText").prop({ title: "Enter the RegEx you want to use. / and /g are already included.\n\nThe contents of Capturing group 1 will be output." });
+        $("#customEntry").prop({ type: "text" });
+        $("#dynamicRegexPrefix").show();
+        $("#dynamicRegexSuffix").show();
+
+      } else {
+        $("#dynamicRegexPrefixText").text("2. IDs begin with:")
+        $("#dynamicRegexPrefixText").prop({ title: "Select the beginning numbers of the IDs.\n\nExample: (991)82302885588992" });
+        $("#customEntry").prop({ type: "number" });
+        $("#dynamicRegexPrefix").hide();
+        $("#dynamicRegexSuffix").hide();
+      }
+    }
+  </script>
+
+  <script> // Open file (clicks the actual button that is set to launch the code in ParseFile.js)
+    function clickOpenFileButton() {
+      $("#files").click();
+    }
+  </script>
+
+  <script> // Save file
+    function saveFile() {
+      if (promptFilename = prompt("Save file as:\n'yourname'.txt", "yourname")) {
+        var textBlob = new Blob([$("#textBoxOutput").text()], { type: "text/plain" });
+        window.saveAs(textBlob, promptFilename + ".txt");
+      }
+    }
+  </script>
+
+  <script> // Copy text
+    function copyText() {
+      
+      
+      $("#textBoxOutput").select(); // Copies the text in the semi-hidden textbox, because we can
+      document.execCommand("copy");
+      console.log("[DEBUG] Copied text");
+      document.getSelection().removeAllRanges();
+      $("#copyOutputButton").animate({ backgroundColor: "#43b581" }, "swing");
+      $(".CodeMirror").animate({ borderColor: "#43b581" }, "swing");
+      setTimeout(function () {
+        $("#copyOutputButton").animate({ backgroundColor: "#7289da" }, "swing");
+        $(".CodeMirror").animate({ borderColor: "#36393f" }, "swing");
+        // probably keeps going
+        setTimeout(function () { // Remove the style to allow for the hover color again
+          $("#copyOutputButton").removeAttr("style");
+        }, 500);
+      }, 1000);
+    }
+  </script>
+
+  <script> // Clear text
+    function clearText() {
+
+      matchesFound = 0;
+
+      $("#outputStatusText").text("");
+      $("#textBoxOutput").text(""); // Clears the actual textbox and then gives that to the CM textbox
+      editorRight.setValue($("#textBoxOutput").text());
+      console.log("[DEBUG] Cleared text");
+      $("#clearOutputButton").animate({ backgroundColor: "#43b581" }, "swing");
+      $(".CodeMirror").animate({ borderColor: "#f04747" }, "swing");
+      setTimeout(function () {
+        $("#clearOutputButton").animate({ backgroundColor: "#f04747" }, "swing");
+        $(".CodeMirror").animate({ borderColor: "#36393f" }, "swing");
+        setTimeout(function () { // Remove the style to allow for the hover color again
+          $("#clearOutputButton").removeAttr("style"); //why not work // ALL COLOR TO THER BUTTONS. RED TEXTBOX BORDER WITH CLEAR
+        }, 500);
+      }, 1000);
+    }
+  </script>
+
+  <script> // Remove duplicates
+    function removeDuplicates() { // Split the at the whitespaces, then remove duplicate lines. TODO: Figure out how to ignore Verbose logging
+      if ($("#textBoxOutput").val() == "") {
+        return;
+      }
+      var textData = $("#textBoxOutput").text().split(/\s+/g); // Gets the Output into a simple array. Splits by whitespace
+      var result = textData.filter((word, i, arr) => arr.indexOf(word) === i);
+      $("#textBoxOutput").text(result.join(idSeparator));
+      editorRight.setValue($("#textBoxOutput").text()); // Do the normal operation, but also add the results to CM textbox
+
+      var linesRemoved = (textData.length - 1) - (result.length - 1); // Calculates the lines removed. Original amount of lines - lines left after removal
+      console.log(`[DEBUG] ${textData.length - 1} entries in textbox. ${result.length - 1} entries left. This means that ${linesRemoved} lines were removed.`)
+
+      var currentStatusText = ` (${matchesFound} found)`; // Gets the current Output status and adds the duplication stats
+      $("#outputStatusText").text(`${currentStatusText} || ${linesRemoved} duplicates removed. ${result.length - 1} lines left.`);
+    }
+  </script>
+
+</body>
+
+</html>

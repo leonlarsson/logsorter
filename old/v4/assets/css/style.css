@@ -1,0 +1,298 @@
+body{
+  background-color: #36393f;
+  font-family: 'Roboto', sans-serif;
+  /* text-align: center; */
+  width: 100%;
+  margin-left: 0px;
+  margin-right: 0px;
+  margin-top: 0px;
+}
+
+::-webkit-scrollbar {
+  width: auto;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #2e3338;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #202225;
+  border-radius: 10px;
+}
+
+#topTitle{
+  width: 100%;
+  background-color: #2f3136;
+  text-align: center;
+  /* padding-bottom: 10px; */ /* removed to have the changelog go here */
+}
+
+#titleMain {
+  color: #7289da;
+  font-size: 5em;
+  line-height: 75px;
+}
+
+#titleLink, #titleLink:visited, #titleLink:active {
+  text-decoration: none;
+  color: #f04747;
+  /* color: #00acee; */ /* Twitter Hex */
+}
+
+#titleLink:hover {
+  text-decoration: none;
+  color: #00acee;
+}
+
+#changelogText {
+  text-decoration-line: none;
+  color: #99aab5;
+  position: relative;
+  top: -10px;
+}
+
+#topOptions {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: baseline;
+  flex-wrap: wrap;
+  background-color: #2f3136;
+  padding-bottom: 20px;
+}
+
+#checkBoxUseNewlines, #checkBoxUseVerboseLogs{
+  margin-right: 3px !important;
+  margin-left: 0px !important;
+}
+
+/* this selects all the elements, including the ones created by select2, disabled in favor of the one below*/
+/* #topOptions *{
+  margin-left: 5px;
+  margin-right: 5px;
+  border-color: #40444b;
+  border: 0px;
+  outline: 0px;
+  font-family: inherit;
+} */
+
+#firstText, #dynamicRegexPrefixText, #dynamicRegexPrefix, #dynamicRegexSuffix, #customEntry, #checkBoxUseNewlines, #checkBoxUseNewlinesText, #checkBoxUseVerboseLogs, #checkBoxUseVerboseLogsText, #selectRegex{
+  margin-left: 5px;
+  margin-right: 5px;
+  border-color: #40444b;
+  border: 0px;
+  outline: 0px;
+  font-family: inherit;
+}
+
+#selectRegex {
+  text-align: left;
+  font-size: 10px;
+}
+
+#checkBoxCustomRegex{
+  margin-right: 0px !important;
+  margin-left: 5px;
+}
+
+#bottomOptions {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: baseline;
+  flex-wrap: wrap;
+  background-color: #2f3136;
+  padding-bottom: 10px;
+}
+
+#bottomOptions *{
+  margin-left: 5px;
+  margin-right: 5px;
+  border-color: #40444b;
+}
+
+.optionText {
+  color: #99aab5;
+}
+
+button {
+  color: white;
+  border-radius: 3px;
+  width: auto;
+  height: 30px;
+  font-family: 'Roboto', sans-serif;
+  border: 0px;
+  outline: 0px;
+}
+
+.buttonBlue {
+  background-color: #7289da;
+}
+
+.buttonBlue:hover {
+  background-color: #677bc4;
+  cursor: pointer;
+}
+
+.buttonRed {
+background-color: #f04747;
+}
+
+.buttonRed:hover {
+  background-color: #d84040;
+  cursor: pointer;
+}
+
+hr {
+  margin-top: 0px;
+  margin-bottom: 15px;
+  height: 3px;
+  background-color: #f04747;
+  border: 0px;
+  outline: 0px;
+}
+
+#textBoxTitleText {
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+}
+
+#textBoxTitleTextLeft {
+  width: 50%;
+  margin-right: 15px;
+  margin-left: 5%;
+}
+
+#textBoxTitleTextRight {
+  width: 50%;
+  margin-right: 5%; /* Usually 5% */
+  margin-left: 15px;
+}
+
+#textBoxArea {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  height: 50vh;
+}
+
+#textBoxInput {
+  background-color: #40444b;
+  color: #99aab5;
+  font-size: 12px;
+  width: 50%; /* Usually 50% */
+  border-radius: 10px;
+  border: 2px solid #36393f;
+  /* padding: 5px 10px; */
+  padding: 5px 0 0 10px; /* Usually 5px 10px */
+  margin-right: 15px;
+  margin-left: 5%;
+  min-width: 1px; /* For Firefox */
+}
+
+#textBoxOutput {
+  background-color: #40444b;
+  color: #99aab5;
+  font-size: 12px;
+  width: 50%;
+  border-radius: 10px;
+  border: 2px solid #36393f;
+  padding: 5px 10px;
+  margin-right: 5%; 
+  margin-left: 15px;
+
+  /* FOR THE COPY FUNCTION TO WORK WITH CM. NEEDS TO NOT BE HIDDEN */
+  /* opacity: 0.1; */
+  display: block !important;
+  position: absolute; 
+  left: -9999em;
+  top: -9999em;
+}
+
+#textBoxOutput:focus, #textBoxInput:focus {
+  outline: black;
+}
+
+
+/* MEDIA SIZE */
+
+@media only screen and (max-height: 455px) { /* When window height is less than 455px, move everything up slightly */
+  #topTitle {
+    font-size: 50%;
+    line-height: 0px;
+    padding-top: 0px;
+    position: relative;
+    top: -10px;
+  }
+  #changelogText {
+    font-size: 150%;
+  }
+  #topOptions {
+    position: relative;
+    top: -13px;
+  }
+  #bottomOptions, hr ,#textBoxTitleText, #textBoxArea{
+    position: relative;
+    top: -25px;
+  }
+  #textBoxArea {
+    height: 40vh;
+  }
+}
+
+@media only screen and (max-width: 700px) { /* When window height is less than 440px, move everything up slightly more and remove the margin between textboxes */
+  #topTitle {
+    font-size: 50%;
+    line-height: 0px;
+    padding-top: 0px;
+    position: relative;
+    top: -10px;
+  }
+  #changelogText {
+    font-size: 150%;
+  }
+  #topOptions {
+    position: relative;
+    top: -13px;
+  }
+  #bottomOptions, hr ,#textBoxTitleText, #textBoxArea {
+    position: relative;
+    top: -25px;
+  }
+  #textBoxOutput {
+    margin-left: 0px;
+  }
+  .CodeMirror {
+    margin-left: 0px !important;
+  }
+  #textBoxInput, #textBoxTitleTextLeft {
+    margin-right: 0px;
+  }
+}
+
+@media only screen and (max-width: 345px) { /* When window height is less than 440px, move everything up even more*/
+  #topTitle {
+    font-size: 30%;
+    line-height: 0px;
+    padding-top: 0px;
+    position: relative;
+    top: -25px;
+  }
+  #changelogText {
+    font-size: 250%;
+  }
+  #topOptions {
+    position: relative;
+    top: -25px;
+  }
+  #bottomOptions, hr ,#textBoxTitleText, #textBoxArea {
+    position: relative;
+    top: -40px;
+  }
+}

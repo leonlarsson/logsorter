@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <!-- Thanks to Zobtzler for the RegEx guidance -->
+  <!-- Primary Meta Tags -->
+  <title>Mozzy's Log Sorter</title>
+  <meta name="title" content="Mozzy's Log Sorter">
+  <meta name="description" content="A website used for extracting Discord ID's from raw logs.">
+  <meta name="theme-color" content="#2f3136">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://leonlarsson.com/projects/logsorter/">
+  <meta property="og:title" content="Mozzy's Log Sorter">
+  <meta property="og:description" content="A website used for extracting Discord ID's from raw logs.">
+  <meta property="og:image" content="https://leonlarsson.com/projects/logsorter/assets/images/embed.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://leonlarsson.com/projects/logsorter/">
+  <meta property="twitter:title" content="Mozzy's Log Sorter">
+  <meta property="twitter:description" content="A website used for extracting Discord ID's from raw logs.">
+  <meta property="twitter:image" content="https://leonlarsson.com/projects/logsorter/assets/images/embed.png">
+
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link rel="icon" href="assets/images/icon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="assets/images/icon.ico" type="image/x-icon">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/jquery.color-animation/1/mainfile" type="text/javascript"></script>
+  <script defer src="assets/js/LoadFile.js"></script>
+  <script defer src="assets/js/FileSaver.js"></script>
+</head>
+
+<body>
+
+  <div id="main">
+    <div id="topTitle">
+      <div id="titleMain"><a id="titleLink" href="https://twitter.com/MozzyFX">Mozzy's</a> Log Sorter</div>
+    </div>
+    <div id="topOptions">
+      <div class="optionText" title="Select the RegEx pattern you want to match for."> 1. Select RegEx:</div>
+      <select id="regexList">
+        <option value="1">Zeppelin - Join/Leave</option>
+        <option value="2">Zeppelin - Join</option>
+        <option value="3">Zeppelin - Leave</option>
+      </select>
+      <div class="optionText" title="Select numbers that the IDs begin with."> 2. IDs begin with:</div>
+      <input type="number" id="numberValue">
+      <!-- <div>
+        <input type="checkbox" id="checkBoxCustomRegex">Use Custom RegEx: (No Checks) /</input>
+        <input type="text" id="textBoxCustomRegex"> /g</input>
+      </div> -->
+      <label class="optionText" style="cursor: pointer;"
+        title="Select if you want the IDs to be separated by newlines instead of spaces."><input
+          style="cursor: pointer;" type="checkbox" id="checkBoxUseNewlines"> Use newline separator</label>
+      <label class="optionText" style="cursor: pointer;"
+        title="Adds information about the operation at the top.&#013;&#013;&#013;Does not look good if you remove duplicates."><input
+          style="cursor: pointer;" type="checkbox" id="checkBoxUseVerboseLogs"> Verbose logs</label>
+
+      <input type="file" class="optionText" id="files" name="files[]" onclick="this.value=null" accept="text/plain"
+        style="display: none;">
+    </div>
+
+    <div id="middleOptions">
+      <button class="buttonBlue" id="loadbtn" title="Opens the file browser to select a txt file."
+        onclick="clickOpenFileButton()">Load .txt file</button>
+      <button class="buttonBlue" id="savebtn"
+        title="Prompts you to enter a filename, and then saves it 'yourfilename'.txt" onclick="saveFile()">Save .txt
+        file</button>
+      <button class="buttonBlue" id="copybtn" title="Copies the content of the text area below to your clipboard."
+        onclick="copyText()">Copy text</button>
+      <button class="buttonRed" id="clearbtn" title="Clears the text area." onclick="clearText()">Clear text</button>
+      <button class="buttonRed" id="removedupesbtn"
+        title="Using this with 'Verbose logs' results in the Verbose log being destroyed. Sorry."
+        onclick="removeDuplicates()">Remove duplicates</button>
+    </div>
+    <hr>
+    <textarea id="textBox" rows="40" cols="80" readonly></textarea>
+    <br>
+    <a style="text-decoration-line: none; color: #99aab5;" href="https://leonlarsson.com/projects/logsorter/changelog/">(changelog)</a>
+  </div>
+
+  <!-- SCRIPTS -->
+
+  <script> // Open file (clicks the actual button that is set to launch the code in LoadFile.js)
+    function clickOpenFileButton() {
+      $("#files").click();
+    }
+  </script>
+
+  <script> // Save file
+    function saveFile() {
+      if (promptFilename = prompt("Save file as:\n'yourname'.txt", "yourname")) {
+        var textBlob = new Blob([$("#textBox").text()], { type: "text/plain" });
+        window.saveAs(textBlob, promptFilename + ".txt");
+      }
+    }
+  </script>
+
+  <script> // Copy text
+    function copyText() {
+      $("#textBox").select();
+      document.execCommand("copy");
+      console.log("[DEBUG] Copied text");
+      document.getSelection().removeAllRanges();
+      $("#copybtn").animate({ backgroundColor: "#43b581" }, "swing");
+      $("#textBox").animate({ borderColor: "#43b581" }, "swing");
+      setTimeout(function () {
+        $("#copybtn").animate({ backgroundColor: "#7289da" }, "swing");
+        $("#textBox").animate({ borderColor: "#36393f" }, "swing");
+        // probably keeps going
+        setTimeout(function () { // Remove the style to allow for the hover color again
+          $("#copybtn").removeAttr("style"); //why not work // ALL COLOR TO THER BUTTONS. RED TEXTBOX BORDER WITH CLEAR
+        }, 1000);
+      }, 1000);
+    }
+  </script>
+
+  <script> // Clear text
+    function clearText() {
+      $('#textBox').text("");
+      console.log("[DEBUG] Cleared text");
+      $("#clearbtn").animate({ backgroundColor: "#43b581" }, "swing");
+      $("#textBox").animate({ borderColor: "#f04747" }, "swing");
+      setTimeout(function () {
+        $("#clearbtn").animate({ backgroundColor: "#f04747" }, "swing");
+        $("#textBox").animate({ borderColor: "#36393f" }, "swing");
+        setTimeout(function () { // Remove the style to allow for the hover color again
+          $("#clearbtn").removeAttr("style"); //why not work // ALL COLOR TO THER BUTTONS. RED TEXTBOX BORDER WITH CLEAR
+        }, 1000);
+      }, 1000);
+    }
+  </script>
+
+  <script> // Remove duplicates
+    function removeDuplicates() { // Split the at the whitespaces, then remove duplicate lines. TODO: Figure out how to ignore the first if Verbose logging is checked
+      var data = $("#textBox").text();
+      var result = data.split(/\s+/g).filter((word, i, arr) => arr.indexOf(word) === i);
+      $("#textBox").text(result.join(idSeparator));
+    }
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,276 @@
+<html>
+
+<head>
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+
+	<title>Log Sorter Changelog</title>
+	<link rel="icon" href="../assets/images/icon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="../assets/images/icon.ico" type="image/x-icon" />
+
+</head>
+
+<style>
+	body {
+		font-family: "Arial";
+		background-color: #36393f;
+		color: rgb(196, 196, 196);
+		margin: 0px;
+		height: 100%;
+		width: 100%;
+	}
+
+	.title {
+		display: flex;
+		font-size: 2em;
+		justify-content: center;
+		background-color: #2f3136;
+		margin: 0px;
+		width: 100%;
+	}
+
+	a {
+		color: lightblue;
+	}
+
+	#Mozzy:hover {
+		color: #00acee !important;
+	}
+
+	.supported-bots {
+		margin-bottom: 0px;
+	}
+
+	h2 {
+		margin: 5px 0px 15px 0px;
+	}
+
+	h4 {
+		margin-top: 0px;
+	}
+
+	.container {
+		width: 100%;
+		/* height: 80%; */
+		display: flex;
+	}
+
+	#separator {
+		width: 10px;
+		background-color: rgb(26, 27, 27);
+		margin: 0px 10px;
+	}
+
+	.cl {
+		width: 100%;
+		border-right: 5px solid rgb(26, 27, 27);
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+
+	.sp {
+		width: 100%;
+		border-left: 5px solid rgb(26, 27, 27);
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+
+	#code {
+		background-color: #1b1d1b;
+		padding: 2px 5px;
+		border-radius: 5px;
+		font-family: monospace;
+		font-size: 14px;
+		color: #3bbe7d;
+	}
+
+	#code2 {
+		color: #228B22 !important;
+	}
+</style>
+
+<body>
+	<div class="title">
+		<h2><a id="Mozzy" style="color: #f04747;text-decoration: none !important;font-size:60px;line-height:55px;"
+				href="https://twitter.com/MozzyFX">Mozzy's</a><a
+				style="color: #5865f2;text-decoration: none !important;font-size:60px;line-height:55px;" href="../"> Log Sorter</a></h2>
+	</div>
+	<hr style="margin-top: 0px; margin-bottom: 0px; border: 1px solid #f04747;">
+
+	<div class="container">
+		<div class="cl">
+			<h2>Changelog</h2>
+			<u><b><a title="Click to see how it looked." href="../assets/images/May_11_2021_Pic.png">May 11,
+						2021</a></b></u>
+			<u><b><a title="Click to experience it." href="../old/v7">(Version 7)</a></b></u>
+			<br>
+			-Added light mode. It defaults to your system preference, but can be selected manually in the top left
+			corner. Dark mode was also... darkened in a few areas.
+			<br>
+			-Added debug/extra options. Double click "Log Sorter" or the | between the Load/Save buttons to toggle debug
+			mode. Comes with some extra options.
+			<br>
+			-Added a way to share all current settings. Can be found in the Debug settings. Example <a
+				href="../?bot=99&start=%28thanks%20for%20clicking%20%3C3%29&newlines=true&verbose=true">here</a>.
+			<br>
+			-The Input textbox now also has numbered lines.
+			<br>
+			-Added an option to scroll to the bottom (or Verbose if used with newlines) of the textbox on parse.
+			<br>
+			-Changed the button order and colors to make a bit more sense. Green to start, Blue to alter, Red to clear.
+			<br>
+			-The website should now be more mobile (and small screen) friendly, stacking the textboxes vertically when
+			at a certain width. Won't be perfect for all devices, of course.
+			<br>
+			-Some backend work with how IDs are counted and such.
+
+
+			<br><br>
+			<u><b><a title="Click to see how it looked." href="../assets/images/Apr_10_2021_Pic.png">Apr 10,
+						2021</a></b></u>
+			<u><b><a title="Click to experience it." href="../old/v6">(Version 6)</a></b></u>
+			<br>
+			-Added the option to only output unique IDs. Effectively a duplication check.
+			<br>
+			-Removing duplicates now takes "Newlines" and "Verbose" options into account and now works fully as
+			intended.
+			<br>
+			-Rewrote and optimized a lot of code handling sorting and most functions, resulting in <b>a lot</b> quicker
+			and more efficient sorting speeds. Previously, matching 9K lines took over 2 seconds. Now, 170K takes 1
+			second.
+
+			<br><br>
+			<u><b><a title="Click to see how it looked." href="../assets/images/Mar_24_2021_Pic.png">Mar 24,
+						2021</a></b></u>
+			<u><b><a title="Click to experience it." href="../old/v5">(Version 5)</a></b></u>
+			<br>
+			-Added ability to match against multiple starting numbers. Useful if the target accounts vary in age.
+			<br>
+			-Added some more styling to input boxes.
+			<br>
+			-Made changes to the File Upload method and changed some under-the-hood things. Uploading a file will now
+			populate the Input textbox.
+			<br>
+			-Removed the check (and annoying alert) for empty starting IDs in favor of placeholder text.
+
+			<br><br>
+			<u><b><a title="Click to see how it looked." href="../assets/images/Jan_30_2021_Pic.png">Jan 30,
+						2021</a></b></u>
+			<u><b><a title="Click to experience it." href="../old/v4">(Version 4)</a></b></u>
+			<br>
+			-Added ability to split the results into groups of x amount. This only works when using newlines. Please
+			remove duplicates before splitting for the best effect.
+
+			<br><br>
+			<u><b><a title="Click to see how it looked." href="../assets/images/Jan_29_2021_Pic.png">Jan 29,
+						2021</a></b></u>
+			<u><b><a title="Click to experience it." href="../old/v3.5">(Version 3.5)</a></b></u>
+			<br>
+			-Added numbered lines to the Output textbox.
+			<br>
+			-Added some nicer scrollbars.
+			<br>
+			-Stonks.
+
+			<br><br>
+			<u><b><a title="Click to see how it looked." href="../assets/images/Jan_24_2021_Pic.png">Jan 24,
+						2021</a></b></u>
+			<u><b><a title="Click to experience it." href="../old/v3">(Version 3)</a></b></u>
+			<br>
+			-Added ability to use custom RegEx. You can select it in "Select RegEx".
+			<br>
+			-Added a second textbox that can be used as a complete replacement for uploading a file. Simply paste the
+			logs and
+			press "Match Input".
+			<br>
+			-Added status text (left of "Output") that shows you if it's working and how many matches were found.
+			<br>
+			-Also added the stats of "Remove duplicates" to the status text above.
+			<br>
+			-Fixed some code related to file checks.
+			<br>
+			-Changed various text, tooltips and styling.
+			<br>
+			-Did my best to scale the website depending on window size.
+
+			<br><br>
+			<u><b><a title="Click to see how it looked." href="../assets/images/Jan_21_2021_Pic.png">Jan 21,
+						2021</a></b></u>
+			<u><b><a title="Click to experience it." href="../old/v2">(Version 2)</a></b></u>
+			<br>
+			-Added actual styling.
+			<br>
+			-Added ability to select RegEx pattern.
+			<br>
+			-Added ability to select newline ID separator.
+			<br>
+			-Added ability to toggle verbose logs.
+			<br>
+			-Added ability to save a text file.
+			<br>
+			-Added ability to "Copy text".
+			<br>
+			-Added ability to "Clear text".
+			<br>
+			-Added ability to "Remove duplicates".
+			<br>
+			-Rewrote all the code.
+
+			<br><br>
+			<u><b><a title="Click to see how it looked." href="../assets/images/Jan_19_2021_Pic.png">Jan 19,
+						2021</a></b></u>
+			<u><b><a title="Click to experience it." href="../old/v1">(Version 1)</a></b></u>
+			<br>
+			Initial release.
+
+			<br><br>
+		</div>
+		<div class="sp">
+			<h2 class="supported-bots">Supported Bots<h4>(Updated 2021-04-05)</h4>
+			</h2>
+			<b>Zeppelin</b> (Joins/Leaves, Joins, Leaves)
+			<br>
+			<b>Aperture</b> (Joins/Leaves, Joins, Leaves)
+			<br>
+			<b>Auttaja (Compact logs)</b> (Joins/Leaves, Joins, Leaves)
+			<br>
+			<b>Utilibot</b> (Joins/Leaves, Joins, Leaves - Not all formats were tested. Don't blindly trust.)
+			<br>
+			<b>Vortex</b> (Joins/Leaves, Joins, Leaves, Kicks - Anti-Raid)
+			<br>
+			<b>Nexus</b> (Joins/Leaves, Joins, Leaves)
+			<br>
+			<b>Mee6/GiselleBot/Dyno/Carl-bot</b> (Only IDs after "*ID:" are grabbed. I don't recommend using this ... or
+			these bots.)
+			<br><br>
+			<b>All IDs (First per line or all)</b> (Filters every ID, any number with the length of 17-18)
+			<hr>
+			<br>
+			If you want your favorite bot added, my Discord is <a
+				href="https://discordapp.com/users/99182302885588992">Mozzy#9999</a>. I will however only take serious
+			looks at bots that do not use embeds as logs. One line logs are better.
+			<br>
+			Version 0 was a C# program, which can be downloaded <a href="./Discord ID Log Sorter.exe"
+				title="File is not trusted by Windows... duh. &#013;&#013;This program is older than the web version and supports less things. &#013;Default support is for Zeppelin, but custom RegEx is supported.">here</a>.
+			<br><br>
+			<u>Known Issues</u>
+			<br>
+			<s>-Selecting "Verbose logs" does not play well with removing duplicates. I do not recommend using this if
+				you
+				plan on removing duplicates on the website.</s> (Fixed in version 6)
+			<br>
+			-Life.
+
+			<br><br>
+			<u>Want To-Dos</u>
+			<br>
+			-Add numbered lines to textboxes. (Done in version 3.5 <i>and</i> 7)
+			<br>
+			-Add a reliable way of splitting matches into groups of x amount. (Done in version 4)
+			<br>
+			-Life.
+		</div>
+	</div>
+</body>
+
+</html>

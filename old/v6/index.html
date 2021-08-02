@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <!-- Thanks to Zobtzler for the RegEx guidance -->
+  <!-- Thanks to the creator of FileSaver.js and the countless Stack Overflow threads re-teaching me JavaScript -->
+
+  <!-- Primary Meta Tags -->
+  <title>Mozzy's Log Sorter</title>
+  <meta name="title" content="Mozzy's Log Sorter">
+  <meta name="description" content="A website used for extracting Discord IDs from raw logs.">
+  <meta name="theme-color" content="#7289da">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://leonlarsson.com/projects/logsorter/">
+  <meta property="og:title" content="Mozzy's Log Sorter">
+  <meta property="og:description" content="A website used for extracting Discord IDs from raw logs.">
+  <meta property="og:image" content="https://leonlarsson.com/projects/logsorter/assets/images/embed.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://leonlarsson.com/projects/logsorter/">
+  <meta property="twitter:title" content="Mozzy's Log Sorter">
+  <meta property="twitter:description" content="A website used for extracting Discord IDs from raw logs.">
+  <meta property="twitter:image" content="https://leonlarsson.com/projects/logsorter/assets/images/embed.png">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link rel="icon" href="assets/images/icon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="assets/images/icon.ico" type="image/x-icon">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/codemirror/lib/codemirror.css">
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/jquery.color-animation/1/mainfile" type="text/javascript"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script src="assets/codemirror/lib/codemirror.js"></script>
+  <script src="assets/codemirror/lib/mark-selection.js"></script>
+  <script defer src="assets/js/ParseTextBox.js"></script>
+  <script defer src="assets/js/LoadFile.js"></script>
+  <script defer src="assets/js/FileSaver.js"></script>
+  <script defer src="assets/js/clipboard.min.js"></script>
+
+</head>
+
+<body>
+
+  <div id="main">
+    <div id="topTitle">
+      <div id="titleMain"><a id="titleLink" href="https://twitter.com/MozzyFX">Mozzy's</a> Log Sorter</div>
+      <a id="changelogText" title="Opens the changelog." href="https://leonlarsson.com/projects/logsorter/changelog/">(changelog)</a>
+    </div>
+    <div id="topOptions">
+      <div class="optionText" id="firstText" title="Select the RegEx pattern you want to match for.">1. Select RegEx:
+      </div>
+      <select id="regexList" onchange="changeRegex()">
+        <optgroup label="Zeppelin:" alt="Zeppelin" title="Default Zeppelin log formats. 'ping_user:' doesn't matter.">
+          <option value="1" alt="Zeppelin" title="This matches both joins and leaves.">Joins/Leaves</option>
+          <option value="2" alt="Zeppelin" title="This matches only joins.">Joins</option>
+          <option value="3" alt="Zeppelin" title="This matches only leaves.">Leaves</option>
+        </optgroup>
+        <optgroup label="Aperture:" alt="Aperture" title="Default Aperture log formats.">
+          <option value="1" alt="Aperture" title="This matches both joins and leaves.">Joins/Leaves</option>
+          <option value="2" alt="Aperture" title="This matches only joins.">Joins</option>
+          <option value="3" alt="Aperture" title="This matches only leaves.">Leaves</option>
+        </optgroup>
+        <optgroup label="Auttaja (Compact Logs):" alt="Auttaja" title="Default (compact) Auttaja log formats.">
+          <option value="1" alt="Auttaja" title="This matches both joins and leaves.">Joins/Leaves</option>
+          <option value="2" alt="Auttaja" title="This matches only joins.">Joins</option>
+          <option value="3" alt="Auttaja" title="This matches only leaves.">Leaves</option>
+        </optgroup>
+        <optgroup label="Utilibot(!):" alt="Utilibot"
+          title="Default Utilibot log formats. &#013;&#013;This SHOULD only match joins and leaves, but I haven't seen every form of Utilibot format.">
+          <option value="4" alt="Utilibot" title="This matches both joins and leaves.">Joins/Leaves</option>
+          <option value="5" alt="Utilibot" title="This matches only joins.">Joins</option>
+          <option value="6" alt="Utilibot" title="This matches only leaves.">Leaves</option>
+        </optgroup>
+        <optgroup label="Vortex:" alt="Vortex" title="Default Vortex log formats.">
+          <option value="7" alt="Vortex" title="This matches both joins and leaves.">Joins/Leaves</option>
+          <option value="8" alt="Vortex" title="This matches only joins.">Joins</option>
+          <option value="9" alt="Vortex" title="This matches only leaves.">Leaves</option>
+          <option value="10" alt="Vortex" title="This matches kicks from Anti-Raid Mode.">Kicks (Anti-Raid)</option>
+        </optgroup>
+        <optgroup label="Nexus:" alt="Nexus" title="Default Nexus log formats.">
+          <option value="95" alt="Nexus" title="This matches both joins and leaves.">Joins/Leaves</option>
+          <option value="96" alt="Nexus" title="This matches only joins.">Joins</option>
+          <option value="97" alt="Nexus" title="This matches only leaves.">Leaves</option>
+        </optgroup>
+        <optgroup label="Mee6/GiselleBot/Dyno/Carl-bot(!):" alt="EmbedBotsEw"
+          title="Limited support because these bots use embed logs and most are not able to split logs into specific channels.">
+          <option value="98" alt="EmbedBotsEw"
+            title="This only grabs the ID (from any log message that has 'ID:' in it.) &#013;&#013;I do not recommend using this as you can't split the logging channels on all bots.">
+            All IDs</option>
+        </optgroup>
+        <optgroup label="Misc:" alt="Misc." title="Anything not specific to any bot.">
+          <option value="99"
+            title="Select if you want to use your own RegEx. &#013;&#013;The contents of Capturing group 1 will be output."
+            alt="Misc.">Custom - Group 1</option>
+          <option value="100"
+            title="This grabs the first ID in each line. &#013;&#013;Beware of false positives in case of usernames."
+            alt="Misc.">All IDs - First occurrence</option>
+          <option value="101" title="This grabs every ID. &#013;&#013;Beware of false positives in case of usernames."
+            alt="Misc.">All IDs</option>
+        </optgroup>
+        <!-- <optgroup label="Embed logs are bad" title="It's true..."></optgroup>
+        <optgroup label="Don't use them :)" title="And you know it."></optgroup> -->
+        <optgroup label="Want a bot added? Contact me."
+          title="Click on the red 'Mozzy' or contact me on Discord. &#013;&#013;Only bots that use single line logs will be considered.">
+        </optgroup>
+
+      </select>
+      <div id="dynamicRegexPrefixText" class="optionText"
+        title="Select the beginning numbers of the IDs. &#013;&#013;Example: (991)82302885588992">2. IDs begin with:
+      </div>
+
+      <div id="dynamicRegexPrefix" class="optionText" style="margin: 0px;">/</div>
+      <input type="number" id="customEntry" placeholder="(0-9)" style="width: 60px; height: 20px; border-radius: 3px;">
+      <div id="dynamicRegexSuffix" class="optionText" style="margin-left: 0px;">/g</div>
+
+
+      <label class="optionText" id="checkBoxMultipleText" style="cursor: pointer;"
+        title="Select if you want to match multiple starting numbers. Up to five."><input style="cursor: pointer;"
+          type="checkbox" id="checkBoxMultiple" onclick="multipleCheck()">Multiple</label>
+      <label class="optionText" id="checkBoxUseNewlinesText" style="cursor: pointer;"
+        title="Select if you want the IDs to be separated by newlines instead of spaces."><input
+          style="cursor: pointer;" type="checkbox" id="checkBoxUseNewlines">Newlines</label>
+      <label class="optionText" id="checkBoxNoDupesText" style="cursor: pointer;"
+        title="Select if you want to only output unique IDs."><input style="cursor: pointer;" type="checkbox"
+          id="checkBoxNoDupes">Deduplicate</label>
+      <label class="optionText" id="checkBoxUseVerboseLogsText" style="cursor: pointer;"
+        title="Select if you want extra logging at the top of the results. &#013;&#013;Displays date/time, pattern used, and which separator used."><input
+          style="cursor: pointer;" type="checkbox" id="checkBoxUseVerboseLogs">Verbose</label>
+
+      <input type="file" class="optionText" id="files" name="files[]" onclick="this.value=null" accept="text/plain"
+        style="display: none;">
+      <div id="multipleIDButtons" style="display: none;">
+        <button class="buttonBlue" title="Adds one ID field." onclick="add()"
+          style="height: 20px; width: 20px; font-size: 15px; margin-left: 5px; margin-right: 5px;">+</button>
+        <button class="buttonBlue" title="Removes one ID field." onclick="remove()"
+          style="height: 20px; width: 20px; font-size: 15px; margin-right: 10px;">-</button>
+      </div>
+      <div id="multipleIDs" style="display: none;">
+        <input type="number" id="customEntry1"
+          style="width: 60px; height: 20px; border-radius: 3px; margin-left: 5px; margin-right: 5px; border-color: #40444b; border: 0px; outline: 0px; font-family: inherit;">
+        <label class="optionText">&</label>
+        <input type="number" id="customEntry2"
+          style="width: 60px; height: 20px; border-radius: 3px; margin-left: 5px; margin-right: 5px; border-color: #40444b; border: 0px; outline: 0px; font-family: inherit;">
+      </div>
+    </div>
+
+    <div id="bottomOptions">
+      <!-- Perhaps move the 2 load button above and make them green? -->
+      <button class="buttonBlue" id="matchTextButton" title="Parses the left textbox into the right one."
+        onclick="parseIDs()">Match
+        "Input"</button>
+      <span ondblclick="toggleDebugOptions()" class="optionText">/</span>
+      <button class="buttonBlue" id="loadFileButton"
+        title="Opens the file browser to select a txt file. Then populates the input with the contents."
+        onclick="clickOpenFileButton()">Load .txt file</button>
+      <button class="buttonBlue" id="saveFileButton"
+        title="Prompts you to enter a filename, and then saves it as 'yourfilename'_LogSorter.txt"
+        onclick="saveFile()">Save
+        .txt file</button>
+      <button class="buttonBlue" data-clipboard-target="#textBoxOutput" id="copyOutputButton"
+        title="Copies the content of the output textbox to your clipboard." onclick="copyText()">Copy output</button>
+      <button class="buttonRed" id="clearOutputButton" title="Clears the output textbox." onclick="clearText()">Clear
+        output</button>
+      <button class="buttonRed" id="removeDupesButton"
+        title="Populates the output with only the unique IDs. &#013;&#013;Takes both 'Newlines' and 'Verbose' options into account. Can be used to switch separator on the fly."
+        onclick="removeDuplicates()">Remove duplicates</button>
+      <button class="buttonRed" id="splitLinesButton"
+        title="Splits the lines into groups of X amount. &#013;&#013;This only works when the newline separator is selected."
+        onclick="splitLines()">Split IDs</button>
+    </div>
+    <hr>
+    <div id="textBoxTitleText">
+      <div class="optionText" id="textBoxTitleTextLeft" title="Paste text into this textbox.">Input</div>
+      <div class="optionText" id="textBoxTitleTextRight" title="The output will be appended to this textbox.">
+        Output<span id="outputStatusText" style="color: #43b581;"></span></div>
+    </div>
+
+    <div id="textBoxArea">
+      <textarea id="textBoxInput" rows="40" cols="80" style="resize:none"
+        placeholder="Paste your logs here, select a log type and change any settings you want, then press the Match Input button."></textarea>
+      <span class="optionText" style="align-self: center; font-size: 30px;" title="No, I'm not a button.">></span>
+      <textarea id="textBoxOutput" rows="40" cols="80" readonly style="resize:none"></textarea>
+    </div>
+  </div>
+
+  <!--------------------- SCRIPTS --------------------->
+
+  <!-- Initialize Set and Array for IDs, debug options toggle -->
+  <script>
+    var uniqueIDs = new Set();
+    var allIDs = [];
+    var totalIDs = [];
+    function toggleDebugOptions() {
+      console.log("[DEBUG] Toggled Debug options.");
+      // $("#checkBoxUseVerboseLogsText").toggle();
+      // $("#checkBoxUseVerboseLogs").prop("checked", false);
+    }
+  </script>
+
+  <!-- Initializes CodeMirror -->
+  <script>
+    var editorRight = CodeMirror.fromTextArea(document.getElementById("textBoxOutput"), {
+      mode: "text/html",
+      lineNumbers: true,
+      readOnly: "true", // was "noCursor"
+      lineWrapping: true,
+      styleSelectedText: true,
+      // viewportMargin: 10,
+    });
+  </script>
+
+  <!-- Creates a custom matcher for Select2. Thanks to user 'willbradley' on SO for providing this custom matcher -->
+  <script>
+    function modelMatcher(params, data) {
+      data.parentText = data.parentText || "";
+
+      // Always return the object if there is nothing to compare
+      if ($.trim(params.term) === '') {
+        return data;
+      }
+
+      // Do a recursive check for options with children
+      if (data.children && data.children.length > 0) {
+        // Clone the data object if there are children
+        // This is required as we modify the object to remove any non-matches
+        var matchRegex = $.extend(true, {}, data);
+
+        // Check each child of the option
+        for (var c = data.children.length - 1; c >= 0; c--) {
+          var child = data.children[c];
+          child.parentText += data.parentText + " " + data.text;
+
+          var matchesRegex = modelMatcher(params, child);
+
+          // If there wasn't a match, remove the object in the array
+          if (matchesRegex == null) {
+            matchRegex.children.splice(c, 1);
+          }
+        }
+
+        // If any children matched, return the new object
+        if (matchRegex.children.length > 0) {
+          return matchRegex;
+        }
+
+        // If there were no matching children, check just the plain object
+        return modelMatcher(params, matchRegex);
+      }
+
+      // If the typed-in term matches the text of this term, or the text from any
+      // parent term, then it's a match.
+      var original = (data.parentText + ' ' + data.text).toUpperCase();
+      var term = params.term.toUpperCase();
+
+      // Check if the text contains the term
+      if (original.indexOf(term) > -1) {
+        return data;
+      }
+
+      // If it doesn't contain the term, don't return anything
+      return null;
+    }
+  </script>
+
+  <!-- Custom RegEx. If Custom is selected, change type number to text, change text and add the visual RegEx open and close -->
+  <script>
+    $("#regexList").select2({ // Makes the RegEx selector a searchable Select2 box
+      dropdownAutoWidth: true,
+      width: "style",
+      matcher: modelMatcher,
+    });
+
+    $("#dynamicRegexPrefix").hide();
+    $("#dynamicRegexSuffix").hide();
+    function changeRegex() {
+      if ($("#regexList").val() == 99) {
+        $("#dynamicRegexPrefixText").text("2. Custom RegEx:")
+        $("#dynamicRegexPrefixText").show();
+        $("#dynamicRegexPrefixText").prop({ title: "Enter the RegEx you want to use. / and /g are already included.\n\nThe contents of Capturing group 1 will be output." });
+        $("#customEntry").prop({ type: "text" });
+        $("#customEntry").prop({ placeholder: "" });
+        $("#customEntry").attr("style", "height: 20px; border-radius: 3px");
+        $("#dynamicRegexPrefix").show();
+        $("#dynamicRegexSuffix").show();
+        $("#customEntry").prop("disabled", false); // Enables the entry box because we do not use multiples for custom Regex
+        $("#checkBoxMultiple").prop("checked", false); // Systemetically uncheck it for the main script
+        $("#multipleIDs, #multipleIDButtons, #checkBoxMultiple, #checkBoxMultipleText").hide(); // Hide!
+
+      } else if ($("#regexList").val() == 100 || $("#regexList").val() == 101) {
+        $("#dynamicRegexPrefixText").text("2. IDs begin with:")
+        $("#dynamicRegexPrefixText").prop({ title: "Select the beginning numbers of the IDs.\n\nExample: (991)82302885588992" });
+        $("#customEntry").prop({ type: "number" });
+        $("#customEntry").prop({ placeholder: "(0-9)" });
+        $("#customEntry").attr("style", "width: 60px; height: 20px; border-radius: 3px;");
+        $("#dynamicRegexPrefix").hide();
+        $("#dynamicRegexSuffix").hide();
+        $("#customEntry").prop("disabled", false); // Show entry box
+        $("#checkBoxMultiple").prop("checked", false); // Systemetically uncheck it for the main script
+        $("#multipleIDs, #multipleIDButtons, #checkBoxMultiple, #checkBoxMultipleText").hide(); // Hide!
+
+      } else {
+        $("#dynamicRegexPrefixText").prop({ title: "Select the beginning numbers of the IDs.\n\nExample: (991)82302885588992" });
+        $("#customEntry").prop({ type: "number" });
+        $("#customEntry").prop({ placeholder: "(0-9)" });
+        $("#customEntry").attr("style", "width: 60px; height: 20px; border-radius: 3px;");
+        $("#dynamicRegexPrefix").hide();
+        $("#dynamicRegexSuffix").hide();
+        $("#customEntry").prop("disabled", false); // Show entry box if not custom Regex
+        $("#checkBoxMultiple, #checkBoxMultipleText").show(); // Show the checkbox
+
+        if ($('#checkBoxMultiple').is(':checked')) { // If not custom regex and multiples is checked, keep/disable the main entry box.
+          $("#customEntry").prop("disabled", true)
+          $("#multipleIDs, #multipleIDButtons").show();
+          $("#dynamicRegexPrefixText").text("2. IDs begin with:")
+        }
+      }
+    }
+  </script>
+
+  <!-- Shows and hides the extra ID Fields based on the multiples checkbox -->
+  <script>
+    function multipleCheck() {
+      if ($('#checkBoxMultiple').is(':checked')) {
+        $("#multipleIDs, #multipleIDButtons").show();
+        $("#customEntry").prop("disabled", true)
+      } else {
+        $("#multipleIDs, #multipleIDButtons").hide();
+        $("#customEntry").prop("disabled", false)
+      }
+    }
+  </script>
+
+  <!-- Handles the Adding and Removing of the extra ID fields -->
+  <script>
+    function add() {
+      number = $('#multipleIDs').children('input').length + 1; // Increase the number when func is run. Used for the customEntryNUMBER id.
+      if ($('#multipleIDs').children('input').length == 5) { // If there are 5 ID Fields, don't add more.
+        number = 5;
+        return;
+      }
+      $("#multipleIDs").append(`<label class="optionText">&</label><input type="number" id="customEntry${number}" style="width: 60px; height: 20px; border-radius: 3px; margin-left: 5px; margin-right: 5px; border-color: #40444b; border: 0px; outline: 0px; font-family: inherit;">`)
+    }
+
+    function remove() {
+      if ($('#multipleIDs').children('input').length == 2) { // If there are 2 ID Fields, don't remove more.
+        number = 2;
+        return;
+      }
+      let idFields = document.getElementById('multipleIDs');
+      idFields.removeChild(idFields.lastElementChild); // Remove 2. One ID Field and one & separator.
+      idFields.removeChild(idFields.lastElementChild);
+    }
+  </script>
+
+  <!-- Open file (clicks the actual button that is set to launch the code in LoadFile.js) -->
+  <script>
+    function clickOpenFileButton() {
+      $("#files").click();
+    }
+  </script>
+
+  <!-- Save file -->
+  <script>
+    function saveFile() {
+      if (promptFilename = prompt("Save file as:\n'IDs'_LogSorter.txt", "IDs")) {
+        var textBlob = new Blob([editorRight.getValue()], { type: "text/plain" });
+        window.saveAs(textBlob, promptFilename + "_LogSorter.txt");
+      }
+    }
+  </script>
+
+  <!-- Copy text -->
+  <script>
+    function copyText() {
+
+      if (editorRight.getValue() == "") { // If nothing to copy, return
+        return;
+      }
+
+      var clipboard = new ClipboardJS('#copyOutputButton', { // Attempt to copy the Output into the clipboard. If successful, run visual change. If failed, alert the user.
+        text: function (trigger) {
+          return editorRight.getValue();
+        }
+      });
+
+      clipboard.on('error', function (e) {
+        clipboard.destroy();
+        console.log(`%c[DEBUG] Failed to copy text.`, `color: #f04747`);
+        alert("Copy operation failed. Please copy manually.")
+      });
+
+      clipboard.on("success", function () {
+        clipboard.destroy();
+        console.log("[DEBUG] Copied text.");
+
+        // Color change
+        $("#copyOutputButton").animate({ backgroundColor: "#43b581" }, "swing");
+        $(".CodeMirror").animate({ borderColor: "#43b581" }, "swing");
+        setTimeout(function () {
+          $("#copyOutputButton").animate({ backgroundColor: "#7289da" }, "swing");
+          $(".CodeMirror").animate({ borderColor: "#36393f" }, "swing");
+          // probably keeps going
+          setTimeout(function () { // Remove the style to allow for the hover color again
+            $("#copyOutputButton").removeAttr("style");
+          }, 500);
+        }, 1000);
+      });
+    }
+  </script>
+
+  <!-- Clear text -->
+  <script>
+    function clearText() {
+
+      // Clears all the values, sets and arrays
+      matchesFound = 0;
+      uniqueIDs.clear();
+      allIDs.length = 0;
+      totalIDs.length = 0;
+
+      $("#outputStatusText").text("");
+      editorRight.setValue("");
+
+      console.log("[DEBUG] Cleared text");
+
+      // Color change
+      $("#clearOutputButton").animate({ backgroundColor: "#43b581" }, "swing");
+      $(".CodeMirror").animate({ borderColor: "#f04747" }, "swing");
+      setTimeout(function () {
+        $("#clearOutputButton").animate({ backgroundColor: "#f04747" }, "swing");
+        $(".CodeMirror").animate({ borderColor: "#36393f" }, "swing");
+        setTimeout(function () { // Remove the style to allow for the hover color again
+          $("#clearOutputButton").removeAttr("style");
+        }, 500);
+      }, 1000);
+    }
+  </script>
+
+  <!-- Remove duplicates -->
+  <script>
+    function removeDuplicates() { // Split the at the whitespaces, then remove duplicate lines. TODO: Figure out how to ignore Verbose logging
+      if (editorRight.getValue() == "") {
+        return;
+      }
+
+      if ($("#checkBoxUseNewlines").is(':checked')) { // If checked, use newlines instead of spaces as the ID separator.
+        idSeparator = "\n"
+        idSeparatorText = "newlines"
+      } else {
+        idSeparator = " "
+        idSeparatorText = "spaces"
+      }
+
+      var today = new Date().toISOString().substr(0, 19); // Gets date for Verbose logs - Deduplication
+      dateTime = today.replace("T", " ")
+
+      if ($("#checkBoxUseVerboseLogs").is(":checked")) {
+        editorRight.setValue(`Generated on ${dateTime} UTC. Duplicates removed, ${uniqueIDs.size} unique IDs. Separated with ${idSeparatorText}:\n${[...uniqueIDs].join(idSeparator) + idSeparator}`);
+      } else {
+        editorRight.setValue(`${[...uniqueIDs].join(idSeparator) + idSeparator}`);
+      }
+
+      console.log(`[DEBUG] Removed duplicates. ${totalIDs.length - uniqueIDs.size} duplicates removed. ${uniqueIDs.size} left.`)
+      var currentStatusText = ` (${totalIDs.length} total)`; // Gets the current Output status and adds the duplication stats
+      $("#outputStatusText").text(`${currentStatusText} || ${totalIDs.length - uniqueIDs.size} duplicates removed. ${uniqueIDs.size} left.`);
+
+      totalIDs.length = uniqueIDs.size; // Adjust the total IDs length to the current value
+
+      // Color change
+      $("#removeDupesButton").animate({ backgroundColor: "#43b581" }, "swing");
+      $(".CodeMirror").animate({ borderColor: "#43b581" }, "swing");
+      setTimeout(function () {
+        $("#removeDupesButton").animate({ backgroundColor: "#f04747" }, "swing");
+        $(".CodeMirror").animate({ borderColor: "#36393f" }, "swing");
+        setTimeout(function () { // Remove the style to allow for the hover color again
+          $("#removeDupesButton").removeAttr("style");
+        }, 500);
+      }, 1000);
+
+    }
+  </script>
+
+  <!-- Split every X lines -->
+  <script>
+    function splitLines() {
+      var rawInput = prompt("After how many lines do you want to split?\n\nPlease enter a number above 0.", "100"); // Gets the number to split by
+      splitEveryX = parseInt(rawInput); // Make the input an int
+
+      if (rawInput == null) { // If no input, return
+        return;
+      }
+
+      if (splitEveryX == 0 || isNaN(splitEveryX)) { // If input is 0 or not a number, return
+        alert("Not a number or 0.");
+        return;
+      }
+
+      if (splitEveryX > editorRight.lineCount() - 2) { // Prevent the user from splitting into groups of X when X is bigger than the total amount of lines
+        alert(`Only found ${editorRight.lineCount() - 1} lines. Please select a number smaller than the amount of lines.`);
+        return;
+      }
+
+      splitsNeeded = Math.trunc(editorRight.lineCount() / splitEveryX); // Sets the amount of splits needed based on the amount of lines and size of group
+      whileLoop = 0; // Sets the base while loop number
+      newlineAtLine = splitEveryX - 1; // Selects the first line to enter a newline at. -1 because apparently it starts at 0
+
+      while (splitsNeeded > whileLoop) { // Continue until the number of splits needed is reached
+        editorRight.replaceRange("\n", { line: newlineAtLine }); // Add a newline at line designated line number
+        whileLoop++;
+        newlineAtLine = newlineAtLine + splitEveryX; // Add the group size to the next line number that needs a newline
+        newlineAtLine++; // +1 to keep up with the line being moved because of previous newline
+      }
+
+      console.log(`[DEBUG] Splitting into groups of ${splitEveryX}.`);
+
+      // Color change
+      $("#splitLinesButton").animate({ backgroundColor: "#43b581" }, "swing");
+      $(".CodeMirror").animate({ borderColor: "#43b581" }, "swing");
+      setTimeout(function () {
+        $("#splitLinesButton").animate({ backgroundColor: "#f04747" }, "swing");
+        $(".CodeMirror").animate({ borderColor: "#36393f" }, "swing");
+        setTimeout(function () { // Remove the style to allow for the hover color again
+          $("#splitLinesButton").removeAttr("style");
+        }, 500);
+      }, 1000);
+
+    }
+  </script>
+
+</body>
+
+</html>
