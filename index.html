@@ -53,6 +53,11 @@
 
 <body>
 
+  <!-- Preload -->
+  <div id="loading">
+    <img id="loading-image" src="assets/images/preloader.gif" alt="Loading..." />
+  </div>
+
   <!-- #region Main HTML -->
   <div id="main">
     <i id="debugToggleLight" onclick="toggleLight()"
@@ -266,6 +271,13 @@
   <!-- #endregion Main HTML -->
 
   <!-- #region Scripts -->
+
+  <!-- Handle preload -->
+  <script>
+    $(window).on('load', function () {
+      $('#loading').fadeOut(200);
+    })
+  </script>
 
   <!-- Initializes CodeMirror -->
   <script>
@@ -1025,7 +1037,7 @@
 
   <!-- #endregion Scripts -->
 
-    <!-- TODO: Could make Split Lines automatically convert to newlines with convertNewlines(). -->
+  <!-- TODO: Could make Split Lines automatically convert to newlines with convertNewlines(). -->
 
 </body>
 
