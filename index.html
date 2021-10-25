@@ -281,7 +281,7 @@
 
   <!-- Initializes CodeMirror -->
   <script>
-    var editorRight = CodeMirror.fromTextArea(document.getElementById("textBoxOutput"), {
+    const editorRight = CodeMirror.fromTextArea(document.getElementById("textBoxOutput"), {
       mode: "text/html",
       theme: "right",
       lineNumbers: true,
@@ -291,7 +291,7 @@
       viewportMargin: 10,
     });
 
-    var editorLeft = CodeMirror.fromTextArea(document.getElementById("textBoxInput"), {
+    const editorLeft = CodeMirror.fromTextArea(document.getElementById("textBoxInput"), {
       mode: "text/html",
       theme: "left",
       lineNumbers: true,
@@ -304,13 +304,11 @@
 
   <!-- Initialize Set and Array for IDs -->
   <script>
-    var uniqueIDs = new Set();
-    var uniqueIDs_Const = new Set(); // I use this for the Remove Duplicates function since the one above is cleared every time a parse is run. 
-    var allIDs = [];
-    var currentIDs = 0;
-    var debugMode = false;
-
-    var lastLine;
+    let uniqueIDs = new Set();
+    let uniqueIDs_Const = new Set(); // I use this for the Remove Duplicates function since the one above is cleared every time a parse is run. 
+    let allIDs = [];
+    let currentIDs = 0;
+    let debugMode = false;
   </script>
 
   <!-- Select2/Creates a custom matcher for Select2. Thanks to user 'willbradley' on SO for providing this custom matcher -->
@@ -327,14 +325,14 @@
       if (data.children && data.children.length > 0) {
         // Clone the data object if there are children
         // This is required as we modify the object to remove any non-matches
-        var matchRegex = $.extend(true, {}, data);
+        const matchRegex = $.extend(true, {}, data);
 
         // Check each child of the option
-        for (var c = data.children.length - 1; c >= 0; c--) {
-          var child = data.children[c];
+        for (let c = data.children.length - 1; c >= 0; c--) {
+          const child = data.children[c];
           child.parentText += data.parentText + " " + data.text;
 
-          var matchesRegex = modelMatcher(params, child);
+          const matchesRegex = modelMatcher(params, child);
 
           // If there wasn't a match, remove the object in the array
           if (matchesRegex == null) {
@@ -353,8 +351,8 @@
 
       // If the typed-in term matches the text of this term, or the text from any
       // parent term, then it's a match.
-      var original = (data.parentText + ' ' + data.text).toUpperCase();
-      var term = params.term.toUpperCase();
+      const original = (data.parentText + ' ' + data.text).toUpperCase();
+      const term = params.term.toUpperCase();
 
       // Check if the text contains the term
       if (original.indexOf(term) > -1) {
@@ -372,6 +370,9 @@
   <!-- Theme setter -->
   <script>
 
+    let isLightMode;
+    let bgColor;
+
     if (document.cookie == "siteTheme=light") { // Checks for theme cookie on load, then sets theme accordingly. If no cookie, check system preference and set to that
       console.log("[DEBUG] Detected light theme cookie.");
       lightMode();
@@ -387,7 +388,7 @@
       $("#debugDeleteThemeCookie").attr("title", "Deletes the cookie that stores your theme preference and changes theme to system preference.");
     };
 
-    window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) { // Detects changes in the system theme preference. Ignores if cookie exists
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(e => { // Detects changes in the system theme preference. Ignores if cookie exists
       if (document.cookie == "siteTheme=light" || document.cookie == "siteTheme=dark") {
         console.log("[DEBUG] System theme changed but cookie overrides it.")
         return;
@@ -407,12 +408,12 @@
     function toggleLight() { // Toggles between dark and light theme and sets the cookie (60 days) to save that preference
 
       if ($("body").hasClass("lightMode")) { // If light mode is active, set to dark mode
-        var date = new Date();
+        const date = new Date();
         date.setDate(date.getDate() + 60);
         document.cookie = `siteTheme=dark; expires=${date}`;
         darkMode();
       } else {
-        var date = new Date();
+        const date = new Date();
         date.setDate(date.getDate() + 60);
         document.cookie = `siteTheme=light; expires=${date}`;
         lightMode();
@@ -545,6 +546,7 @@
 
   <!-- Handles the Adding and Removing of the extra ID fields -->
   <script>
+    let number;
     function addIDField() {
       number = $('#multipleIDs').children('input').length + 1; // Increase the number when func is run. Used for the customEntryNUMBER id.
       if ($('#multipleIDs').children('input').length == 5) { // If there are 5 ID Fields, don't add more.
@@ -580,7 +582,7 @@
   <script>
     function saveFile() {
       if (promptFilename = prompt("Save file as:\n'IDs'_LogSorter.txt", "IDs")) {
-        var textBlob = new Blob([editorRight.getValue()], { type: "text/plain" });
+        const textBlob = new Blob([editorRight.getValue()], { type: "text/plain" });
         window.saveAs(textBlob, promptFilename + "_LogSorter.txt");
       }
     }
@@ -589,21 +591,20 @@
   <!-- Remove duplicates -->
   <script>
     function removeDuplicates() {
+      if (editorRight.getValue() == "") return;
 
-      if (editorRight.getValue() == "") {
-        return;
-      }
-
+      let idSeparator;
+      let idSeparatorText;
       if ($("#checkBoxUseNewlines").is(':checked')) { // If checked, use newlines instead of spaces as the ID separator.
-        idSeparator = "\n"
-        idSeparatorText = "newlines"
+        idSeparator = "\n";
+        idSeparatorText = "newlines";
       } else {
-        idSeparator = " "
-        idSeparatorText = "spaces"
+        idSeparator = " ";
+        idSeparatorText = "spaces";
       }
 
-      var today = new Date().toISOString().substr(0, 19); // Gets date for Verbose logs - Deduplication
-      dateTime = today.replace("T", " ")
+      const today = new Date().toISOString().substr(0, 19); // Gets date for Verbose logs - Deduplication
+      const dateTime = today.replace("T", " ");
 
       if ($("#checkBoxUseVerboseLogs").is(":checked")) {
         editorRight.setValue(`Generated on ${dateTime} UTC. Duplicates removed, ${uniqueIDs_Const.size} unique IDs. Separated with ${idSeparatorText}:\n${[...uniqueIDs_Const].join(idSeparator) + idSeparator}`);
@@ -620,10 +621,10 @@
       // Color change
       $("#removeDupesButton").animate({ backgroundColor: "#43b581" }, "swing");
       $(".CodeMirror.cm-s-right").animate({ borderColor: "#43b581" }, "swing");
-      setTimeout(function () {
+      setTimeout(() => {
         $("#removeDupesButton").animate({ backgroundColor: "#7289da" }, "swing");
         $(".CodeMirror.cm-s-right").animate({ borderColor: bgColor }, "swing");
-        setTimeout(function () { // Remove the style to allow for the hover color again
+        setTimeout(() => { // Remove the style to allow for the hover color again
           $("#removeDupesButton").removeAttr("style");
         }, 500);
       }, 1000);
@@ -634,8 +635,8 @@
   <!-- Split every X lines -->
   <script>
     function splitLines() {
-      var rawInput = prompt("After how many lines do you want to split?\n\nPlease enter a number above 0.", "100"); // Gets the number to split by
-      splitEveryX = parseInt(rawInput); // Make the input an int
+      const rawInput = prompt("After how many lines do you want to split?\n\nPlease enter a number above 0.", "100"); // Gets the number to split by
+      const splitEveryX = parseInt(rawInput); // Make the input an int
 
       if (rawInput == null) { // If no input, return
         return;
@@ -651,9 +652,9 @@
         return;
       }
 
-      splitsNeeded = Math.trunc(editorRight.lineCount() / splitEveryX); // Sets the amount of splits needed based on the amount of lines and size of group
-      whileLoop = 0; // Sets the base while loop number
-      newlineAtLine = splitEveryX - 1; // Selects the first line to enter a newline at. -1 because apparently it starts at 0
+      const splitsNeeded = Math.trunc(editorRight.lineCount() / splitEveryX); // Sets the amount of splits needed based on the amount of lines and size of group
+      let whileLoop = 0; // Sets the base while loop number
+      let newlineAtLine = splitEveryX - 1; // Selects the first line to enter a newline at. -1 because apparently it starts at 0
 
       while (splitsNeeded > whileLoop) { // Continue until the number of splits needed is reached
         editorRight.replaceRange("\n", { line: newlineAtLine }); // Add a newline at line designated line number
@@ -667,10 +668,10 @@
       // Color change
       $("#splitLinesButton").animate({ backgroundColor: "#43b581" }, "swing");
       $(".CodeMirror.cm-s-right").animate({ borderColor: "#43b581" }, "swing");
-      setTimeout(function () {
+      setTimeout(() => {
         $("#splitLinesButton").animate({ backgroundColor: "#7289da" }, "swing");
         $(".CodeMirror.cm-s-right").animate({ borderColor: bgColor }, "swing");
-        setTimeout(function () { // Remove the style to allow for the hover color again
+        setTimeout(() => { // Remove the style to allow for the hover color again
           $("#splitLinesButton").removeAttr("style");
         }, 500);
       }, 1000);
@@ -682,34 +683,33 @@
   <script>
     function copyText() {
 
-      if (editorRight.getValue() == "") { // If nothing to copy, return
-        return;
-      }
+      // If nothing to copy, return
+      if (editorRight.getValue() == "") return;
 
-      var clipboard = new ClipboardJS('#copyOutputButton', { // Attempt to copy the Output into the clipboard. If successful, run visual change. If failed, alert the user.
-        text: function (trigger) {
+      const clipboard = new ClipboardJS('#copyOutputButton', { // Attempt to copy the Output into the clipboard. If successful, run visual change. If failed, alert the user.
+        text: trigger => {
           return editorRight.getValue();
         }
       });
 
-      clipboard.on('error', function (e) {
+      clipboard.on('error', e => {
         clipboard.destroy();
         console.log(`%c[DEBUG] Failed to copy text.`, `color: #f04747`);
         alert("Copy operation failed. Please copy manually.")
       });
 
-      clipboard.on("success", function () {
+      clipboard.on("success", () => {
         clipboard.destroy();
         console.log("[DEBUG] Copied text.");
 
         // Color change
         $("#copyOutputButton").animate({ backgroundColor: "#43b581" }, "swing");
         $(".CodeMirror.cm-s-right").animate({ borderColor: "#43b581" }, "swing");
-        setTimeout(function () {
+        setTimeout(() => {
           $("#copyOutputButton").animate({ backgroundColor: "#7289da" }, "swing");
           $(".CodeMirror.cm-s-right").animate({ borderColor: bgColor }, "swing");
           // probably keeps going
-          setTimeout(function () { // Remove the style to allow for the hover color again
+          setTimeout(() => { // Remove the style to allow for the hover color again
             $("#copyOutputButton").removeAttr("style");
           }, 500);
         }, 1000);
@@ -721,9 +721,8 @@
   <script>
     function clearText() {
 
-      if (editorRight.getValue() == "") { // If nothing to copy, return
-        return;
-      }
+      // If nothing to copy, return
+      if (editorRight.getValue() == "") return;
 
       // Clears all the values, sets and arrays
       uniqueIDs.clear();
@@ -740,10 +739,10 @@
       // Color change
       $("#clearOutputButton").animate({ backgroundColor: "#43b581" }, "swing");
       $(".CodeMirror.cm-s-right").animate({ borderColor: "#f04747" }, "swing");
-      setTimeout(function () {
+      setTimeout(() => {
         $("#clearOutputButton").animate({ backgroundColor: "#f04747" }, "swing");
         $(".CodeMirror.cm-s-right").animate({ borderColor: bgColor }, "swing");
-        setTimeout(function () { // Remove the style to allow for the hover color again
+        setTimeout(() => { // Remove the style to allow for the hover color again
           $("#clearOutputButton").removeAttr("style");
         }, 500);
       }, 1000);
@@ -757,7 +756,7 @@
         disableDebug();
         function disableDebug() {
           debugMode = false;
-          editorRight.setOption("readOnly", true)
+          editorRight.setOption("readOnly", true);
           // $("#debugCheckBoxScrollBottom").prop("checked", false) // Uncheck
           $("#debugOptions").hide();
           console.log(`[DEBUG] Debug mode set to ${debugMode}.`);
@@ -767,7 +766,7 @@
         enableDebug();
         function enableDebug() {
           debugMode = true;
-          editorRight.setOption("readOnly", false)
+          editorRight.setOption("readOnly", false);
           $("#debugOptions").show();
           console.log(`[DEBUG] Debug mode set to ${debugMode}.`);
         }
@@ -776,17 +775,17 @@
     }
 
     function deleteThemeCookie() { // Deletes the theme cookie, hides the delete button and changes theme to system preference
-      document.cookie = `siteTheme=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`
+      document.cookie = `siteTheme=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
       $("#debugDeleteThemeCookie").hide();
       console.log("[DEBUG] Deleted theme cookie. Setting to system preference.");
       checkSystemThemePref();
     }
 
     function convertNewlines() { // Convert current separator to newlines
-      var today = new Date().toISOString().substr(0, 19); // Gets date for Verbose logs - Deduplication
-      dateTime = today.replace("T", " ")
+      const today = new Date().toISOString().substr(0, 19); // Gets date for Verbose logs - Deduplication
+      const dateTime = today.replace("T", " ");
 
-      str = editorRight.getValue().replaceAll(/Generated.*:/g, "").replaceAll(/^\s/g, "").replace(/\s+$/g, "").replaceAll(/\s+/g, "\n");
+      const str = editorRight.getValue().replaceAll(/Generated.*:/g, "").replaceAll(/^\s/g, "").replace(/\s+$/g, "").replaceAll(/\s+/g, "\n");
 
       if ($("#checkBoxUseVerboseLogs").is(":checked")) {
         editorRight.setValue(`Generated on ${dateTime} UTC. ${currentIDs} IDs. Separated with newlines:\n${str}\n`);
@@ -797,7 +796,10 @@
     }
 
     function convertSpaces() { // Convert current separator to spaces
-      str = editorRight.getValue().replaceAll(/Generated.*:/g, "").replaceAll(/^\s/g, "").replace(/\s+$/g, "").replaceAll(/\s+/g, " ");
+      const today = new Date().toISOString().substr(0, 19); // Gets date for Verbose logs - Deduplication
+      const dateTime = today.replace("T", " ");
+
+      const str = editorRight.getValue().replaceAll(/Generated.*:/g, "").replaceAll(/^\s/g, "").replace(/\s+$/g, "").replaceAll(/\s+/g, " ");
 
       if ($("#checkBoxUseVerboseLogs").is(":checked")) {
         editorRight.setValue(`Generated on ${dateTime} UTC. ${currentIDs} IDs. Separated with spaces:\n${str}\n`);
@@ -820,7 +822,7 @@
       editorRight.scrollTo(0, 9999999999999999999999999999999999999);
     }
 
-    function scrollVerbose() {
+    function scrollVerbose(lastLine) {
       editorRight.scrollIntoView({ line: lastLine }, 200);
     }
 
@@ -835,19 +837,19 @@
     function createCustomURL() {
 
       // Set variables with the current settings
-      var botSelected = `bot=${$("#regexList").val()}`;
-      var firstNumber = `&start=${escape($("#customEntry").val()).replaceAll("+", "%2b")}`; // using escape() on the value to escape dumb URL encoding stuff. Also replacing + with the encoded variant
-      var checkMultiple = `&multiple=${$("#checkBoxMultiple").is(':checked')}`; // Not used as a parameter
-      var mulCount = `&mulCount=${$('#multipleIDs').children('input').length}`;
-      var mul1 = `&mul1=${$("#customEntry1").val()}`;
-      var mul2 = `&mul2=${$("#customEntry2").val()}`;
-      var mul3 = `&mul3=${$("#customEntry3").val()}`;
-      var mul4 = `&mul4=${$("#customEntry4").val()}`;
-      var mul5 = `&mul5=${$("#customEntry5").val()}`;
-      var checkNewlines = `&newlines=${$("#checkBoxUseNewlines").is(':checked')}`;
-      var checkDeduplicate = `&dedupe=${$("#checkBoxNoDupes").is(':checked')}`;
-      var checkVerbose = `&verbose=${$("#checkBoxUseVerboseLogs").is(':checked')}`;
-      var checkScrollBottom = `&scroll=${$("#debugCheckBoxScrollBottom").is(':checked')}`;
+      let botSelected = `bot=${$("#regexList").val()}`;
+      let firstNumber = `&start=${escape($("#customEntry").val()).replaceAll("+", "%2b")}`; // using escape() on the value to escape dumb URL encoding stuff. Also replacing + with the encoded variant
+      let checkMultiple = `&multiple=${$("#checkBoxMultiple").is(':checked')}`; // Not used as a parameter
+      let mulCount = `&mulCount=${$('#multipleIDs').children('input').length}`;
+      let mul1 = `&mul1=${$("#customEntry1").val()}`;
+      let mul2 = `&mul2=${$("#customEntry2").val()}`;
+      let mul3 = `&mul3=${$("#customEntry3").val()}`;
+      let mul4 = `&mul4=${$("#customEntry4").val()}`;
+      let mul5 = `&mul5=${$("#customEntry5").val()}`;
+      let checkNewlines = `&newlines=${$("#checkBoxUseNewlines").is(':checked')}`;
+      let checkDeduplicate = `&dedupe=${$("#checkBoxNoDupes").is(':checked')}`;
+      let checkVerbose = `&verbose=${$("#checkBoxUseVerboseLogs").is(':checked')}`;
+      let checkScrollBottom = `&scroll=${$("#debugCheckBoxScrollBottom").is(':checked')}`;
 
       if (botSelected == "bot=1") { // If bot is default, remove the param
         botSelected = "";
@@ -894,31 +896,31 @@
       }
 
       // Creates the custom URL based on the above information. Does some replacing for visual's sake. If no params, remove the trailing "?"
-      customURL = `${window.location.origin + window.location.pathname + "?" + botSelected + firstNumber + mulCount + mul1 + mul2 + mul3 + mul4 + mul5 + checkNewlines + checkDeduplicate + checkVerbose + checkScrollBottom}`.replace("?&", "?")
+      let customURL = `${window.location.origin + window.location.pathname + "?" + botSelected + firstNumber + mulCount + mul1 + mul2 + mul3 + mul4 + mul5 + checkNewlines + checkDeduplicate + checkVerbose + checkScrollBottom}`.replace("?&", "?");
       if (customURL == window.location.origin + window.location.pathname + "?") {
         customURL = customURL.replace("?", "");
       }
 
-      var clipboard = new ClipboardJS('#debugCopyCustomURL', { // Copy the URL created
-        text: function (trigger) {
+      const clipboard = new ClipboardJS('#debugCopyCustomURL', { // Copy the URL created
+        text: trigger => {
           return customURL;
         }
       });
 
-      clipboard.on('error', function (e) {
+      clipboard.on('error', e => {
         clipboard.destroy();
         console.log(`%c[DEBUG] Failed to copy settings link.`, `color: #f04747`);
       });
 
-      clipboard.on("success", function () {
+      clipboard.on("success", () => {
         clipboard.destroy();
         console.log(`%c[DEBUG] Copied settings link: ${customURL}`, `color: #43b581`);
 
         // Color change
         $("#debugCopyCustomURL").animate({ backgroundColor: "#43b581" }, "swing");
-        setTimeout(function () {
+        setTimeout(() => {
           $("#debugCopyCustomURL").animate({ backgroundColor: "#7289da" }, "swing");
-          setTimeout(function () { // Remove the style to allow for the hover color again
+          setTimeout(() => { // Remove the style to allow for the hover color again
             $("#debugCopyCustomURL").removeAttr("style");
           }, 500);
         }, 1000);
@@ -928,29 +930,29 @@
 
   <!-- Read URL parameters and apply them -->
   <script>
-    $(document).ready(function () {
+    $(document).ready(() => {
 
       if (window.location.href.includes("?")) { // Run if URL has params
         console.log("[DEBUG] URL params found. Applying.");
 
         // Gets the params
-        var queryString = window.location.search;
-        var urlParams = new URLSearchParams(queryString);
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
 
         // Read each param
-        var botSelected = urlParams.get("bot");
-        var firstNumber = urlParams.get(unescape("start"));
-        var mulCount = urlParams.get("mulCount");
-        var mul1 = urlParams.get("mul1");
-        var mul2 = urlParams.get("mul2");
-        var mul3 = urlParams.get("mul3");
-        var mul4 = urlParams.get("mul4");
-        var mul5 = urlParams.get("mul5");
-        var checkNewlines = urlParams.get("newlines");
-        var checkDeduplicate = urlParams.get("dedupe");
-        var checkVerbose = urlParams.get("verbose");
-        var checkScrollBottom = urlParams.get("scroll");
-        var debugEnabled = urlParams.get("debug"); // Checks for debug param
+        let botSelected = urlParams.get("bot");
+        const firstNumber = urlParams.get(unescape("start"));
+        const mulCount = urlParams.get("mulCount");
+        const mul1 = urlParams.get("mul1");
+        const mul2 = urlParams.get("mul2");
+        const mul3 = urlParams.get("mul3");
+        const mul4 = urlParams.get("mul4");
+        const mul5 = urlParams.get("mul5");
+        const checkNewlines = urlParams.get("newlines");
+        const checkDeduplicate = urlParams.get("dedupe");
+        const checkVerbose = urlParams.get("verbose");
+        const checkScrollBottom = urlParams.get("scroll");
+        const debugEnabled = urlParams.get("debug"); // Checks for debug param
 
         if (botSelected == null) { // Sets bot to default if nothing was selected
           botSelected = 1;
@@ -1000,12 +1002,12 @@
   <!-- Cookie notice -->
   <script>
     function GetCookie(name) {
-      var arg = name + "=";
-      var alen = arg.length;
-      var clen = document.cookie.length;
-      var i = 0;
+      const arg = name + "=";
+      const alen = arg.length;
+      const clen = document.cookie.length;
+      let i = 0;
       while (i < clen) {
-        var j = i + alen;
+        const j = i + alen;
         if (document.cookie.substring(i, j) == arg)
           return "yup";
         i = document.cookie.indexOf(" ", i) + 1;
@@ -1013,10 +1015,11 @@
       }
       return null;
     }
+
     function testFirstCookie() {
-      var offset = new Date().getTimezoneOffset();
+      const offset = new Date().getTimezoneOffset();
       if ((offset >= -180) && (offset <= 0)) { // European time zones
-        var visit = GetCookie("acceptedCookieNotice");
+        const visit = GetCookie("acceptedCookieNotice");
         if (visit == null) {
           $("#cookieConsent").fadeIn(400);	// Show warning
         } else {
@@ -1024,9 +1027,9 @@
         }
       }
     }
-    $(document).ready(function () {
-      $("#cookieButton").click(function () {
-        var expire = new Date();
+
+    $(document).ready(() => {
+      $("#cookieButton").click(() => {
         expire = new Date(expire.getTime() + 15778800000);
         document.cookie = "acceptedCookieNotice=yup; expires=" + expire;
         $("#cookieConsent").fadeOut(200);

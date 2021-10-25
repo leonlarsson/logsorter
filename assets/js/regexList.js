@@ -1,15 +1,18 @@
 function getRegex() {
-  customEntry1 = $("#customEntry1").val();
-  customEntry2 = $("#customEntry2").val();
-  customEntry3 = $("#customEntry3").val();
-  customEntry4 = $("#customEntry4").val();
-  customEntry5 = $("#customEntry5").val();
+  const customEntry1 = $("#customEntry1").val();
+  const customEntry2 = $("#customEntry2").val();
+  const customEntry3 = $("#customEntry3").val();
+  const customEntry4 = $("#customEntry4").val();
+  const customEntry5 = $("#customEntry5").val();
+  let customEntry;
+  let regex;
 
   if ($("#checkBoxMultiple").is(":checked")) {
     if (customEntry1 == "" || customEntry2 == "" || customEntry3 == "" || customEntry4 == "" || customEntry5 == "") {
-      alert("Please fill in all the fields or decrease the number of fields.")
+      alert("Please fill in all the fields or decrease the number of fields.");
       return;
     }
+
     if ($('#multipleIDs').children('input').length == 2) {
       customEntry = `(?:${customEntry1}|${customEntry2})`;
     }
@@ -120,5 +123,5 @@ function getRegex() {
     console.log("--------------------------------------\n[DEBUG] RegEx 101 was selected.");
   }
 
-  parseIDs();
+  parseIDs(regex);
 }

@@ -1,4 +1,4 @@
-function parseIDs() {
+function parseIDs(regex) {
 
   if (editorLeft.getValue() == "") { // Returns if there is no text to match
     alert("Please input some text into the 'Input' textbox below or upload a file.");
@@ -9,15 +9,17 @@ function parseIDs() {
   //   alert("You did not select any ID to filter.\n\nBe aware that this includes every found ID.");
   // }
 
-  var today = new Date().toISOString().substr(0, 19); // Gets date for Verbose logs
-  dateTime = today.replace("T", " ")
+  const today = new Date().toISOString().substr(0, 19); // Gets date for Verbose logs
+  const dateTime = today.replace("T", " ")
 
+  let idSeparator;
+  let idSeparatorText;
   if ($("#checkBoxUseNewlines").is(':checked')) { // If checked, use newlines instead of spaces as the ID separator.
-    idSeparator = "\n"
-    idSeparatorText = "newlines"
+    idSeparator = "\n";
+    idSeparatorText = "newlines";
   } else {
-    idSeparator = " "
-    idSeparatorText = "spaces"
+    idSeparator = " ";
+    idSeparatorText = "spaces";
   }
 
   $("#outputStatusText").text(" (Working...)"); // Sets the status label to indicate that work has started
@@ -25,11 +27,12 @@ function parseIDs() {
   $("#outputStatusTextCol").text(" (Working...)"); // Sets the status label to indicate that work has started
   $("#outputStatusTextCol").css({ color: "" }); // Reset color
   $(".CodeMirror.cm-s-right").css({ borderColor: "#43b581" });  // Make the Output border green
-  setTimeout(function () { // Setting a timeout of 0 milliseconds so that the above status text gets rendered
 
-    var operationStart = new Date();
-    str = editorLeft.getValue();
-    match = regex.exec(str);
+  setTimeout(() => { // Setting a timeout of 0 milliseconds so that the above status text gets rendered
+
+    const operationStart = new Date();
+    const str = editorLeft.getValue();
+    let match = regex.exec(str);
     uniqueIDs.clear();
     allIDs.length = 0;
     console.log(`[DEBUG] Attempting to use pattern: ${regex}`);
@@ -55,8 +58,8 @@ function parseIDs() {
         }
       }
 
-      lastLine = editorRight.lastLine();
-      var operationFinish = new Date();
+      const lastLine = editorRight.lastLine();
+      const operationFinish = new Date();
       console.log(`%c[DEBUG] Found ${allIDs.length} matches (${uniqueIDs.size} unique) in ` + ((operationFinish - operationStart) / 1000).toFixed(2) + ` seconds. ${currentIDs} current IDs.\n--------------------------------------`, `color: #f04747`); // Once done, console.log the amount of found matches
       $("#outputStatusText").text(` (${allIDs.length} matches || ${uniqueIDs.size} unique || ${currentIDs} total)`); // Sets the status label to mention how many matches were found
       $("#outputStatusText").css({ color: "#f04747" }); // Set status to red
@@ -64,11 +67,12 @@ function parseIDs() {
       $("#outputStatusTextCol").css({ color: "#f04747" }); // Set status to red
       $(".CodeMirror.cm-s-right").css({ borderColor: bgColor }); // Reset the Output border
 
-      scrollText(); // Perform the scroll
+      scrollText(lastLine); // Perform the scroll
       return; // Return and do not continue
     }
 
     // MATCHES FOUND
+    let lastLine;
     if ($("#checkBoxNoDupes").is(":checked")) { // Append depending on checkbox. If no dupes, append the set.
 
       currentIDs += uniqueIDs.size;
@@ -104,22 +108,23 @@ function parseIDs() {
     }
 
     // REGARDLESS OF MATCHES FOUND
-    var operationFinish = new Date();
+    const operationFinish = new Date();
     console.log(`%c[DEBUG] Found ${allIDs.length} matches (${uniqueIDs.size} unique) in ` + ((operationFinish - operationStart) / 1000).toFixed(2) + ` seconds. ${currentIDs} current IDs.\n--------------------------------------`, `color: #43b581`); // Once done, console.log the amount of found matches
     $("#outputStatusText").css({ color: "" }); // Set status to default depending on light theme. Removes the style.
     $("#outputStatusTextCol").css({ color: "" }); // Set status to default depending on light theme. Removes the style.
     $(".CodeMirror.cm-s-right").css({ borderColor: bgColor }); // Reset the Output border
 
-    scrollText(); // Perform the scroll
+    scrollText(lastLine); // Perform the scroll
   }, 0)
 };
 
-function scrollText() {
+function scrollText(lastLine) {
   if ($("#debugCheckBoxScrollBottom").is(":checked")) { // Make this only available with newlines checked. Add button to scroll to last pos
     scrollBottom();
   }
+
   if ($("#debugCheckBoxScroll").is(":checked")) { // Make this only available with newlines checked. Add button to scroll to last pos
-    scrollVerbose();
+    scrollVerbose(lastLine);
   }
 }
 
