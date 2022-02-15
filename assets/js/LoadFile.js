@@ -1,12 +1,8 @@
 $("#files").on("change", evt => {
   const file = evt.target.files[0]; // Gets the selected file
 
-  let maxFileSize;
-  if (debugMode) { // Infinite file size if debug mode is active
-    maxFileSize = Infinity;
-  } else {
-    maxFileSize = 5000000;
-  }
+  // Infinite file size if debug mode is active
+  const maxFileSize = debugMode ? Infinity : 5000000;
 
   console.log(`[DEBUG] Received file "${file.name}" (${file.size} bytes), which is ${(file.size / maxFileSize * 100).toFixed(1)}% of the size limit.`);
 
