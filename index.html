@@ -9,7 +9,7 @@
   <title>Mozzy's Log Sorter</title>
   <meta name="title" content="Mozzy's Log Sorter">
   <meta name="description" content="A website used for extracting Discord IDs from raw logs.">
-  <meta name="theme-color" content="#7289da">
+  <meta name="theme-color" content="#5865F2">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
@@ -44,6 +44,7 @@
   <script src="assets/codemirror/lib/codemirror.js"></script>
   <script src="assets/codemirror/lib/mark-selection.js"></script>
   <script src="assets/codemirror/lib/placeholder.js"></script>
+  <script defer src="assets/js/constants.js"></script>
   <script defer src="assets/js/regexList.js"></script>
   <script defer src="assets/js/ParseTextBox.js"></script>
   <script defer src="assets/js/LoadFile.js"></script>
@@ -364,8 +365,6 @@
       return null;
     }
 
-
-
   </script>
 
   <!-- Theme setter -->
@@ -620,10 +619,10 @@
       currentIDs = uniqueIDs_Const.size; // Adjust the total IDs length to the current value
 
       // Color change
-      $("#removeDupesButton").animate({ backgroundColor: "#43b581" }, "swing");
-      $(".CodeMirror.cm-s-right").animate({ borderColor: "#43b581" }, "swing");
+      $("#removeDupesButton").animate({ backgroundColor: Colors.GREEN }, "swing");
+      $(".CodeMirror.cm-s-right").animate({ borderColor: Colors.GREEN }, "swing");
       setTimeout(() => {
-        $("#removeDupesButton").animate({ backgroundColor: "#7289da" }, "swing");
+        $("#removeDupesButton").animate({ backgroundColor: Colors.BLUE }, "swing");
         $(".CodeMirror.cm-s-right").animate({ borderColor: bgColor }, "swing");
         setTimeout(() => { // Remove the style to allow for the hover color again
           $("#removeDupesButton").removeAttr("style");
@@ -667,10 +666,10 @@
       console.log(`[DEBUG] Splitting into groups of ${splitEveryX}.`);
 
       // Color change
-      $("#splitLinesButton").animate({ backgroundColor: "#43b581" }, "swing");
-      $(".CodeMirror.cm-s-right").animate({ borderColor: "#43b581" }, "swing");
+      $("#splitLinesButton").animate({ backgroundColor: Colors.GREEN }, "swing");
+      $(".CodeMirror.cm-s-right").animate({ borderColor: Colors.GREEN }, "swing");
       setTimeout(() => {
-        $("#splitLinesButton").animate({ backgroundColor: "#7289da" }, "swing");
+        $("#splitLinesButton").animate({ backgroundColor: Colors.BLUE }, "swing");
         $(".CodeMirror.cm-s-right").animate({ borderColor: bgColor }, "swing");
         setTimeout(() => { // Remove the style to allow for the hover color again
           $("#splitLinesButton").removeAttr("style");
@@ -695,7 +694,7 @@
 
       clipboard.on('error', e => {
         clipboard.destroy();
-        console.log(`%c[DEBUG] Failed to copy text.`, `color: #f04747`);
+        console.log(`%c[DEBUG] Failed to copy text.`, `color: ${Colors.RED}`);
         alert("Copy operation failed. Please copy manually.")
       });
 
@@ -704,10 +703,10 @@
         console.log("[DEBUG] Copied text.");
 
         // Color change
-        $("#copyOutputButton").animate({ backgroundColor: "#43b581" }, "swing");
-        $(".CodeMirror.cm-s-right").animate({ borderColor: "#43b581" }, "swing");
+        $("#copyOutputButton").animate({ backgroundColor: Colors.GREEN }, "swing");
+        $(".CodeMirror.cm-s-right").animate({ borderColor: Colors.GREEN }, "swing");
         setTimeout(() => {
-          $("#copyOutputButton").animate({ backgroundColor: "#7289da" }, "swing");
+          $("#copyOutputButton").animate({ backgroundColor: Colors.BLUE }, "swing");
           $(".CodeMirror.cm-s-right").animate({ borderColor: bgColor }, "swing");
           // probably keeps going
           setTimeout(() => { // Remove the style to allow for the hover color again
@@ -738,10 +737,10 @@
       console.log("[DEBUG] Cleared text");
 
       // Color change
-      $("#clearOutputButton").animate({ backgroundColor: "#43b581" }, "swing");
-      $(".CodeMirror.cm-s-right").animate({ borderColor: "#f04747" }, "swing");
+      $("#clearOutputButton").animate({ backgroundColor: Colors.GREEN }, "swing");
+      $(".CodeMirror.cm-s-right").animate({ borderColor: Colors.RED }, "swing");
       setTimeout(() => {
-        $("#clearOutputButton").animate({ backgroundColor: "#f04747" }, "swing");
+        $("#clearOutputButton").animate({ backgroundColor: Colors.RED }, "swing");
         $(".CodeMirror.cm-s-right").animate({ borderColor: bgColor }, "swing");
         setTimeout(() => { // Remove the style to allow for the hover color again
           $("#clearOutputButton").removeAttr("style");
@@ -910,17 +909,17 @@
 
       clipboard.on('error', e => {
         clipboard.destroy();
-        console.log(`%c[DEBUG] Failed to copy settings link.`, `color: #f04747`);
+        console.log(`%c[DEBUG] Failed to copy settings link.`, `color: ${Colors.RED}`);
       });
 
       clipboard.on("success", () => {
         clipboard.destroy();
-        console.log(`%c[DEBUG] Copied settings link: ${customURL}`, `color: #43b581`);
+        console.log(`%c[DEBUG] Copied settings link: ${customURL}`, `color: ${Colors.GREEN}`);
 
         // Color change
-        $("#debugCopyCustomURL").animate({ backgroundColor: "#43b581" }, "swing");
+        $("#debugCopyCustomURL").animate({ backgroundColor: Colors.GREEN }, "swing");
         setTimeout(() => {
-          $("#debugCopyCustomURL").animate({ backgroundColor: "#7289da" }, "swing");
+          $("#debugCopyCustomURL").animate({ backgroundColor: Colors.BLUE }, "swing");
           setTimeout(() => { // Remove the style to allow for the hover color again
             $("#debugCopyCustomURL").removeAttr("style");
           }, 500);

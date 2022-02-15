@@ -10,7 +10,7 @@ function parseIDs(regex) {
   // }
 
   const today = new Date().toISOString().substr(0, 19); // Gets date for Verbose logs
-  const dateTime = today.replace("T", " ")
+  const dateTime = today.replace("T", " ");
 
   let idSeparator;
   let idSeparatorText;
@@ -26,7 +26,7 @@ function parseIDs(regex) {
   $("#outputStatusText").css({ color: "" }); // Reset color
   $("#outputStatusTextCol").text(" (Working...)"); // Sets the status label to indicate that work has started
   $("#outputStatusTextCol").css({ color: "" }); // Reset color
-  $(".CodeMirror.cm-s-right").css({ borderColor: "#43b581" });  // Make the Output border green
+  $(".CodeMirror.cm-s-right").css({ borderColor: Colors.GREEN });  // Make the Output border green
 
   setTimeout(() => { // Setting a timeout of 0 milliseconds so that the above status text gets rendered
 
@@ -48,7 +48,7 @@ function parseIDs(regex) {
     }
 
     // NO MATCHES
-    if (allIDs.length == 0 && uniqueIDs.size == 0) { // If no matches, return
+    if (allIDs.length === 0 && uniqueIDs.size === 0) { // If no matches, return
 
       if ($("#checkBoxUseVerboseLogs").is(":checked")) { // If checked, use verbose logs. Currently hidden by default
         if (editorRight.getValue() == "") { // Verbose logging. If textarea is empty, add no newlines at the top
@@ -60,11 +60,11 @@ function parseIDs(regex) {
 
       const lastLine = editorRight.lastLine();
       const operationFinish = new Date();
-      console.log(`%c[DEBUG] Found ${allIDs.length} matches (${uniqueIDs.size} unique) in ` + ((operationFinish - operationStart) / 1000).toFixed(2) + ` seconds. ${currentIDs} current IDs.\n--------------------------------------`, `color: #f04747`); // Once done, console.log the amount of found matches
+      console.log(`%c[DEBUG] Found ${allIDs.length} matches (${uniqueIDs.size} unique) in ` + ((operationFinish - operationStart) / 1000).toFixed(2) + ` seconds. ${currentIDs} current IDs.\n--------------------------------------`, `color: ${Colors.RED}`); // Once done, console.log the amount of found matches
       $("#outputStatusText").text(` (${allIDs.length} matches || ${uniqueIDs.size} unique || ${currentIDs} total)`); // Sets the status label to mention how many matches were found
-      $("#outputStatusText").css({ color: "#f04747" }); // Set status to red
+      $("#outputStatusText").css({ color: Colors.RED }); // Set status to red
       $("#outputStatusTextCol").text(` (${allIDs.length} matches || ${uniqueIDs.size} unique || ${currentIDs} total)`); // Sets the status label to mention how many matches were found
-      $("#outputStatusTextCol").css({ color: "#f04747" }); // Set status to red
+      $("#outputStatusTextCol").css({ color: Colors.RED }); // Set status to red
       $(".CodeMirror.cm-s-right").css({ borderColor: bgColor }); // Reset the Output border
 
       scrollText(lastLine); // Perform the scroll
@@ -109,7 +109,7 @@ function parseIDs(regex) {
 
     // REGARDLESS OF MATCHES FOUND
     const operationFinish = new Date();
-    console.log(`%c[DEBUG] Found ${allIDs.length} matches (${uniqueIDs.size} unique) in ` + ((operationFinish - operationStart) / 1000).toFixed(2) + ` seconds. ${currentIDs} current IDs.\n--------------------------------------`, `color: #43b581`); // Once done, console.log the amount of found matches
+    console.log(`%c[DEBUG] Found ${allIDs.length} matches (${uniqueIDs.size} unique) in ` + ((operationFinish - operationStart) / 1000).toFixed(2) + ` seconds. ${currentIDs} current IDs.\n--------------------------------------`, `color: ${Colors.GREEN}`); // Once done, console.log the amount of found matches
     $("#outputStatusText").css({ color: "" }); // Set status to default depending on light theme. Removes the style.
     $("#outputStatusTextCol").css({ color: "" }); // Set status to default depending on light theme. Removes the style.
     $(".CodeMirror.cm-s-right").css({ borderColor: bgColor }); // Reset the Output border
