@@ -603,7 +603,7 @@
         idSeparatorText = "spaces";
       }
 
-      const today = new Date().toISOString().substr(0, 19); // Gets date for Verbose logs - Deduplication
+      const today = new Date().toISOString().substring(0, 19); // Gets date for Verbose logs - Deduplication
       const dateTime = today.replace("T", " ");
 
       if ($("#checkBoxUseVerboseLogs").is(":checked")) {
@@ -782,7 +782,7 @@
     }
 
     function convertNewlines() { // Convert current separator to newlines
-      const today = new Date().toISOString().substr(0, 19); // Gets date for Verbose logs - Deduplication
+      const today = new Date().toISOString().substring(0, 19); // Gets date for Verbose logs - Deduplication
       const dateTime = today.replace("T", " ");
 
       const str = editorRight.getValue().replaceAll(/Generated.*:/g, "").replaceAll(/^\s/g, "").replace(/\s+$/g, "").replaceAll(/\s+/g, "\n");
@@ -796,7 +796,7 @@
     }
 
     function convertSpaces() { // Convert current separator to spaces
-      const today = new Date().toISOString().substr(0, 19); // Gets date for Verbose logs - Deduplication
+      const today = new Date().toISOString().substring(0, 19); // Gets date for Verbose logs - Deduplication
       const dateTime = today.replace("T", " ");
 
       const str = editorRight.getValue().replaceAll(/Generated.*:/g, "").replaceAll(/^\s/g, "").replace(/\s+$/g, "").replaceAll(/\s+/g, " ");

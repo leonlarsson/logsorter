@@ -9,7 +9,7 @@ function parseIDs(regex) {
   //   alert("You did not select any ID to filter.\n\nBe aware that this includes every found ID.");
   // }
 
-  const today = new Date().toISOString().substr(0, 19); // Gets date for Verbose logs
+  const today = new Date().toISOString().substring(0, 19); // Gets date for Verbose logs
   const dateTime = today.replace("T", " ");
 
   let idSeparator;
