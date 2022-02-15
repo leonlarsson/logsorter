@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <!-- Thanks to Zobtzler for the RegEx guidance -->
+  <!-- Thanks to the creator of FileSaver.js and the countless Stack Overflow threads re-teaching me JavaScript -->
+
+  <!-- Primary Meta Tags -->
+  <title>Mozzy's Log Sorter</title>
+  <meta name="title" content="Mozzy's Log Sorter">
+  <meta name="description" content="A website used for extracting Discord IDs from raw logs.">
+  <meta name="theme-color" content="#5865F2">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://logsorter.net/">
+  <meta property="og:title" content="Mozzy's Log Sorter">
+  <meta property="og:description" content="A website used for extracting Discord IDs from raw logs.">
+  <meta property="og:image" content="https://logsorter.net/assets/images/embed.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://logsorter.net/">
+  <meta property="twitter:title" content="Mozzy's Log Sorter">
+  <meta property="twitter:description" content="A website used for extracting Discord IDs from raw logs.">
+  <meta property="twitter:image" content="https://logsorter.net/assets/images/embed.png">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link rel="icon" href="assets/images/icon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="assets/images/icon.ico" type="image/x-icon">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/codemirror/lib/codemirror.css">
+  <link rel="stylesheet" href="assets/css/select2.css">
+  <script src="https://kit.fontawesome.com/7ebec69507.js" crossorigin="anonymous"></script>
+
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/jquery-color-animation.js" type="text/javascript"></script>
+  <script src="assets/js/select2.js"></script>
+  <script src="assets/codemirror/lib/codemirror.js"></script>
+  <script src="assets/codemirror/lib/mark-selection.js"></script>
+  <script src="assets/codemirror/lib/placeholder.js"></script>
+  <script defer src="assets/js/constants.js"></script>
+  <script defer src="assets/js/regexList.js"></script>
+  <script defer src="assets/js/ParseTextBox.js"></script>
+  <script defer src="assets/js/LoadFile.js"></script>
+  <script defer src="assets/js/FileSaver.js"></script>
+  <script defer src="assets/js/clipboard.min.js"></script>
+</head>
+
+<body>
+
+  <!-- Preload -->
+  <div id="loading">
+    <img id="loading-image" src="assets/images/preloader.gif" alt="Loading..." />
+  </div>
+
+  <!-- #region Main HTML -->
+  <div id="main">
+    <i id="debugToggleLight" onclick="toggleLight()"
+      style="position: absolute; transform: scale(2);top: 20px; left: 20px; z-index: 999; cursor: pointer;"></i>
+    <i class="fas fa-trash-alt" id="debugDeleteThemeCookie" onclick="deleteThemeCookie()"
+      style="position: absolute; transform: scale(2);top: 20px; left: 60px; z-index: 999; cursor: pointer;display: none;"></i>
+
+    <div id="topTitle" class="no-select">
+      <div ondblclick="toggleDebugOptions()" id="titleMain"><a href="https://ko-fi.com/mozzy" target="_blank"
+          title="A link to ko-fi.com" class="coffeeLink">☕</a><a id="titleLink" href="https://twitter.com/MozzyFX"
+          title="A link to Mozzy's Twitter.">Mozzy's</a> Log Sorter
+      </div>
+      <a id="changelogText" title="Opens the changelog." href="/changelog">(changelog)</a>
+    </div>
+
+    <div id="topOptions">
+      <div class="optionText no-select" id="firstText" title="Select the RegEx pattern you want to match for.">1. Select
+        RegEx:
+      </div>
+      <select id="regexList" onchange="changeRegex()">
+        <optgroup label="Zeppelin:" alt="Zeppelin" title="Default Zeppelin log formats. 'ping_user:' doesn't matter.">
+          <option value="1" alt="Zeppelin" title="This matches both joins and leaves.">Joins/Leaves</option>
+          <option value="2" alt="Zeppelin" title="This matches only joins.">Joins</option>
+          <option value="3" alt="Zeppelin" title="This matches only leaves.">Leaves</option>
+        </optgroup>
+        <optgroup label="Aperture:" alt="Aperture" title="Default Aperture log formats.">
+          <option value="1" alt="Aperture" title="This matches both joins and leaves.">Joins/Leaves</option>
+          <option value="2" alt="Aperture" title="This matches only joins.">Joins</option>
+          <option value="3" alt="Aperture" title="This matches only leaves.">Leaves</option>
+        </optgroup>
+        <optgroup label="Auttaja (Compact Logs):" alt="Auttaja" title="Default (compact) Auttaja log formats.">
+          <option value="1" alt="Auttaja" title="This matches both joins and leaves.">Joins/Leaves</option>
+          <option value="2" alt="Auttaja" title="This matches only joins.">Joins</option>
+          <option value="3" alt="Auttaja" title="This matches only leaves.">Leaves</option>
+        </optgroup>
+        <optgroup label="Utilibot(!):" alt="Utilibot"
+          title="Default Utilibot log formats. &#013;&#013;This SHOULD only match joins and leaves, but I haven't seen every form of Utilibot format.">
+          <option value="4" alt="Utilibot" title="This matches both joins and leaves.">Joins/Leaves</option>
+          <option value="5" alt="Utilibot" title="This matches only joins.">Joins</option>
+          <option value="6" alt="Utilibot" title="This matches only leaves.">Leaves</option>
+        </optgroup>
+        <optgroup label="Vortex:" alt="Vortex" title="Default Vortex log formats.">
+          <option value="7" alt="Vortex" title="This matches both joins and leaves.">Joins/Leaves</option>
+          <option value="8" alt="Vortex" title="This matches only joins.">Joins</option>
+          <option value="9" alt="Vortex" title="This matches only leaves.">Leaves</option>
+          <option value="10" alt="Vortex" title="This matches kicks from Anti-Raid Mode.">Kicks (Anti-Raid)</option>
+        </optgroup>
+        <optgroup label="Nexus:" alt="Nexus" title="Default Nexus log formats.">
+          <option value="95" alt="Nexus" title="This matches both joins and leaves.">Joins/Leaves</option>
+          <option value="96" alt="Nexus" title="This matches only joins.">Joins</option>
+          <option value="97" alt="Nexus" title="This matches only leaves.">Leaves</option>
+        </optgroup>
+        <optgroup label="Mee6/GiselleBot/Dyno/Carl-bot(!):" alt="EmbedBotsEw"
+          title="Limited support because these bots use embed logs and most are not able to split logs into specific channels.">
+          <option value="98" alt="EmbedBotsEw"
+            title="This only grabs the ID (from any log message that has 'ID:' in it.) &#013;&#013;I do not recommend using this as you can't split the logging channels on all bots.">
+            All IDs</option>
+        </optgroup>
+        <optgroup label="Misc:" alt="Misc." title="Anything not specific to any bot.">
+          <option value="99"
+            title="Select if you want to use your own RegEx. &#013;&#013;The contents of Capturing group 1 will be output."
+            alt="Misc.">Custom - Group 1</option>
+          <option value="100"
+            title="This grabs the first ID in each line. &#013;&#013;Beware of false positives in case of usernames."
+            alt="Misc.">All IDs - First occurrence</option>
+          <option value="101" title="This grabs every ID. &#013;&#013;Beware of false positives in case of usernames."
+            alt="Misc.">All IDs</option>
+        </optgroup>
+        <!-- <optgroup label="Embed logs are bad" title="It's true..."></optgroup>
+        <optgroup label="Don't use them :)" title="And you know it."></optgroup> -->
+        <optgroup label="Want a bot added? Contact me."
+          title="Click on the red 'Mozzy' or contact me on Discord. &#013;&#013;Only bots that use single line logs will be considered.">
+        </optgroup>
+
+      </select>
+      <div id="dynamicRegexPrefixText" class="optionText no-select"
+        title="Select the beginning numbers of the IDs. &#013;&#013;Example: (991)82302885588992">2. IDs begin with:
+      </div>
+
+      <div id="dynamicRegexPrefix" class="optionText no-select" style="margin: 0px;">/</div>
+      <input type="number" class="inputBox" id="customEntry" min="0" placeholder="(0-9)"
+        style="width: 60px; height: 20px; border-radius: 3px;">
+      <div id="dynamicRegexSuffix" class="optionText no-select" style="margin-left: 0px;">/g</div>
+
+
+      <label class="optionText no-select" id="checkBoxMultipleText" style="cursor: pointer;"
+        title="Select if you want to match multiple starting numbers. Up to five."><input style="cursor: pointer;"
+          type="checkbox" id="checkBoxMultiple" onclick="multipleCheck()">Multiple</label>
+
+      <label class="optionText no-select" id="checkBoxUseNewlinesText" style="cursor: pointer;"
+        title="Select if you want the IDs to be separated by newlines instead of spaces."><input
+          style="cursor: pointer;" type="checkbox" id="checkBoxUseNewlines" onchange="scrollCheck()">Newlines</label>
+
+      <label class="optionText no-select" id="checkBoxNoDupesText" style="cursor: pointer;"
+        title="Select if you want to only output unique IDs."><input style="cursor: pointer;" type="checkbox"
+          id="checkBoxNoDupes">Deduplicate</label>
+
+      <label class="optionText no-select" id="checkBoxUseVerboseLogsText" style="cursor: pointer;"
+        title="Select if you want extra logging at the top of the results. &#013;&#013;Displays date/time, pattern used, and which separator used."><input
+          style="cursor: pointer;" type="checkbox" id="checkBoxUseVerboseLogs" onchange="scrollCheck()">Verbose</label>
+
+
+      <input type="file" class="optionText" id="files" name="files[]" onclick="this.value=null" accept="text/plain"
+        style="display: none;">
+      <div id="multipleIDButtons" style="display: none;">
+        <button class="buttonBlueNew" title="Adds one ID field." onclick="addIDField()"
+          style="height: 20px; width: 20px; font-size: 15px; margin-left: 5px; margin-right: 5px;">+</button>
+        <button class="buttonBlueNew" title="Removes one ID field." onclick="removeIDField()"
+          style="height: 20px; width: 20px; font-size: 15px; margin-right: 10px;">-</button>
+      </div>
+      <div id="multipleIDs" style="display: none;">
+        <input class="inputBox" type="number" id="customEntry1"
+          style="width: 60px; height: 20px; border-radius: 3px; margin-left: 5px; margin-right: 5px; border-color: #40444b; border: 0px; outline: 0px; font-family: inherit;">
+        <label class="optionText">&</label>
+        <input class="inputBox" type="number" id="customEntry2"
+          style="width: 60px; height: 20px; border-radius: 3px; margin-left: 5px; margin-right: 5px; border-color: #40444b; border: 0px; outline: 0px; font-family: inherit;">
+      </div>
+    </div>
+
+    <div id="bottomOptions">
+      <!-- Perhaps move the 2 load button above and make them green? -->
+      <button class="buttonGreenNew no-select" id="matchTextButton" title="Parses the left textbox into the right one."
+        onclick="getRegex()">Match
+        "Input"</button>
+      <button class="buttonGreenNew no-select" id="loadFileButton"
+        title="Opens the file browser to select a txt file. Then populates the input with the contents."
+        onclick="clickOpenFileButton()">Load .txt file</button>
+      <span style="padding: 0 5px;" ondblclick="toggleDebugOptions()" id="buttonSeparator"
+        class="optionText no-select">|</span>
+      <button class="buttonBlueNew no-select" id="saveFileButton"
+        title="Prompts you to enter a filename, and then saves it as 'yourfilename'_LogSorter.txt"
+        onclick="saveFile()">Save
+        .txt file</button>
+      <button class="buttonBlueNew no-select" id="removeDupesButton"
+        title="Populates the output with only the unique IDs. &#013;&#013;Takes both 'Newlines' and 'Verbose' options into account. Can be used to switch separator on the fly."
+        onclick="removeDuplicates()">Remove duplicates</button>
+      <button class="buttonBlueNew no-select" id="splitLinesButton"
+        title="Splits the lines into groups of X amount. &#013;&#013;This only works when the newline separator is selected."
+        onclick="splitLines()">Split IDs</button>
+      <button class="buttonBlueNew no-select" data-clipboard-target="#textBoxOutput" id="copyOutputButton"
+        title="Copies the content of the output textbox to your clipboard." onclick="copyText()">Copy output</button>
+      <button class="buttonRedNew no-select" id="clearOutputButton" title="Clears the output textbox."
+        onclick="clearText()">Clear
+        output</button>
+    </div>
+
+    <div id="debugOptions" style="display: none;">
+
+      <button class="buttonBlueNew no-select" id="debugShowExample"
+        title="Populates the website with some example values." onclick="showExample()">Show example</button>
+
+      <button class="buttonBlueNew no-select" id="debugCopyCustomURL" title="Copies a URL with the current settings."
+        onclick="createCustomURL()">Share settings</button>
+
+      <button class="buttonBlueNew no-select" id="debugConvertNewlines" title="Converts the separator to newlines."
+        onclick="convertNewlines()">Newlines</button>
+      <button class="buttonBlueNew no-select" id="debugConvertSpaces" title="Converts the separator to spaces."
+        onclick="convertSpaces()">Spaces</button>
+
+      <!-- <label class="optionText no-select" id="debugCheckBoxScrollBottomText" style="cursor: pointer;"
+        title="Select if you want to scroll to the bottom on parse."><input style="cursor: pointer;" type="checkbox"
+          id="debugCheckBoxScrollBottom">Scroll to bottom</label> -->
+    </div>
+
+    <hr>
+
+    <div id="textBoxTitleText">
+      <div class="optionText no-select" id="textBoxTitleTextLeft" title="Paste text into this textbox.">Input</div>
+      <div class="optionText no-select" id="textBoxTitleTextRight" title="The output will be appended to this textbox."
+        ondblclick="woodMode()">
+        Output<span id="outputStatusText"></span></div>
+    </div>
+
+    <div id="textBoxArea">
+
+      <div style="display: none;" class="col-text optionText no-select" id="textBoxTitleTextLeftCol"
+        title="Paste text into this textbox.">Input</div>
+
+      <textarea id="textBoxInput" rows="40" cols="80" style="resize:none"
+        placeholder="Paste your logs here, select a log type and change any settings you want, then press the Match Input button.&#10;&#10;Made with <3 by Mozzy."></textarea>
+
+      <!-- <span class="optionText no-select" style="align-self: center; font-size: 30px;" title="No, I'm not a button.">></span> -->
+      <i class="col-icon fas fa-arrow-right optionText no-select" style="align-self: center; font-size: 20px;"></i>
+
+      <div style="display: none;" class="col-text optionText no-select" id="textBoxTitleTextRightCol"
+        title="The output will be appended to this textbox.">Output<span id="outputStatusTextCol"></span></div>
+
+      <textarea id="textBoxOutput" rows="40" cols="80" readonly style="resize:none"
+        placeholder="This is where you will find your parsed logs."></textarea>
+
+    </div>
+
+    <div class="container-below">
+      <span style="margin-top: 6px;" class="optionText no-select">Scroll to:</span>
+      <label class="optionText no-select" id="debugCheckBoxScrollText" style="display: none; cursor: pointer;"
+        title="Select if you want to scroll to the Verbose part on parse. &#013;&#013;This is very experimental and probably doesn't work great most times."><input
+          style="cursor: pointer;" type="checkbox" id="debugCheckBoxScroll"
+          onchange="$('#debugCheckBoxScrollBottom').prop('checked', false)">Verbose(!)</label>
+
+      <label class="optionText no-select" id="debugCheckBoxScrollBottomText" style="cursor: pointer;"
+        title="Select if you want to scroll to the bottom on parse."><input style="cursor: pointer;" type="checkbox"
+          id="debugCheckBoxScrollBottom" onchange="$('#debugCheckBoxScroll').prop('checked', false)">Bottom</label>
+    </div>
+
+    <div id="cookieConsent" class="no-select">
+      <button class="buttonBlueNew" id="cookieButton">Stop bothering me</button>
+      <div>🍪 This website uses one cookie to remember your theme preference.
+        <a style="text-decoration: underline; cursor: pointer;"
+          onclick="alert('When selecting a theme, the website saves a cookie with that preference.\n\nThis cookie can be deleted by clicking the trash icon to the right of the theme button.\n\nBy manually selecting a theme, you agree to this.')">More
+          details</a>
+      </div>
+    </div>
+
+  </div>
+  <!-- #endregion Main HTML -->
+
+  <!-- #region Scripts -->
+
+  <!-- Handle preload -->
+  <script>
+    $(window).on('load', function () {
+      $('#loading').fadeOut(200);
+    })
+  </script>
+
+  <!-- Initializes CodeMirror -->
+  <script>
+    const editorRight = CodeMirror.fromTextArea(document.getElementById("textBoxOutput"), {
+      mode: "text/html",
+      theme: "right",
+      lineNumbers: true,
+      readOnly: true, // was "noCursor"
+      lineWrapping: true,
+      styleSelectedText: true,
+      viewportMargin: 10,
+    });
+
+    const editorLeft = CodeMirror.fromTextArea(document.getElementById("textBoxInput"), {
+      mode: "text/html",
+      theme: "left",
+      lineNumbers: true,
+      readOnly: false, // was "noCursor"
+      lineWrapping: true,
+      styleSelectedText: true,
+      viewportMargin: 10,
+    });
+  </script>
+
+  <!-- Initialize Set and Array for IDs -->
+  <script>
+    let uniqueIDs = new Set();
+    let uniqueIDs_Const = new Set(); // I use this for the Remove Duplicates function since the one above is cleared every time a parse is run. 
+    let allIDs = [];
+    let currentIDs = 0;
+    let debugMode = false;
+  </script>
+
+  <!-- Select2/Creates a custom matcher for Select2. Thanks to user 'willbradley' on SO for providing this custom matcher -->
+  <script>
+    function modelMatcher(params, data) {
+      data.parentText = data.parentText || "";
+
+      // Always return the object if there is nothing to compare
+      if ($.trim(params.term) === '') {
+        return data;
+      }
+
+      // Do a recursive check for options with children
+      if (data.children && data.children.length > 0) {
+        // Clone the data object if there are children
+        // This is required as we modify the object to remove any non-matches
+        const matchRegex = $.extend(true, {}, data);
+
+        // Check each child of the option
+        for (let c = data.children.length - 1; c >= 0; c--) {
+          const child = data.children[c];
+          child.parentText += data.parentText + " " + data.text;
+
+          const matchesRegex = modelMatcher(params, child);
+
+          // If there wasn't a match, remove the object in the array
+          if (matchesRegex == null) {
+            matchRegex.children.splice(c, 1);
+          }
+        }
+
+        // If any children matched, return the new object
+        if (matchRegex.children.length > 0) {
+          return matchRegex;
+        }
+
+        // If there were no matching children, check just the plain object
+        return modelMatcher(params, matchRegex);
+      }
+
+      // If the typed-in term matches the text of this term, or the text from any
+      // parent term, then it's a match.
+      const original = (data.parentText + ' ' + data.text).toUpperCase();
+      const term = params.term.toUpperCase();
+
+      // Check if the text contains the term
+      if (original.indexOf(term) > -1) {
+        return data;
+      }
+
+      // If it doesn't contain the term, don't return anything
+      return null;
+    }
+
+  </script>
+
+  <!-- Theme setter -->
+  <script>
+
+    let isLightMode;
+    let bgColor;
+
+    if (document.cookie == "siteTheme=light") { // Checks for theme cookie on load, then sets theme accordingly. If no cookie, check system preference and set to that
+      console.log("[DEBUG] Detected light theme cookie.");
+      lightMode();
+    } else if (document.cookie == "siteTheme=dark") {
+      console.log("[DEBUG] Detected dark theme cookie.");
+      darkMode();
+    } else {
+      checkSystemThemePref();
+    }
+
+    window.onload = (event) => { // Set the theme button titles here to avoid the text flash
+      $("#debugToggleLight").attr("title", "Toggles light/dark theme.\n\nUses a non-tracking cookie to save your preference.\nPress the trash can to clear cookie.");
+      $("#debugDeleteThemeCookie").attr("title", "Deletes the cookie that stores your theme preference and changes theme to system preference.");
+    };
+
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(e => { // Detects changes in the system theme preference. Ignores if cookie exists
+      if (document.cookie == "siteTheme=light" || document.cookie == "siteTheme=dark") {
+        console.log("[DEBUG] System theme changed but cookie overrides it.")
+        return;
+      }
+
+      if ((e.matches ? "dark" : "light") == "dark") { // If system theme changed to dark
+        console.log("[DEBUG] No cookie. System preference changed to dark theme.");
+        darkMode();
+      }
+
+      if ((e.matches ? "dark" : "light") == "light") { // If system theme changed to light
+        console.log("[DEBUG] No cookie. System preference changed to light theme.");
+        lightMode();
+      }
+    });
+
+    function toggleLight() { // Toggles between dark and light theme and sets the cookie (60 days) to save that preference
+
+      if ($("body").hasClass("lightMode")) { // If light mode is active, set to dark mode
+        const date = new Date();
+        date.setDate(date.getDate() + 60);
+        document.cookie = `siteTheme=dark; expires=${date}`;
+        darkMode();
+      } else {
+        const date = new Date();
+        date.setDate(date.getDate() + 60);
+        document.cookie = `siteTheme=light; expires=${date}`;
+        lightMode();
+      }
+    }
+
+    function checkSystemThemePref() { // Function to check system theme preference
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) { // If System theme is dark when cookie is deleted.
+        console.log("[DEBUG] System theme preference is dark.");
+        darkMode();
+      }
+
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) { // If System theme is light when cookie is deleted.
+        console.log("[DEBUG] System theme preference is light.");
+        lightMode();
+      }
+    }
+
+    function lightMode() {
+      isLightMode = true;
+      $("*").addClass("lightMode");
+      $("#debugToggleLight").addClass("fas fa-moon");
+      $("#debugToggleLight").removeClass("fa-sun");
+      $("#debugToggleLight").css("color", "#2f3136");
+      $("#debugDeleteThemeCookie").css("color", "#2f3136");
+      bgColor = "#ffffff";
+      $(".CodeMirror").css("border-color", bgColor);
+
+      if (document.cookie.indexOf("siteTheme=") == -1) {
+        $("#debugDeleteThemeCookie").hide();
+      } else {
+        $("#debugDeleteThemeCookie").show();
+      }
+
+      $("#regexList").select2({ // Makes the RegEx selector a searchable Select2 box
+        dropdownAutoWidth: true,
+        width: "style",
+        matcher: modelMatcher,
+        theme: "default"
+      });
+    }
+
+    function darkMode() {
+      isLightMode = false;
+      $("*").removeClass("lightMode");
+      $("#debugToggleLight").addClass("fas fa-sun");
+      $("#debugToggleLight").removeClass("fa-moon");
+      $("#debugToggleLight").css("color", "#f2f3f5");
+      $("#debugDeleteThemeCookie").css("color", "#f2f3f5");
+      bgColor = "#36393f";
+      $(".CodeMirror").css("border-color", bgColor);
+
+      if (document.cookie.indexOf("siteTheme=") == -1) {
+        $("#debugDeleteThemeCookie").hide();
+      } else {
+        $("#debugDeleteThemeCookie").show();
+      }
+
+      $("#regexList").select2({ // Makes the RegEx selector a searchable Select2 box
+        dropdownAutoWidth: true,
+        width: "style",
+        matcher: modelMatcher,
+        theme: "mozzy"
+      });
+    }
+  </script>
+
+  <!-- Custom RegEx. If Custom is selected, change type number to text, change text and add the visual RegEx open and close -->
+  <script>
+    $("#dynamicRegexPrefix").hide();
+    $("#dynamicRegexSuffix").hide();
+    function changeRegex() {
+      if ($("#regexList").val() == 99) {
+        $("#dynamicRegexPrefixText").text("2. Custom RegEx:")
+        $("#dynamicRegexPrefixText").show();
+        $("#dynamicRegexPrefixText").prop({ title: "Enter the RegEx you want to use. / and /g are already included.\n\nThe contents of Capturing group 1 will be output." });
+        $("#customEntry").prop({ type: "text" });
+        $("#customEntry").prop({ placeholder: "" });
+        $("#customEntry").attr("style", "height: 20px; border-radius: 3px");
+        $("#dynamicRegexPrefix").show();
+        $("#dynamicRegexSuffix").show();
+        $("#customEntry").prop("disabled", false); // Enables the entry box because we do not use multiples for custom Regex
+        $("#checkBoxMultiple").prop("checked", false); // Systemetically uncheck it for the main script
+        $("#multipleIDs, #multipleIDButtons, #checkBoxMultiple, #checkBoxMultipleText").hide(); // Hide!
+
+      } else if ($("#regexList").val() == 100 || $("#regexList").val() == 101) {
+        $("#dynamicRegexPrefixText").text("2. IDs begin with:")
+        $("#dynamicRegexPrefixText").prop({ title: "Select the beginning numbers of the IDs.\n\nExample: (991)82302885588992" });
+        $("#customEntry").prop({ type: "number" });
+        $("#customEntry").prop({ placeholder: "(0-9)" });
+        $("#customEntry").attr("style", "width: 60px; height: 20px; border-radius: 3px;");
+        $("#dynamicRegexPrefix").hide();
+        $("#dynamicRegexSuffix").hide();
+        $("#customEntry").prop("disabled", false); // Show entry box
+        $("#checkBoxMultiple").prop("checked", false); // Systemetically uncheck it for the main script
+        $("#multipleIDs, #multipleIDButtons, #checkBoxMultiple, #checkBoxMultipleText").hide(); // Hide!
+
+      } else {
+        $("#dynamicRegexPrefixText").text("2. IDs begin with:")
+        $("#dynamicRegexPrefixText").prop({ title: "Select the beginning numbers of the IDs.\n\nExample: (991)82302885588992" });
+        $("#customEntry").prop({ type: "number" });
+        $("#customEntry").prop({ placeholder: "(0-9)" });
+        $("#customEntry").attr("style", "width: 60px; height: 20px; border-radius: 3px;");
+        $("#dynamicRegexPrefix").hide();
+        $("#dynamicRegexSuffix").hide();
+        $("#customEntry").prop("disabled", false); // Show entry box if not custom Regex
+        $("#checkBoxMultiple, #checkBoxMultipleText").show(); // Show the checkbox
+
+        if ($('#checkBoxMultiple').is(':checked')) { // If not custom regex and multiples is checked, keep/disable the main entry box.
+          $("#customEntry").prop("disabled", true)
+          $("#multipleIDs, #multipleIDButtons").show();
+          $("#dynamicRegexPrefixText").text("2. IDs begin with:")
+        }
+      }
+    }
+  </script>
+
+  <!-- Shows and hides the extra ID Fields based on the multiples checkbox -->
+  <script>
+    function multipleCheck() {
+      if ($('#checkBoxMultiple').is(':checked')) {
+        $("#multipleIDs, #multipleIDButtons").show();
+        $("#customEntry").prop("disabled", true)
+      } else {
+        $("#multipleIDs, #multipleIDButtons").hide();
+        $("#customEntry").prop("disabled", false)
+      }
+    }
+  </script>
+
+  <!-- Handles the Adding and Removing of the extra ID fields -->
+  <script>
+    let number;
+    function addIDField() {
+      number = $('#multipleIDs').children('input').length + 1; // Increase the number when func is run. Used for the customEntryNUMBER id.
+      if ($('#multipleIDs').children('input').length == 5) { // If there are 5 ID Fields, don't add more.
+        number = 5;
+        return;
+      }
+      if (isLightMode) {
+        $("#multipleIDs").append(`<label class="optionText lightMode">&</label><input class="inputBox lightMode" type="number" id="customEntry${number}" style="width: 60px; height: 20px; border-radius: 3px; margin-left: 5px; margin-right: 5px; border-color: #40444b; border: 0px; outline: 0px; font-family: inherit;">`)
+      } else {
+        $("#multipleIDs").append(`<label class="optionText">&</label><input class="inputBox" type="number" id="customEntry${number}" style="width: 60px; height: 20px; border-radius: 3px; margin-left: 5px; margin-right: 5px; border-color: #40444b; border: 0px; outline: 0px; font-family: inherit;">`)
+      }
+    }
+
+    function removeIDField() {
+      if ($('#multipleIDs').children('input').length == 2) { // If there are 2 ID Fields, don't remove more.
+        number = 2;
+        return;
+      }
+      let idFields = document.getElementById('multipleIDs');
+      idFields.removeChild(idFields.lastElementChild); // Remove 2. One ID Field and one & separator.
+      idFields.removeChild(idFields.lastElementChild);
+    }
+  </script>
+
+  <!-- Load file (clicks the actual button that is set to launch the code in LoadFile.js) -->
+  <script>
+    function clickOpenFileButton() {
+      $("#files").click();
+    }
+  </script>
+
+  <!-- Save file -->
+  <script>
+    function saveFile() {
+      if (promptFilename = prompt("Save file as:\n'IDs'_LogSorter.txt", "IDs")) {
+        const textBlob = new Blob([editorRight.getValue()], { type: "text/plain" });
+        window.saveAs(textBlob, promptFilename + "_LogSorter.txt");
+      }
+    }
+  </script>
+
+  <!-- Remove duplicates -->
+  <script>
+    function removeDuplicates() {
+      if (editorRight.getValue() == "") return;
+
+      let idSeparator;
+      let idSeparatorText;
+      if ($("#checkBoxUseNewlines").is(':checked')) { // If checked, use newlines instead of spaces as the ID separator.
+        idSeparator = "\n";
+        idSeparatorText = "newlines";
+      } else {
+        idSeparator = " ";
+        idSeparatorText = "spaces";
+      }
+
+      const today = new Date().toISOString().substring(0, 19); // Gets date for Verbose logs - Deduplication
+      const dateTime = today.replace("T", " ");
+
+      if ($("#checkBoxUseVerboseLogs").is(":checked")) {
+        editorRight.setValue(`Generated on ${dateTime} UTC. Duplicates removed, ${uniqueIDs_Const.size} unique IDs. Separated with ${idSeparatorText}:\n${[...uniqueIDs_Const].join(idSeparator) + idSeparator}`);
+      } else {
+        editorRight.setValue(`${[...uniqueIDs_Const].join(idSeparator) + idSeparator}`);
+      }
+
+      console.log(`[DEBUG] Removed duplicates. ${currentIDs - uniqueIDs_Const.size} duplicates removed. ${uniqueIDs_Const.size} left.`)
+      $("#outputStatusText").text(` (${currentIDs - uniqueIDs_Const.size} duplicates removed. ${uniqueIDs_Const.size} left)`);
+      $("#outputStatusTextCol").text(` (${currentIDs - uniqueIDs_Const.size} duplicates removed. ${uniqueIDs_Const.size} left)`);
+
+      currentIDs = uniqueIDs_Const.size; // Adjust the total IDs length to the current value
+
+      // Color change
+      $("#removeDupesButton").animate({ backgroundColor: Colors.GREEN }, "swing");
+      $(".CodeMirror.cm-s-right").animate({ borderColor: Colors.GREEN }, "swing");
+      setTimeout(() => {
+        $("#removeDupesButton").animate({ backgroundColor: Colors.BLUE }, "swing");
+        $(".CodeMirror.cm-s-right").animate({ borderColor: bgColor }, "swing");
+        setTimeout(() => { // Remove the style to allow for the hover color again
+          $("#removeDupesButton").removeAttr("style");
+        }, 500);
+      }, 1000);
+
+    }
+  </script>
+
+  <!-- Split every X lines -->
+  <script>
+    function splitLines() {
+      const rawInput = prompt("After how many lines do you want to split?\n\nPlease enter a number above 0.", "100"); // Gets the number to split by
+      const splitEveryX = parseInt(rawInput); // Make the input an int
+
+      if (rawInput == null) { // If no input, return
+        return;
+      }
+
+      if (splitEveryX == 0 || isNaN(splitEveryX)) { // If input is 0 or not a number, return
+        alert("Not a number or 0.");
+        return;
+      }
+
+      if (splitEveryX > editorRight.lineCount() - 2) { // Prevent the user from splitting into groups of X when X is bigger than the total amount of lines
+        alert(`Only found ${editorRight.lineCount() - 1} lines. Please select a number smaller than the amount of lines.`);
+        return;
+      }
+
+      const splitsNeeded = Math.trunc(editorRight.lineCount() / splitEveryX); // Sets the amount of splits needed based on the amount of lines and size of group
+      let whileLoop = 0; // Sets the base while loop number
+      let newlineAtLine = splitEveryX - 1; // Selects the first line to enter a newline at. -1 because apparently it starts at 0
+
+      while (splitsNeeded > whileLoop) { // Continue until the number of splits needed is reached
+        editorRight.replaceRange("\n", { line: newlineAtLine }); // Add a newline at line designated line number
+        whileLoop++;
+        newlineAtLine = newlineAtLine + splitEveryX; // Add the group size to the next line number that needs a newline
+        newlineAtLine++; // +1 to keep up with the line being moved because of previous newline
+      }
+
+      console.log(`[DEBUG] Splitting into groups of ${splitEveryX}.`);
+
+      // Color change
+      $("#splitLinesButton").animate({ backgroundColor: Colors.GREEN }, "swing");
+      $(".CodeMirror.cm-s-right").animate({ borderColor: Colors.GREEN }, "swing");
+      setTimeout(() => {
+        $("#splitLinesButton").animate({ backgroundColor: Colors.BLUE }, "swing");
+        $(".CodeMirror.cm-s-right").animate({ borderColor: bgColor }, "swing");
+        setTimeout(() => { // Remove the style to allow for the hover color again
+          $("#splitLinesButton").removeAttr("style");
+        }, 500);
+      }, 1000);
+
+    }
+  </script>
+
+  <!-- Copy text -->
+  <script>
+    function copyText() {
+
+      // If nothing to copy, return
+      if (editorRight.getValue() == "") return;
+
+      const clipboard = new ClipboardJS('#copyOutputButton', { // Attempt to copy the Output into the clipboard. If successful, run visual change. If failed, alert the user.
+        text: trigger => {
+          return editorRight.getValue();
+        }
+      });
+
+      clipboard.on('error', e => {
+        clipboard.destroy();
+        console.log(`%c[DEBUG] Failed to copy text.`, `color: ${Colors.RED}`);
+        alert("Copy operation failed. Please copy manually.")
+      });
+
+      clipboard.on("success", () => {
+        clipboard.destroy();
+        console.log("[DEBUG] Copied text.");
+
+        // Color change
+        $("#copyOutputButton").animate({ backgroundColor: Colors.GREEN }, "swing");
+        $(".CodeMirror.cm-s-right").animate({ borderColor: Colors.GREEN }, "swing");
+        setTimeout(() => {
+          $("#copyOutputButton").animate({ backgroundColor: Colors.BLUE }, "swing");
+          $(".CodeMirror.cm-s-right").animate({ borderColor: bgColor }, "swing");
+          // probably keeps going
+          setTimeout(() => { // Remove the style to allow for the hover color again
+            $("#copyOutputButton").removeAttr("style");
+          }, 500);
+        }, 1000);
+      });
+    }
+  </script>
+
+  <!-- Clear text -->
+  <script>
+    function clearText() {
+
+      // If nothing to copy, return
+      if (editorRight.getValue() == "") return;
+
+      // Clears all the values, sets and arrays
+      uniqueIDs.clear();
+      uniqueIDs_Const.clear();
+      allIDs.length = 0;
+      currentIDs = 0;
+
+      $("#outputStatusText").text("");
+      $("#outputStatusTextCol").text("");
+      editorRight.setValue("");
+
+      console.log("[DEBUG] Cleared text");
+
+      // Color change
+      $("#clearOutputButton").animate({ backgroundColor: Colors.GREEN }, "swing");
+      $(".CodeMirror.cm-s-right").animate({ borderColor: Colors.RED }, "swing");
+      setTimeout(() => {
+        $("#clearOutputButton").animate({ backgroundColor: Colors.RED }, "swing");
+        $(".CodeMirror.cm-s-right").animate({ borderColor: bgColor }, "swing");
+        setTimeout(() => { // Remove the style to allow for the hover color again
+          $("#clearOutputButton").removeAttr("style");
+        }, 500);
+      }, 1000);
+    }
+  </script>
+
+  <!-- DEBUG MODE & OPTIONS-->
+  <script>
+    function toggleDebugOptions() {
+      if (debugMode) {
+        disableDebug();
+        function disableDebug() {
+          debugMode = false;
+          editorRight.setOption("readOnly", true);
+          // $("#debugCheckBoxScrollBottom").prop("checked", false) // Uncheck
+          $("#debugOptions").hide();
+          console.log(`[DEBUG] Debug mode set to ${debugMode}.`);
+        }
+      } else {
+
+        enableDebug();
+        function enableDebug() {
+          debugMode = true;
+          editorRight.setOption("readOnly", false);
+          $("#debugOptions").show();
+          console.log(`[DEBUG] Debug mode set to ${debugMode}.`);
+        }
+      }
+
+    }
+
+    function deleteThemeCookie() { // Deletes the theme cookie, hides the delete button and changes theme to system preference
+      document.cookie = `siteTheme=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
+      $("#debugDeleteThemeCookie").hide();
+      console.log("[DEBUG] Deleted theme cookie. Setting to system preference.");
+      checkSystemThemePref();
+    }
+
+    function convertNewlines() { // Convert current separator to newlines
+      const today = new Date().toISOString().substring(0, 19); // Gets date for Verbose logs - Deduplication
+      const dateTime = today.replace("T", " ");
+
+      const str = editorRight.getValue().replaceAll(/Generated.*:/g, "").replaceAll(/^\s/g, "").replace(/\s+$/g, "").replaceAll(/\s+/g, "\n");
+
+      if ($("#checkBoxUseVerboseLogs").is(":checked")) {
+        editorRight.setValue(`Generated on ${dateTime} UTC. ${currentIDs} IDs. Separated with newlines:\n${str}\n`);
+      } else {
+        editorRight.setValue(str + "\n");
+      }
+      console.log("[DEBUG] Converted to newlines.");
+    }
+
+    function convertSpaces() { // Convert current separator to spaces
+      const today = new Date().toISOString().substring(0, 19); // Gets date for Verbose logs - Deduplication
+      const dateTime = today.replace("T", " ");
+
+      const str = editorRight.getValue().replaceAll(/Generated.*:/g, "").replaceAll(/^\s/g, "").replace(/\s+$/g, "").replaceAll(/\s+/g, " ");
+
+      if ($("#checkBoxUseVerboseLogs").is(":checked")) {
+        editorRight.setValue(`Generated on ${dateTime} UTC. ${currentIDs} IDs. Separated with spaces:\n${str}\n`);
+      } else {
+        editorRight.setValue(str + "\n");
+      }
+      console.log("[DEBUG] Converted to spaces.");
+    }
+
+    function scrollCheck() {
+      if ($("#checkBoxUseNewlines").is(":checked") && $("#checkBoxUseVerboseLogs").is(":checked")) {
+        $("#debugCheckBoxScrollText").show();
+      } else {
+        $("#debugCheckBoxScrollText").hide();
+        $("#debugCheckBoxScroll").prop("checked", false);
+      }
+    }
+
+    function scrollBottom() {
+      editorRight.scrollTo(0, 9999999999999999999999999999999999999);
+    }
+
+    function scrollVerbose(lastLine) {
+      editorRight.scrollIntoView({ line: lastLine }, 200);
+    }
+
+    function woodMode() {
+      console.log("lol");
+    }
+
+  </script>
+
+  <!-- Populate the website with some example values -->
+  <script>
+    function showExample() {
+
+      // Populate left editor
+      editorLeft.setValue(`📥 @Gamer Deluxe (Gamer Deluxe#9999, 649462446880518336) joined (created 2 years, 3 months ago)
+📤 <@!736816352345563726> (EpicGamer#9129, 736816352345563726) left the server
+📥 <@!945442324440556746> (Poggers#7856, 945442324440556746) joined (created 8 hours, 57 minutes ago)
+📤 <@!550050618767156620> (Cow Pogging#4017, 550050618767156620) left the server
+📥 <@!943243552187497252> (coolguy123#7825, 943243552187497252) joined (created 8 hours, 57 minutes ago)
+📤 <@!584490524775616448> (loveminecraft#0666, 584490524775616448) left the server`);
+
+
+      // Change bot, starting number, and checkboxes
+      $("#customEntry").val("94");
+      $("#checkBoxUseNewlines").prop("checked", true);
+      $("#checkBoxUseVerboseLogs").prop("checked", true);
+      $("#regexList").val(2).change();
+
+    }
+  </script>
+
+  <!-- Create custom URL with params -->
+  <script>
+    function createCustomURL() {
+
+      // Set variables with the current settings
+      let botSelected = `bot=${$("#regexList").val()}`;
+      let firstNumber = `&start=${escape($("#customEntry").val()).replaceAll("+", "%2b")}`; // using escape() on the value to escape dumb URL encoding stuff. Also replacing + with the encoded variant
+      let checkMultiple = `&multiple=${$("#checkBoxMultiple").is(':checked')}`; // Not used as a parameter
+      let mulCount = `&mulCount=${$('#multipleIDs').children('input').length}`;
+      let mul1 = `&mul1=${$("#customEntry1").val()}`;
+      let mul2 = `&mul2=${$("#customEntry2").val()}`;
+      let mul3 = `&mul3=${$("#customEntry3").val()}`;
+      let mul4 = `&mul4=${$("#customEntry4").val()}`;
+      let mul5 = `&mul5=${$("#customEntry5").val()}`;
+      let checkNewlines = `&newlines=${$("#checkBoxUseNewlines").is(':checked')}`;
+      let checkDeduplicate = `&dedupe=${$("#checkBoxNoDupes").is(':checked')}`;
+      let checkVerbose = `&verbose=${$("#checkBoxUseVerboseLogs").is(':checked')}`;
+      let checkScrollBottom = `&scroll=${$("#debugCheckBoxScrollBottom").is(':checked')}`;
+
+      if (botSelected == "bot=1") { // If bot is default, remove the param
+        botSelected = "";
+      }
+
+      if (firstNumber == "&start=") { // If starting number is empty, remove the param
+        firstNumber = "";
+      }
+
+      if (checkMultiple.includes("false")) { // If Multiples checkbox is disabled, remove all the related params. If checked, check each value and remove if empty
+        checkMultiple = ""; mulCount = ""; mul1 = ""; mul2 = ""; mul3 = ""; mul4 = ""; mul5 = "";
+      } else {
+
+        // Go through each Multiple value and remove param if empty or undefined
+        if (mul1.includes("undefined") || mul1 == "&mul1=") {
+          mul1 = "";
+        }
+        if (mul2.includes("undefined") || mul2 == "&mul2=") {
+          mul2 = "";
+        }
+        if (mul3.includes("undefined") || mul3 == "&mul3=") {
+          mul3 = "";
+        }
+        if (mul4.includes("undefined") || mul4 == "&mul4=") {
+          mul4 = "";
+        }
+        if (mul5.includes("undefined") || mul5 == "&mul5=") {
+          mul5 = "";
+        }
+      }
+
+      // Remove Checkbox params if unchecked (default)
+      if (checkNewlines.includes("false")) {
+        checkNewlines = "";
+      }
+      if (checkDeduplicate.includes("false")) {
+        checkDeduplicate = "";
+      }
+      if (checkVerbose.includes("false")) {
+        checkVerbose = "";
+      }
+      if (checkScrollBottom.includes("false")) {
+        checkScrollBottom = "";
+      }
+
+      // Creates the custom URL based on the above information. Does some replacing for visual's sake. If no params, remove the trailing "?"
+      let customURL = `${window.location.origin + window.location.pathname + "?" + botSelected + firstNumber + mulCount + mul1 + mul2 + mul3 + mul4 + mul5 + checkNewlines + checkDeduplicate + checkVerbose + checkScrollBottom}`.replace("?&", "?");
+      if (customURL == window.location.origin + window.location.pathname + "?") {
+        customURL = customURL.replace("?", "");
+      }
+
+      const clipboard = new ClipboardJS('#debugCopyCustomURL', { // Copy the URL created
+        text: trigger => {
+          return customURL;
+        }
+      });
+
+      clipboard.on('error', e => {
+        clipboard.destroy();
+        console.log(`%c[DEBUG] Failed to copy settings link.`, `color: ${Colors.RED}`);
+      });
+
+      clipboard.on("success", () => {
+        clipboard.destroy();
+        console.log(`%c[DEBUG] Copied settings link: ${customURL}`, `color: ${Colors.GREEN}`);
+
+        // Color change
+        $("#debugCopyCustomURL").animate({ backgroundColor: Colors.GREEN }, "swing");
+        setTimeout(() => {
+          $("#debugCopyCustomURL").animate({ backgroundColor: Colors.BLUE }, "swing");
+          setTimeout(() => { // Remove the style to allow for the hover color again
+            $("#debugCopyCustomURL").removeAttr("style");
+          }, 500);
+        }, 1000);
+      });
+    }
+  </script>
+
+  <!-- Read URL parameters and apply them -->
+  <script>
+    $(document).ready(() => {
+
+      if (window.location.href.includes("?")) { // Run if URL has params
+        console.log("[DEBUG] URL params found. Applying.");
+
+        // Gets the params
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+
+        // Read each param
+        let botSelected = urlParams.get("bot");
+        const firstNumber = urlParams.get(unescape("start"));
+        const mulCount = urlParams.get("mulCount");
+        const mul1 = urlParams.get("mul1");
+        const mul2 = urlParams.get("mul2");
+        const mul3 = urlParams.get("mul3");
+        const mul4 = urlParams.get("mul4");
+        const mul5 = urlParams.get("mul5");
+        const checkNewlines = urlParams.get("newlines");
+        const checkDeduplicate = urlParams.get("dedupe");
+        const checkVerbose = urlParams.get("verbose");
+        const checkScrollBottom = urlParams.get("scroll");
+        const debugEnabled = urlParams.get("debug"); // Checks for debug param
+
+        if (botSelected == null) { // Sets bot to default if nothing was selected
+          botSelected = 1;
+        }
+
+        if (mulCount) { // Activate the Multiple checkbox if the mulCount param exists (exists when Multiples checkbox is checked)
+          $("#checkBoxMultiple").prop("checked", true);
+        }
+
+        if (mulCount == "3") { // Adds ID fields based on the setting. Starting from 2
+          addIDField();
+        }
+        if (mulCount == "4") {
+          addIDField();
+          addIDField();
+        }
+        if (mulCount == "5") {
+          addIDField();
+          addIDField();
+          addIDField();
+        }
+
+        // Apply changes
+        $("#regexList").val(botSelected).change();
+        $("#customEntry").val(firstNumber);
+        $("#customEntry1").val(mul1);
+        $("#customEntry2").val(mul2);
+        $("#customEntry3").val(mul3);
+        $("#customEntry4").val(mul4);
+        $("#customEntry5").val(mul5);
+        $("#checkBoxUseNewlines").prop("checked", String(checkNewlines) == "true");
+        $("#checkBoxNoDupes").prop("checked", String(checkDeduplicate) == "true");
+        $("#checkBoxUseVerboseLogs").prop("checked", String(checkVerbose) == "true");
+        $("#debugCheckBoxScrollBottom").prop("checked", String(checkScrollBottom) == "true");
+
+        if (debugEnabled == "1" || debugEnabled == "true") { // If "debug=true/1", activate debug mode
+          toggleDebugOptions();
+        }
+
+        multipleCheck(); // Runs the check to expand the Multiples section. .change() above somehow already does this?
+        scrollCheck(); // Runs the check to show the Verbose scroll.
+        history.pushState({}, null, "./"); // Strips URL of the params
+      }
+    });
+  </script>
+
+  <!-- Cookie notice -->
+  <script>
+    function GetCookie(name) {
+      const arg = name + "=";
+      const alen = arg.length;
+      const clen = document.cookie.length;
+      let i = 0;
+      while (i < clen) {
+        const j = i + alen;
+        if (document.cookie.substring(i, j) == arg)
+          return "yup";
+        i = document.cookie.indexOf(" ", i) + 1;
+        if (i == 0) break;
+      }
+      return null;
+    }
+
+    function testFirstCookie() {
+      const offset = new Date().getTimezoneOffset();
+      if ((offset >= -180) && (offset <= 0)) { // European time zones
+        const visit = GetCookie("acceptedCookieNotice");
+        if (visit == null) {
+          $("#cookieConsent").fadeIn(400);	// Show warning
+        } else {
+          // Already accepted
+        }
+      }
+    }
+
+    $(document).ready(() => {
+      $("#cookieButton").click(() => {
+        expire = new Date(expire.getTime() + 15778800000);
+        document.cookie = "acceptedCookieNotice=yup; expires=" + expire;
+        $("#cookieConsent").fadeOut(200);
+      });
+      testFirstCookie();
+    });
+  </script>
+
+  <!-- #endregion Scripts -->
+
+  <!-- TODO: Could make Split Lines automatically convert to newlines with convertNewlines(). -->
+
+</body>
+
+</html>
