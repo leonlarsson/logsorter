@@ -1,21 +1,48 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-  <head>
-    <link rel="stylesheet" href="assets/style.css" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <meta charset="utf-8" />
-    <title>Log Sorter</title>
-  </head>
 
-  <body>
-    <div>
-      IDs begin with:
-      <input type="number" id="numberValue"></input>
-      <input type="file" id="files" name="files[]" onclick="this.value=null" accept="text/plain"></input>
-    </div>
-    <hr>
-    <textarea id="textBox" rows="8" cols="80" readonly></textarea>
+<head>
+  <!-- Primary Meta Tags -->
+  <title>Mozzy's Log Sorter (Archive - v1)</title>
+  <meta name="title" content="Mozzy's Log Sorter (Archive - v1)">
+  <meta name="description" content="A website used for extracting Discord IDs from raw logs. (Archive - v1)">
+  <meta name="theme-color" content="#5865F2">
 
-    <script src="assets/js/LoadFile.js" type="text/javascript"></script>
-  </body>
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://logsorter.net/">
+  <meta property="og:title" content="Mozzy's Log Sorter (Archive - v1)">
+  <meta property="og:description" content="A website used for extracting Discord IDs from raw logs. (Archive - v1)">
+  <meta property="og:image" content="https://logsorter.net/changelog/images/v1_Jan_19_2021.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://logsorter.net/">
+  <meta property="twitter:title" content="Mozzy's Log Sorter (Archive - v1)">
+  <meta property="twitter:description"
+    content="A website used for extracting Discord IDs from raw logs. (Archive - v1)">
+  <meta property="twitter:image" content="https://logsorter.net/changelog/images/v1_Jan_19_2021.png">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link rel="icon" href="https://logsorter.net/assets/images/icon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="https://logsorter.net/assets/images/icon.ico" type="image/x-icon">
+
+  <link rel="stylesheet" href="assets/style.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <meta charset="utf-8" />
+</head>
+
+<body>
+  <div>
+    IDs begin with:
+    <input type="number" id="numberValue"></input>
+    <input type="file" id="files" name="files[]" onclick="this.value=null" accept="text/plain"></input>
+  </div>
+  <hr>
+  <textarea id="textBox" rows="8" cols="80" readonly></textarea>
+
+  <script src="assets/js/LoadFile.js" type="text/javascript"></script>
+</body>
+
 </html>
