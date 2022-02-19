@@ -197,7 +197,7 @@
         title="Populates the output with only the unique IDs. &#013;&#013;Takes both 'Newlines' and 'Verbose' options into account. Can be used to switch separator on the fly."
         onclick="removeDuplicates()">Remove duplicates</button>
       <button class="buttonBlueNew no-select" id="splitLinesButton"
-        title="Splits the lines into groups of X amount. &#013;&#013;This only works when the newline separator is selected."
+        title="Splits the lines into groups of X amount. &#013;&#013;This converts the output to newlines before splitting."
         onclick="splitLines()">Split IDs</button>
       <button class="buttonBlueNew no-select" data-clipboard-target="#textBoxOutput" id="copyOutputButton"
         title="Copies the content of the output textbox to your clipboard." onclick="copyText()">Copy output</button>
@@ -265,7 +265,7 @@
     </div>
 
     <div id="cookieConsent" class="no-select">
-      <button class="buttonBlueNew" id="cookieButton">Stop bothering me</button>
+      <button class="buttonBlueNew" id="cookieButton" onclick="dismissCookieMessage()">Stop bothering me</button>
       <div>🍪 This website uses one cookie to remember your theme preference.
         <a style="text-decoration: underline; cursor: pointer;"
           onclick="alert('When selecting a theme, the website saves a cookie with that preference.\n\nThis cookie can be deleted by clicking the trash icon to the right of the theme button.\n\nBy manually selecting a theme, you agree to this.')">More
@@ -377,66 +377,77 @@
     let isLightMode;
     let bgColor;
 
-    if (document.cookie == "siteTheme=light") { // Checks for theme cookie on load, then sets theme accordingly. If no cookie, check system preference and set to that
+    // Checks for theme cookie on load, then sets theme accordingly. If no cookie, check system preference and set to that
+    if (document.cookie.includes("siteTheme=light")) {
       console.log("[DEBUG] Detected light theme cookie.");
-      lightMode();
-    } else if (document.cookie == "siteTheme=dark") {
+      useLightMode();
+    } else if (document.cookie.includes("siteTheme=dark")) {
       console.log("[DEBUG] Detected dark theme cookie.");
-      darkMode();
+      useDarkMode();
     } else {
       checkSystemThemePref();
     }
 
-    window.onload = (event) => { // Set the theme button titles here to avoid the text flash
+    // Set the theme button titles here to avoid the text flash
+    window.onload = () => {
       $("#debugToggleLight").attr("title", "Toggles light/dark theme.\n\nUses a non-tracking cookie to save your preference.\nPress the trash can to clear cookie.");
       $("#debugDeleteThemeCookie").attr("title", "Deletes the cookie that stores your theme preference and changes theme to system preference.");
     };
 
-    window.matchMedia('(prefers-color-scheme: dark)').addListener(e => { // Detects changes in the system theme preference. Ignores if cookie exists
-      if (document.cookie == "siteTheme=light" || document.cookie == "siteTheme=dark") {
+    // Detects changes in the system theme preference. Ignores if cookie exists
+    window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+      if (document.cookie.includes("siteTheme=light") || document.cookie.includes("siteTheme=dark")) {
         console.log("[DEBUG] System theme changed but cookie overrides it.")
         return;
       }
 
-      if ((e.matches ? "dark" : "light") == "dark") { // If system theme changed to dark
+      // If system theme changed to dark
+      if ((e.matches ? "dark" : "light") === "dark") {
         console.log("[DEBUG] No cookie. System preference changed to dark theme.");
-        darkMode();
+        useDarkMode();
       }
 
-      if ((e.matches ? "dark" : "light") == "light") { // If system theme changed to light
+      // If system theme changed to light
+      if ((e.matches ? "dark" : "light") === "light") {
         console.log("[DEBUG] No cookie. System preference changed to light theme.");
-        lightMode();
+        useLightMode();
       }
     });
 
-    function toggleLight() { // Toggles between dark and light theme and sets the cookie (60 days) to save that preference
+    // Toggles between dark and light theme and sets the cookie (60 days) to save that preference
+    function toggleLight() {
 
-      if ($("body").hasClass("lightMode")) { // If light mode is active, set to dark mode
+      // If light mode is active, set to dark mode
+      if ($("body").hasClass("lightMode")) {
         const date = new Date();
         date.setDate(date.getDate() + 60);
         document.cookie = `siteTheme=dark; expires=${date}`;
-        darkMode();
+        useDarkMode();
       } else {
         const date = new Date();
         date.setDate(date.getDate() + 60);
         document.cookie = `siteTheme=light; expires=${date}`;
-        lightMode();
+        useLightMode();
       }
     }
 
-    function checkSystemThemePref() { // Function to check system theme preference
-      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) { // If System theme is dark when cookie is deleted.
+    // Function to check system theme preference
+    function checkSystemThemePref() {
+
+      // If System theme is dark when cookie is deleted
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
         console.log("[DEBUG] System theme preference is dark.");
-        darkMode();
+        useDarkMode();
       }
 
-      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) { // If System theme is light when cookie is deleted.
+      // If System theme is light when cookie is deleted
+      if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
         console.log("[DEBUG] System theme preference is light.");
-        lightMode();
+        useLightMode();
       }
     }
 
-    function lightMode() {
+    function useLightMode() {
       isLightMode = true;
       $("*").addClass("lightMode");
       $("#debugToggleLight").addClass("fas fa-moon");
@@ -452,7 +463,8 @@
         $("#debugDeleteThemeCookie").show();
       }
 
-      $("#regexList").select2({ // Makes the RegEx selector a searchable Select2 box
+      // Makes the RegEx selector a searchable Select2 box
+      $("#regexList").select2({
         dropdownAutoWidth: true,
         width: "style",
         matcher: modelMatcher,
@@ -460,7 +472,7 @@
       });
     }
 
-    function darkMode() {
+    function useDarkMode() {
       isLightMode = false;
       $("*").removeClass("lightMode");
       $("#debugToggleLight").addClass("fas fa-sun");
@@ -476,7 +488,8 @@
         $("#debugDeleteThemeCookie").show();
       }
 
-      $("#regexList").select2({ // Makes the RegEx selector a searchable Select2 box
+      // Makes the RegEx selector a searchable Select2 box
+      $("#regexList").select2({
         dropdownAutoWidth: true,
         width: "style",
         matcher: modelMatcher,
@@ -491,7 +504,7 @@
     $("#dynamicRegexSuffix").hide();
     function changeRegex() {
       if ($("#regexList").val() == 99) {
-        $("#dynamicRegexPrefixText").text("2. Custom RegEx:")
+        $("#dynamicRegexPrefixText").text("2. Custom RegEx:");
         $("#dynamicRegexPrefixText").show();
         $("#dynamicRegexPrefixText").prop({ title: "Enter the RegEx you want to use. / and /g are already included.\n\nThe contents of Capturing group 1 will be output." });
         $("#customEntry").prop({ type: "text" });
@@ -504,7 +517,7 @@
         $("#multipleIDs, #multipleIDButtons, #checkBoxMultiple, #checkBoxMultipleText").hide(); // Hide!
 
       } else if ($("#regexList").val() == 100 || $("#regexList").val() == 101) {
-        $("#dynamicRegexPrefixText").text("2. IDs begin with:")
+        $("#dynamicRegexPrefixText").text("2. IDs begin with:");
         $("#dynamicRegexPrefixText").prop({ title: "Select the beginning numbers of the IDs.\n\nExample: (991)82302885588992" });
         $("#customEntry").prop({ type: "number" });
         $("#customEntry").prop({ placeholder: "(0-9)" });
@@ -516,7 +529,7 @@
         $("#multipleIDs, #multipleIDButtons, #checkBoxMultiple, #checkBoxMultipleText").hide(); // Hide!
 
       } else {
-        $("#dynamicRegexPrefixText").text("2. IDs begin with:")
+        $("#dynamicRegexPrefixText").text("2. IDs begin with:");
         $("#dynamicRegexPrefixText").prop({ title: "Select the beginning numbers of the IDs.\n\nExample: (991)82302885588992" });
         $("#customEntry").prop({ type: "number" });
         $("#customEntry").prop({ placeholder: "(0-9)" });
@@ -526,10 +539,11 @@
         $("#customEntry").prop("disabled", false); // Show entry box if not custom Regex
         $("#checkBoxMultiple, #checkBoxMultipleText").show(); // Show the checkbox
 
-        if ($('#checkBoxMultiple').is(':checked')) { // If not custom regex and multiples is checked, keep/disable the main entry box.
-          $("#customEntry").prop("disabled", true)
+        // If not custom regex and multiples is checked, keep/disable the main entry box
+        if ($('#checkBoxMultiple').is(':checked')) {
+          $("#customEntry").prop("disabled", true);
           $("#multipleIDs, #multipleIDButtons").show();
-          $("#dynamicRegexPrefixText").text("2. IDs begin with:")
+          $("#dynamicRegexPrefixText").text("2. IDs begin with:");
         }
       }
     }
@@ -540,10 +554,10 @@
     function multipleCheck() {
       if ($('#checkBoxMultiple').is(':checked')) {
         $("#multipleIDs, #multipleIDButtons").show();
-        $("#customEntry").prop("disabled", true)
+        $("#customEntry").prop("disabled", true);
       } else {
         $("#multipleIDs, #multipleIDButtons").hide();
-        $("#customEntry").prop("disabled", false)
+        $("#customEntry").prop("disabled", false);
       }
     }
   </script>
@@ -552,11 +566,16 @@
   <script>
     let number;
     function addIDField() {
-      number = $('#multipleIDs').children('input').length + 1; // Increase the number when func is run. Used for the customEntryNUMBER id.
-      if ($('#multipleIDs').children('input').length == 5) { // If there are 5 ID Fields, don't add more.
+
+      // Increase the number when func is run. Used for the customEntryNUMBER id
+      number = $('#multipleIDs').children('input').length + 1;
+
+      // If there are 5 ID Fields, don't add more
+      if ($('#multipleIDs').children('input').length == 5) {
         number = 5;
         return;
       }
+
       if (isLightMode) {
         $("#multipleIDs").append(`<label class="optionText lightMode">&</label><input class="inputBox lightMode" type="number" id="customEntry${number}" style="width: 60px; height: 20px; border-radius: 3px; margin-left: 5px; margin-right: 5px; border-color: #40444b; border: 0px; outline: 0px; font-family: inherit;">`)
       } else {
@@ -565,12 +584,16 @@
     }
 
     function removeIDField() {
-      if ($('#multipleIDs').children('input').length == 2) { // If there are 2 ID Fields, don't remove more.
+
+      // If there are 2 ID Fields, don't remove more
+      if ($('#multipleIDs').children('input').length == 2) {
         number = 2;
         return;
       }
       let idFields = document.getElementById('multipleIDs');
-      idFields.removeChild(idFields.lastElementChild); // Remove 2. One ID Field and one & separator.
+
+      // Remove 2. One ID Field and one & separator
+      idFields.removeChild(idFields.lastElementChild);
       idFields.removeChild(idFields.lastElementChild);
     }
   </script>
@@ -599,7 +622,9 @@
 
       let idSeparator;
       let idSeparatorText;
-      if ($("#checkBoxUseNewlines").is(':checked')) { // If checked, use newlines instead of spaces as the ID separator.
+
+      // If checked, use newlines instead of spaces as the ID separator
+      if ($("#checkBoxUseNewlines").is(':checked')) {
         idSeparator = "\n";
         idSeparatorText = "newlines";
       } else {
@@ -607,7 +632,8 @@
         idSeparatorText = "spaces";
       }
 
-      const today = new Date().toISOString().substring(0, 19); // Gets date for Verbose logs - Deduplication
+      // Gets date for Verbose logs - Deduplication
+      const today = new Date().toISOString().substring(0, 19);
       const dateTime = today.replace("T", " ");
 
       if ($("#checkBoxUseVerboseLogs").is(":checked")) {
@@ -620,7 +646,8 @@
       $("#outputStatusText").text(` (${currentIDs - uniqueIDs_Const.size} duplicates removed. ${uniqueIDs_Const.size} left)`);
       $("#outputStatusTextCol").text(` (${currentIDs - uniqueIDs_Const.size} duplicates removed. ${uniqueIDs_Const.size} left)`);
 
-      currentIDs = uniqueIDs_Const.size; // Adjust the total IDs length to the current value
+      // Adjust the total IDs length to the current value
+      currentIDs = uniqueIDs_Const.size;
 
       // Color change
       $("#removeDupesButton").animate({ backgroundColor: Colors.GREEN }, "swing");
@@ -628,7 +655,9 @@
       setTimeout(() => {
         $("#removeDupesButton").animate({ backgroundColor: Colors.BLUE }, "swing");
         $(".CodeMirror.cm-s-right").animate({ borderColor: bgColor }, "swing");
-        setTimeout(() => { // Remove the style to allow for the hover color again
+
+        // Remove the style to allow for the hover color again
+        setTimeout(() => {
           $("#removeDupesButton").removeAttr("style");
         }, 500);
       }, 1000);
@@ -639,32 +668,54 @@
   <!-- Split every X lines -->
   <script>
     function splitLines() {
-      const rawInput = prompt("After how many lines do you want to split?\n\nPlease enter a number above 0.", "100"); // Gets the number to split by
-      const splitEveryX = parseInt(rawInput); // Make the input an int
 
-      if (rawInput == null) { // If no input, return
+      // Gets the number to split by
+      const rawInput = prompt("After how many lines do you want to split?\n\nPlease enter a number above 0.", "100");
+
+      // If no input, return
+      if (!rawInput) {
         return;
       }
 
-      if (splitEveryX == 0 || isNaN(splitEveryX)) { // If input is 0 or not a number, return
+      // Make the input an int
+      const splitEveryX = parseInt(rawInput);
+
+      // If input is 0 or not a number, return
+      if (splitEveryX == 0 || isNaN(splitEveryX)) {
         alert("Not a number or 0.");
         return;
       }
 
-      if (splitEveryX > editorRight.lineCount() - 2) { // Prevent the user from splitting into groups of X when X is bigger than the total amount of lines
-        alert(`Only found ${editorRight.lineCount() - 1} lines. Please select a number smaller than the amount of lines.`);
+      // Convert to newlines before proceeding
+      convertNewlines();
+
+      // Prevent the user from splitting into groups of X when X is bigger than the total amount of lines
+      if (splitEveryX > editorRight.lineCount() - 2) {
+        alert(`Only found ${editorRight.lineCount() - 1} lines after converting to newlines. Please select a number smaller than the amount of lines.`);
         return;
       }
 
-      const splitsNeeded = Math.trunc(editorRight.lineCount() / splitEveryX); // Sets the amount of splits needed based on the amount of lines and size of group
-      let whileLoop = 0; // Sets the base while loop number
-      let newlineAtLine = splitEveryX - 1; // Selects the first line to enter a newline at. -1 because apparently it starts at 0
+      // Sets the amount of splits needed based on the amount of lines and size of group
+      const splitsNeeded = Math.trunc(editorRight.lineCount() / splitEveryX);
 
-      while (splitsNeeded > whileLoop) { // Continue until the number of splits needed is reached
-        editorRight.replaceRange("\n", { line: newlineAtLine }); // Add a newline at line designated line number
+      // Sets the base while loop number
+      let whileLoop = 0;
+
+      // Selects the first line to enter a newline at. -1 because apparently it starts at 0
+      let newlineAtLine = splitEveryX - 1;
+
+      // Continue until the number of splits needed is reached
+      while (splitsNeeded > whileLoop) {
+
+        // Add a newline at line designated line number
+        editorRight.replaceRange("\n", { line: newlineAtLine });
         whileLoop++;
-        newlineAtLine = newlineAtLine + splitEveryX; // Add the group size to the next line number that needs a newline
-        newlineAtLine++; // +1 to keep up with the line being moved because of previous newline
+
+        // Add the group size to the next line number that needs a newline
+        newlineAtLine = newlineAtLine + splitEveryX;
+
+        // +1 to keep up with the line being moved because of previous newline
+        newlineAtLine++;
       }
 
       console.log(`[DEBUG] Splitting into groups of ${splitEveryX}.`);
@@ -675,7 +726,9 @@
       setTimeout(() => {
         $("#splitLinesButton").animate({ backgroundColor: Colors.BLUE }, "swing");
         $(".CodeMirror.cm-s-right").animate({ borderColor: bgColor }, "swing");
-        setTimeout(() => { // Remove the style to allow for the hover color again
+
+        // Remove the style to allow for the hover color again
+        setTimeout(() => {
           $("#splitLinesButton").removeAttr("style");
         }, 500);
       }, 1000);
@@ -688,15 +741,16 @@
     function copyText() {
 
       // If nothing to copy, return
-      if (editorRight.getValue() == "") return;
+      if (!editorRight.getValue()) return;
 
-      const clipboard = new ClipboardJS('#copyOutputButton', { // Attempt to copy the Output into the clipboard. If successful, run visual change. If failed, alert the user.
+      // Attempt to copy the Output into the clipboard. If successful, run visual change. If failed, alert the user
+      const clipboard = new ClipboardJS('#copyOutputButton', {
         text: trigger => {
           return editorRight.getValue();
         }
       });
 
-      clipboard.on('error', e => {
+      clipboard.on('error', () => {
         clipboard.destroy();
         console.log(`%c[DEBUG] Failed to copy text.`, `color: ${Colors.RED}`);
         alert("Copy operation failed. Please copy manually.")
@@ -712,8 +766,9 @@
         setTimeout(() => {
           $("#copyOutputButton").animate({ backgroundColor: Colors.BLUE }, "swing");
           $(".CodeMirror.cm-s-right").animate({ borderColor: bgColor }, "swing");
-          // probably keeps going
-          setTimeout(() => { // Remove the style to allow for the hover color again
+
+          // Remove the style to allow for the hover color again
+          setTimeout(() => {
             $("#copyOutputButton").removeAttr("style");
           }, 500);
         }, 1000);
@@ -725,10 +780,10 @@
   <script>
     function clearText() {
 
-      // If nothing to copy, return
-      if (editorRight.getValue() == "") return;
+      // If nothing to clear, return
+      if (!editorRight.getValue()) return;
 
-      // Clears all the values, sets and arrays
+      // Clears all the values, sets, and arrays
       uniqueIDs.clear();
       uniqueIDs_Const.clear();
       allIDs.length = 0;
@@ -746,7 +801,9 @@
       setTimeout(() => {
         $("#clearOutputButton").animate({ backgroundColor: Colors.RED }, "swing");
         $(".CodeMirror.cm-s-right").animate({ borderColor: bgColor }, "swing");
-        setTimeout(() => { // Remove the style to allow for the hover color again
+
+        // Remove the style to allow for the hover color again
+        setTimeout(() => {
           $("#clearOutputButton").removeAttr("style");
         }, 500);
       }, 1000);
@@ -775,18 +832,21 @@
           console.log(`[DEBUG] Debug mode set to ${debugMode}.`);
         }
       }
-
     }
 
-    function deleteThemeCookie() { // Deletes the theme cookie, hides the delete button and changes theme to system preference
+    // Deletes the theme cookie, hides the delete button and changes theme to system preference
+    function deleteThemeCookie() {
       document.cookie = `siteTheme=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
       $("#debugDeleteThemeCookie").hide();
       console.log("[DEBUG] Deleted theme cookie. Setting to system preference.");
       checkSystemThemePref();
     }
 
-    function convertNewlines() { // Convert current separator to newlines
-      const today = new Date().toISOString().substring(0, 19); // Gets date for Verbose logs - Deduplication
+    // Convert current separator to newlines
+    function convertNewlines() {
+
+      // Gets date for Verbose logs - Deduplication
+      const today = new Date().toISOString().substring(0, 19);
       const dateTime = today.replace("T", " ");
 
       const str = editorRight.getValue().replaceAll(/Generated.*:/g, "").replaceAll(/^\s/g, "").replace(/\s+$/g, "").replaceAll(/\s+/g, "\n");
@@ -799,8 +859,11 @@
       console.log("[DEBUG] Converted to newlines.");
     }
 
-    function convertSpaces() { // Convert current separator to spaces
-      const today = new Date().toISOString().substring(0, 19); // Gets date for Verbose logs - Deduplication
+    // Convert current separator to spaces
+    function convertSpaces() {
+
+      // Gets date for Verbose logs - Deduplication
+      const today = new Date().toISOString().substring(0, 19);
       const dateTime = today.replace("T", " ");
 
       const str = editorRight.getValue().replaceAll(/Generated.*:/g, "").replaceAll(/^\s/g, "").replace(/\s+$/g, "").replaceAll(/\s+/g, " ");
@@ -933,7 +996,7 @@
         }
       });
 
-      clipboard.on('error', e => {
+      clipboard.on('error', () => {
         clipboard.destroy();
         console.log(`%c[DEBUG] Failed to copy settings link.`, `color: ${Colors.RED}`);
       });
@@ -946,7 +1009,9 @@
         $("#debugCopyCustomURL").animate({ backgroundColor: Colors.GREEN }, "swing");
         setTimeout(() => {
           $("#debugCopyCustomURL").animate({ backgroundColor: Colors.BLUE }, "swing");
-          setTimeout(() => { // Remove the style to allow for the hover color again
+
+          // Remove the style to allow for the hover color again
+          setTimeout(() => {
             $("#debugCopyCustomURL").removeAttr("style");
           }, 500);
         }, 1000);
@@ -958,7 +1023,8 @@
   <script>
     $(document).ready(() => {
 
-      if (window.location.href.includes("?")) { // Run if URL has params
+      // Run if URL has params
+      if (window.location.href.includes("?")) {
         console.log("[DEBUG] URL params found. Applying.");
 
         // Gets the params
@@ -980,15 +1046,18 @@
         const checkScrollBottom = urlParams.get("scroll");
         const debugEnabled = urlParams.get("debug"); // Checks for debug param
 
-        if (botSelected == null) { // Sets bot to default if nothing was selected
+        // Sets bot to default if nothing was selected
+        if (botSelected == null) {
           botSelected = 1;
         }
 
-        if (mulCount) { // Activate the Multiple checkbox if the mulCount param exists (exists when Multiples checkbox is checked)
+        // Activate the Multiple checkbox if the mulCount param exists (exists when Multiples checkbox is checked)
+        if (mulCount) {
           $("#checkBoxMultiple").prop("checked", true);
         }
 
-        if (mulCount == "3") { // Adds ID fields based on the setting. Starting from 2
+        // Adds ID fields based on the setting. Starting from 2
+        if (mulCount == "3") {
           addIDField();
         }
         if (mulCount == "4") {
@@ -1014,13 +1083,19 @@
         $("#checkBoxUseVerboseLogs").prop("checked", String(checkVerbose) == "true");
         $("#debugCheckBoxScrollBottom").prop("checked", String(checkScrollBottom) == "true");
 
-        if (debugEnabled == "1" || debugEnabled == "true") { // If "debug=true/1", activate debug mode
+        // If "debug=true/1", activate debug mode
+        if (debugEnabled == "1" || debugEnabled == "true") {
           toggleDebugOptions();
         }
 
-        multipleCheck(); // Runs the check to expand the Multiples section. .change() above somehow already does this?
-        scrollCheck(); // Runs the check to show the Verbose scroll.
-        history.pushState({}, null, "./"); // Strips URL of the params
+        // Runs the check to expand the Multiples section. .change() above somehow already does this?
+        multipleCheck();
+
+        // Runs the check to show the Verbose scroll.
+        scrollCheck();
+
+        // Strips URL of the params
+        history.pushState({}, null, "./");
       }
     });
   </script>
@@ -1029,11 +1104,11 @@
   <script>
     function GetCookie(name) {
       const arg = name + "=";
-      const alen = arg.length;
-      const clen = document.cookie.length;
+      const argLength = arg.length;
+      const cookieLength = document.cookie.length;
       let i = 0;
-      while (i < clen) {
-        const j = i + alen;
+      while (i < cookieLength) {
+        const j = i + argLength;
         if (document.cookie.substring(i, j) == arg)
           return "yup";
         i = document.cookie.indexOf(" ", i) + 1;
@@ -1042,31 +1117,33 @@
       return null;
     }
 
+    // Show cookie notice if it hasn't been accepted
     function testFirstCookie() {
       const offset = new Date().getTimezoneOffset();
       if ((offset >= -180) && (offset <= 0)) { // European time zones
         const visit = GetCookie("acceptedCookieNotice");
-        if (visit == null) {
-          $("#cookieConsent").fadeIn(400);	// Show warning
-        } else {
-          // Already accepted
+
+        if (!visit) {
+          $("#cookieConsent").fadeIn(400);
         }
       }
     }
 
+    // Remove cookie notice and add cookie
+    function dismissCookieMessage() {
+      const currentTime = new Date();
+      const newCookieExpire = new Date(currentTime.getTime() + 15778800000);
+      document.cookie = "acceptedCookieNotice=yup; expires=" + newCookieExpire;
+      $("#cookieConsent").fadeOut(200);
+    };
+
+    // On document ready, check the status of the acceptedCookieNotice cookie
     $(document).ready(() => {
-      $("#cookieButton").click(() => {
-        expire = new Date(expire.getTime() + 15778800000);
-        document.cookie = "acceptedCookieNotice=yup; expires=" + expire;
-        $("#cookieConsent").fadeOut(200);
-      });
       testFirstCookie();
     });
   </script>
 
   <!-- #endregion Scripts -->
-
-  <!-- TODO: Could make Split Lines automatically convert to newlines with convertNewlines(). -->
 
 </body>
 
