@@ -837,6 +837,10 @@ hr {
   z-index: 99;
 }
 
+#loading.lightMode {
+  background-color: #ffffff;
+}
+
 #loading-image {
   z-index: 10000;
 }
