@@ -264,7 +264,7 @@
     </div>
 
     <div id="cookieConsent" class="no-select">
-      <button class="buttonBlueNew" id="cookieButton">Stop bothering me</button>
+      <button class="buttonBlueNew" id="cookieButton" onclick="dismissCookieMessage()">Stop bothering me</button>
       <div>🍪 This website uses one cookie to remember your theme preference.
         <a style="text-decoration: underline; cursor: pointer;"
           onclick="alert('When selecting a theme, the website saves a cookie with that preference.\n\nThis cookie can be deleted by clicking the trash icon to the right of the theme button.\n\nBy manually selecting a theme, you agree to this.')">More
@@ -376,12 +376,12 @@
     let isLightMode;
     let bgColor;
 
-    if (document.cookie == "siteTheme=light") { // Checks for theme cookie on load, then sets theme accordingly. If no cookie, check system preference and set to that
+    if (document.cookie.includes("siteTheme=light")) { // Checks for theme cookie on load, then sets theme accordingly. If no cookie, check system preference and set to that
       console.log("[DEBUG] Detected light theme cookie.");
-      lightMode();
-    } else if (document.cookie == "siteTheme=dark") {
+      useLightMode();
+    } else if (document.cookie.includes("siteTheme=dark")) {
       console.log("[DEBUG] Detected dark theme cookie.");
-      darkMode();
+      useDarkMode();
     } else {
       checkSystemThemePref();
     }
@@ -392,19 +392,19 @@
     };
 
     window.matchMedia('(prefers-color-scheme: dark)').addListener(e => { // Detects changes in the system theme preference. Ignores if cookie exists
-      if (document.cookie == "siteTheme=light" || document.cookie == "siteTheme=dark") {
+      if (document.cookie.includes("siteTheme=light") || document.cookie.includes("siteTheme=dark")) {
         console.log("[DEBUG] System theme changed but cookie overrides it.")
         return;
       }
 
       if ((e.matches ? "dark" : "light") == "dark") { // If system theme changed to dark
         console.log("[DEBUG] No cookie. System preference changed to dark theme.");
-        darkMode();
+        useDarkMode();
       }
 
       if ((e.matches ? "dark" : "light") == "light") { // If system theme changed to light
         console.log("[DEBUG] No cookie. System preference changed to light theme.");
-        lightMode();
+        useLightMode();
       }
     });
 
@@ -414,28 +414,28 @@
         const date = new Date();
         date.setDate(date.getDate() + 60);
         document.cookie = `siteTheme=dark; expires=${date}`;
-        darkMode();
+        useDarkMode();
       } else {
         const date = new Date();
         date.setDate(date.getDate() + 60);
         document.cookie = `siteTheme=light; expires=${date}`;
-        lightMode();
+        useLightMode();
       }
     }
 
     function checkSystemThemePref() { // Function to check system theme preference
       if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) { // If System theme is dark when cookie is deleted.
         console.log("[DEBUG] System theme preference is dark.");
-        darkMode();
+        useDarkMode();
       }
 
       if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) { // If System theme is light when cookie is deleted.
         console.log("[DEBUG] System theme preference is light.");
-        lightMode();
+        useLightMode();
       }
     }
 
-    function lightMode() {
+    function useLightMode() {
       isLightMode = true;
       $("*").addClass("lightMode");
       $("#debugToggleLight").addClass("fas fa-moon");
@@ -459,7 +459,7 @@
       });
     }
 
-    function darkMode() {
+    function useDarkMode() {
       isLightMode = false;
       $("*").removeClass("lightMode");
       $("#debugToggleLight").addClass("fas fa-sun");
@@ -1028,11 +1028,11 @@
   <script>
     function GetCookie(name) {
       const arg = name + "=";
-      const alen = arg.length;
-      const clen = document.cookie.length;
+      const argLength = arg.length;
+      const cookieLength = document.cookie.length;
       let i = 0;
-      while (i < clen) {
-        const j = i + alen;
+      while (i < cookieLength) {
+        const j = i + argLength;
         if (document.cookie.substring(i, j) == arg)
           return "yup";
         i = document.cookie.indexOf(" ", i) + 1;
@@ -1041,24 +1041,27 @@
       return null;
     }
 
+    // Show cookie notice if it hasn't been accepted
     function testFirstCookie() {
       const offset = new Date().getTimezoneOffset();
       if ((offset >= -180) && (offset <= 0)) { // European time zones
         const visit = GetCookie("acceptedCookieNotice");
-        if (visit == null) {
+        if (!visit) {
           $("#cookieConsent").fadeIn(400);	// Show warning
-        } else {
-          // Already accepted
         }
       }
     }
 
+    // Remove cookie notice and add cookie
+    function dismissCookieMessage() {
+      const currentTime = new Date();
+      const newCookieExpire = new Date(currentTime.getTime() + 15778800000);
+      document.cookie = "acceptedCookieNotice=yup; expires=" + newCookieExpire;
+      $("#cookieConsent").fadeOut(200);
+    };
+
+    // On document ready, check the status of the acceptedCookieNotice cookie
     $(document).ready(() => {
-      $("#cookieButton").click(() => {
-        expire = new Date(expire.getTime() + 15778800000);
-        document.cookie = "acceptedCookieNotice=yup; expires=" + expire;
-        $("#cookieConsent").fadeOut(200);
-      });
       testFirstCookie();
     });
   </script>
