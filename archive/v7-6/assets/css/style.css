@@ -644,7 +644,7 @@ hr {
     height: 60vh;
   }
 
-  #cookieConsent {
+  #localStorageConsentNotice {
     margin: 0 10px 10px 10px !important;
   }
 
@@ -662,8 +662,8 @@ hr {
 }
 
 @media only screen and (max-width: 630px) {
-  #debugToggleLight,
-  #debugDeleteThemeCookie {
+  #toggleThemeButton,
+  #deleteThemeSettingButton {
     top: 10px !important;
   }
 
@@ -736,7 +736,7 @@ hr {
     padding-left: 3px;
   }
 
-  #cookieConsent {
+  #localStorageConsentNotice {
     margin: 0 6px 5px 6px !important;
     text-align: left !important;
   }
@@ -773,8 +773,8 @@ hr {
   }
 }
 
-/* Cookie stuff lol */
-#cookieConsent {
+/* localStorage stuff lol */
+#localStorageConsentNotice {
   z-index: 999;
   min-height: 20px;
   padding: 10px 20px;
@@ -792,30 +792,30 @@ hr {
   margin: 0 5% 10px 5%;
 }
 
-#cookieConsent.lightMode {
+#localStorageConsentNotice.lightMode {
   color: #000;
   background: rgba(190, 190, 190, 0.9);
 }
 
-#cookieConsent div {
+#localStorageConsentNotice div {
   padding: 4px 0 0;
 }
 
-#cookieConsent a {
+#localStorageConsentNotice a {
   color: #43b581;
   display: inline-block;
   /* padding: 0 5px; */
 }
 
-#cookieConsent a.lightMode {
+#localStorageConsentNotice a.lightMode {
   color: #008000;
 }
 
-#cookieConsent a:hover {
+#localStorageConsentNotice a:hover {
   color: #3ca374;
 }
 
-#cookieConsent button#cookieButton {
+#localStorageConsentNotice button#localStorageOKButton {
   float: right;
   margin-left: 5px;
   height: auto !important;
@@ -835,6 +835,10 @@ hr {
   opacity: 1;
   background-color: #36393f;
   z-index: 99;
+}
+
+#loading.lightMode {
+  background-color: #ffffff;
 }
 
 #loading-image {

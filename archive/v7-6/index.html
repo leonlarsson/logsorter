@@ -62,9 +62,9 @@
 
   <!-- #region Main HTML -->
   <div id="main">
-    <i id="debugToggleLight" onclick="toggleLight()"
+    <i id="toggleThemeButton" onclick="toggleLight()"
       style="position: absolute; transform: scale(2);top: 20px; left: 20px; z-index: 999; cursor: pointer;"></i>
-    <i class="fas fa-trash-alt" id="debugDeleteThemeCookie" onclick="deleteThemeCookie()"
+    <i class="fas fa-trash-alt" id="deleteThemeSettingButton" onclick="deleteThemeSetting()"
       style="position: absolute; transform: scale(2);top: 20px; left: 60px; z-index: 999; cursor: pointer;display: none;"></i>
 
     <div id="topTitle" class="no-select">
@@ -264,11 +264,12 @@
           id="debugCheckBoxScrollBottom" onchange="$('#debugCheckBoxScroll').prop('checked', false)">Bottom</label>
     </div>
 
-    <div id="cookieConsent" class="no-select">
-      <button class="buttonBlueNew" id="cookieButton" onclick="dismissCookieMessage()">Stop bothering me</button>
-      <div>🍪 This website uses one cookie to remember your theme preference.
+    <div id="localStorageConsentNotice" class="no-select">
+      <button class="buttonBlueNew" id="localStorageOKButton" onclick="dismissLocalStorageNotice()">Stop bothering
+        me</button>
+      <div>🍪 This website saves your preferred theme to local storage.
         <a style="text-decoration: underline; cursor: pointer;"
-          onclick="alert('When selecting a theme, the website saves a cookie with that preference.\n\nThis cookie can be deleted by clicking the trash icon to the right of the theme button.\n\nBy manually selecting a theme, you agree to this.')">More
+          onclick="alert('When selecting a theme, the website saves a localStorage key with that preference.\n\nThis setting can be deleted by clicking the trash icon to the right of the theme button.\n\nBy manually selecting a theme, you agree to this.')">More
           details</a>
       </div>
     </div>
@@ -280,7 +281,7 @@
 
   <!-- Handle preload -->
   <script>
-    $(window).on('load', function () {
+    $(window).on('load', () => {
       $('#loading').fadeOut(200);
     })
   </script>
@@ -377,12 +378,12 @@
     let isLightMode;
     let bgColor;
 
-    // Checks for theme cookie on load, then sets theme accordingly. If no cookie, check system preference and set to that
-    if (document.cookie.includes("siteTheme=light")) {
-      console.log("[DEBUG] Detected light theme cookie.");
+    // Checks for theme setting on load, then sets theme accordingly. If no setting, check system preference and set to that
+    if (localStorage.getItem("siteTheme") === "light") {
+      console.log("[DEBUG] Detected light theme setting.");
       useLightMode();
-    } else if (document.cookie.includes("siteTheme=dark")) {
-      console.log("[DEBUG] Detected dark theme cookie.");
+    } else if (localStorage.getItem("siteTheme") === "dark") {
+      console.log("[DEBUG] Detected dark theme setting.");
       useDarkMode();
     } else {
       checkSystemThemePref();
@@ -390,43 +391,39 @@
 
     // Set the theme button titles here to avoid the text flash
     window.onload = () => {
-      $("#debugToggleLight").attr("title", "Toggles light/dark theme.\n\nUses a non-tracking cookie to save your preference.\nPress the trash can to clear cookie.");
-      $("#debugDeleteThemeCookie").attr("title", "Deletes the cookie that stores your theme preference and changes theme to system preference.");
+      $("#toggleThemeButton").attr("title", "Toggles light/dark theme.\n\nUses a non-tracking localStorage key to save your preference.\nPress the trash can to clear setting.");
+      $("#deleteThemeSettingButton").attr("title", "Deletes the key that stores your theme preference and changes theme to system preference.");
     };
 
-    // Detects changes in the system theme preference. Ignores if cookie exists
+    // Detects changes in the system theme preference. Ignores if localStorage setting exists
     window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
-      if (document.cookie.includes("siteTheme=light") || document.cookie.includes("siteTheme=dark")) {
-        console.log("[DEBUG] System theme changed but cookie overrides it.")
+      if (localStorage.getItem("siteTheme")) {
+        console.log("[DEBUG] System theme changed but setting overrides it.")
         return;
       }
 
       // If system theme changed to dark
       if ((e.matches ? "dark" : "light") === "dark") {
-        console.log("[DEBUG] No cookie. System preference changed to dark theme.");
+        console.log("[DEBUG] No setting. System preference changed to dark theme.");
         useDarkMode();
       }
 
       // If system theme changed to light
       if ((e.matches ? "dark" : "light") === "light") {
-        console.log("[DEBUG] No cookie. System preference changed to light theme.");
+        console.log("[DEBUG] No setting. System preference changed to light theme.");
         useLightMode();
       }
     });
 
-    // Toggles between dark and light theme and sets the cookie (60 days) to save that preference
+    // Toggles between dark and light theme and sets the localStorage to save that preference
     function toggleLight() {
 
       // If light mode is active, set to dark mode
       if ($("body").hasClass("lightMode")) {
-        const date = new Date();
-        date.setDate(date.getDate() + 60);
-        document.cookie = `siteTheme=dark; expires=${date}`;
+        localStorage.setItem("siteTheme", "dark");
         useDarkMode();
       } else {
-        const date = new Date();
-        date.setDate(date.getDate() + 60);
-        document.cookie = `siteTheme=light; expires=${date}`;
+        localStorage.setItem("siteTheme", "light");
         useLightMode();
       }
     }
@@ -434,13 +431,13 @@
     // Function to check system theme preference
     function checkSystemThemePref() {
 
-      // If System theme is dark when cookie is deleted
+      // If system theme is dark when LS key is deleted
       if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
         console.log("[DEBUG] System theme preference is dark.");
         useDarkMode();
       }
 
-      // If System theme is light when cookie is deleted
+      // If system theme is light when LS key is deleted
       if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
         console.log("[DEBUG] System theme preference is light.");
         useLightMode();
@@ -450,17 +447,17 @@
     function useLightMode() {
       isLightMode = true;
       $("*").addClass("lightMode");
-      $("#debugToggleLight").addClass("fas fa-moon");
-      $("#debugToggleLight").removeClass("fa-sun");
-      $("#debugToggleLight").css("color", "#2f3136");
-      $("#debugDeleteThemeCookie").css("color", "#2f3136");
+      $("#toggleThemeButton").addClass("fas fa-moon");
+      $("#toggleThemeButton").removeClass("fa-sun");
+      $("#toggleThemeButton").css("color", "#2f3136");
+      $("#deleteThemeSettingButton").css("color", "#2f3136");
       bgColor = "#ffffff";
       $(".CodeMirror").css("border-color", bgColor);
 
-      if (document.cookie.indexOf("siteTheme=") == -1) {
-        $("#debugDeleteThemeCookie").hide();
+      if (!localStorage.getItem("siteTheme")) {
+        $("#deleteThemeSettingButton").hide();
       } else {
-        $("#debugDeleteThemeCookie").show();
+        $("#deleteThemeSettingButton").show();
       }
 
       // Makes the RegEx selector a searchable Select2 box
@@ -475,17 +472,17 @@
     function useDarkMode() {
       isLightMode = false;
       $("*").removeClass("lightMode");
-      $("#debugToggleLight").addClass("fas fa-sun");
-      $("#debugToggleLight").removeClass("fa-moon");
-      $("#debugToggleLight").css("color", "#f2f3f5");
-      $("#debugDeleteThemeCookie").css("color", "#f2f3f5");
+      $("#toggleThemeButton").addClass("fas fa-sun");
+      $("#toggleThemeButton").removeClass("fa-moon");
+      $("#toggleThemeButton").css("color", "#f2f3f5");
+      $("#deleteThemeSettingButton").css("color", "#f2f3f5");
       bgColor = "#36393f";
       $(".CodeMirror").css("border-color", bgColor);
 
-      if (document.cookie.indexOf("siteTheme=") == -1) {
-        $("#debugDeleteThemeCookie").hide();
+      if (!localStorage.getItem("siteTheme")) {
+        $("#deleteThemeSettingButton").hide();
       } else {
-        $("#debugDeleteThemeCookie").show();
+        $("#deleteThemeSettingButton").show();
       }
 
       // Makes the RegEx selector a searchable Select2 box
@@ -834,11 +831,11 @@
       }
     }
 
-    // Deletes the theme cookie, hides the delete button and changes theme to system preference
-    function deleteThemeCookie() {
-      document.cookie = `siteTheme=; expires=Thu, 01 Jan 1970 00:00:00 UTC;`;
-      $("#debugDeleteThemeCookie").hide();
-      console.log("[DEBUG] Deleted theme cookie. Setting to system preference.");
+    // Deletes the theme setting, hides the delete button and changes theme to system preference
+    function deleteThemeSetting() {
+      localStorage.removeItem("siteTheme");
+      $("#deleteThemeSettingButton").hide();
+      console.log("[DEBUG] Deleted theme setting. Setting to system preference.");
       checkSystemThemePref();
     }
 
@@ -1100,46 +1097,18 @@
     });
   </script>
 
-  <!-- Cookie notice -->
+  <!-- Local Storage notice -->
   <script>
-    function GetCookie(name) {
-      const arg = name + "=";
-      const argLength = arg.length;
-      const cookieLength = document.cookie.length;
-      let i = 0;
-      while (i < cookieLength) {
-        const j = i + argLength;
-        if (document.cookie.substring(i, j) == arg)
-          return "yup";
-        i = document.cookie.indexOf(" ", i) + 1;
-        if (i == 0) break;
-      }
-      return null;
-    }
-
-    // Show cookie notice if it hasn't been accepted
-    function testFirstCookie() {
-      const offset = new Date().getTimezoneOffset();
-      if ((offset >= -180) && (offset <= 0)) { // European time zones
-        const visit = GetCookie("acceptedCookieNotice");
-
-        if (!visit) {
-          $("#cookieConsent").fadeIn(400);
-        }
-      }
-    }
-
-    // Remove cookie notice and add cookie
-    function dismissCookieMessage() {
-      const currentTime = new Date();
-      const newCookieExpire = new Date(currentTime.getTime() + 15778800000);
-      document.cookie = "acceptedCookieNotice=yup; expires=" + newCookieExpire;
-      $("#cookieConsent").fadeOut(200);
+    // Remove localStorage notice and add LS key
+    function dismissLocalStorageNotice() {
+      localStorage.setItem("acknowledgedStorageNotice", "yup");
+      $("#localStorageConsentNotice").fadeOut(200);
     };
 
-    // On document ready, check the status of the acceptedCookieNotice cookie
+    // On document ready, show localStorage notice if it hasn't been acknowledged
     $(document).ready(() => {
-      testFirstCookie();
+      if (localStorage.getItem("acknowledgedStorageNotice") !== "yup")
+        $("#localStorageConsentNotice").fadeIn(400);
     });
   </script>
 
