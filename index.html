@@ -650,8 +650,11 @@
         return;
       }
 
+      // Convert to newlines before proceeding
+      convertNewlines();
+
       if (splitEveryX > editorRight.lineCount() - 2) { // Prevent the user from splitting into groups of X when X is bigger than the total amount of lines
-        alert(`Only found ${editorRight.lineCount() - 1} lines. Please select a number smaller than the amount of lines.`);
+        alert(`Only found ${editorRight.lineCount() - 1} lines after converting to newlines. Please select a number smaller than the amount of lines.`);
         return;
       }
 
@@ -1067,8 +1070,6 @@
   </script>
 
   <!-- #endregion Scripts -->
-
-  <!-- TODO: Could make Split Lines automatically convert to newlines with convertNewlines(). -->
 
 </body>
 
