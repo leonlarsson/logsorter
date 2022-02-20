@@ -12,7 +12,7 @@
   height: 28px;
   user-select: none;
   -webkit-user-select: none;
-  outline: black 0px;
+  /* outline: black 0px; DISABLED FOR ACCESSIBILITY */
 }
 .select2-container .select2-selection--single .select2-selection__rendered {
   display: block;
@@ -481,7 +481,7 @@
   background-color: #303339; /* or #40444b */
   border: 0.5px solid black;
   border-radius: 4px;
-  outline: black 0px;
+  /* outline: black 0px; DISABLED FOR ACCESSIBILITY */
 }
 
 /* Selected value */
@@ -601,7 +601,6 @@
   -webkit-appearance: textfield;
 }
 
-
 .select2-container--mozzy .select2-results > .select2-results__options {
   max-height: 200px;
   overflow-y: auto;
@@ -626,7 +625,6 @@
   background-color: #26272b !important;
 }
 
-
 .select2-container--mozzy
   .select2-results__option--highlighted.select2-results__option--selectable {
   background-color: #2a2c30;
@@ -640,10 +638,6 @@
   padding: 6px;
   color: #99aab5;
 }
-
-
-
-
 
 .select2-container--mozzy
   .select2-results__option
@@ -696,11 +690,6 @@
   margin-left: -5em;
   padding-left: 6em;
 }
-
-
-
-
-
 
 /* UNUSED/UNKNOWN STYLES */
 

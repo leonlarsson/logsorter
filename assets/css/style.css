@@ -256,7 +256,7 @@ input.lightMode[type="checkbox"]:checked {
   margin-right: 5px;
   border-color: #40444b;
   border: 0px;
-  outline: 0px;
+  /* outline: 0px; DISABLED FOR ACCESSIBILITY */
   font-family: inherit;
 }
 
@@ -344,7 +344,7 @@ button {
   height: 30px;
   font-family: "Roboto", sans-serif;
   border: 0px;
-  outline: 0px;
+  /* outline: 0px; DISABLED FOR ACCESSIBILITY */
 }
 
 /* BUTTONS */
