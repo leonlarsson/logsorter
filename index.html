@@ -604,6 +604,10 @@
   <!-- Save file -->
   <script>
     function saveFile() {
+
+      // Return if output is empty
+      if (!editorRight.getValue()) return;
+
       if (promptFilename = prompt("Save file as:\n'IDs'_LogSorter.txt", "IDs")) {
         const textBlob = new Blob([editorRight.getValue()], { type: "text/plain" });
         window.saveAs(textBlob, promptFilename + "_LogSorter.txt");
@@ -614,7 +618,9 @@
   <!-- Remove duplicates -->
   <script>
     function removeDuplicates() {
-      if (editorRight.getValue() == "") return;
+
+      // Return if output is empty
+      if (!editorRight.getValue()) return;
 
       let idSeparator;
       let idSeparatorText;
@@ -664,6 +670,9 @@
   <!-- Split every X lines -->
   <script>
     function splitLines() {
+
+      // Return if output is empty
+      if (!editorRight.getValue()) return;
 
       // Gets the number to split by
       const rawInput = prompt("After how many lines do you want to split?\n\nPlease enter a number above 0.", "100");
@@ -736,7 +745,7 @@
   <script>
     function copyText() {
 
-      // If nothing to copy, return
+      // Return if output is empty
       if (!editorRight.getValue()) return;
 
       // Attempt to copy the Output into the clipboard. If successful, run visual change. If failed, alert the user
@@ -776,7 +785,7 @@
   <script>
     function clearText() {
 
-      // If nothing to clear, return
+      // Return if output is empty
       if (!editorRight.getValue()) return;
 
       // Clears all the values, sets, and arrays
@@ -841,6 +850,9 @@
     // Convert current separator to newlines
     function convertNewlines() {
 
+      // Return if output is empty
+      if (!editorRight.getValue()) return;
+
       // Gets date for Verbose logs - Deduplication
       const today = new Date().toISOString().substring(0, 19);
       const dateTime = today.replace("T", " ");
@@ -857,6 +869,9 @@
 
     // Convert current separator to spaces
     function convertSpaces() {
+
+      // Return if output is empty
+      if (!editorRight.getValue()) return;
 
       // Gets date for Verbose logs - Deduplication
       const today = new Date().toISOString().substring(0, 19);
