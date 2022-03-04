@@ -310,6 +310,7 @@
 
   <!-- Initialize Set and Array for IDs -->
   <script>
+    if (!location.hostname.includes("logsorter.net")) alert("Please know that this tool can now also be found at logsorter.net\n\nOn March 15th, any redirects from leonlarsson.com/projects/logsorter will stop working.");
     let uniqueIDs = new Set();
     let uniqueIDs_Const = new Set(); // I use this for the Remove Duplicates function since the one above is cleared every time a parse is run. 
     let allIDs = [];
