@@ -937,73 +937,36 @@
   <script>
     function createCustomURL() {
 
-      // Set variables with the current settings
-      let botSelected = `bot=${$("#regexList").val()}`;
-      let firstNumber = `&start=${escape($("#customEntry").val()).replaceAll("+", "%2b")}`; // using escape() on the value to escape dumb URL encoding stuff. Also replacing + with the encoded variant
-      let checkMultiple = `&multiple=${$("#checkBoxMultiple").is(':checked')}`; // Not used as a parameter
-      let mulCount = `&mulCount=${$('#multipleIDs').children('input').length}`;
-      let mul1 = `&mul1=${$("#customEntry1").val()}`;
-      let mul2 = `&mul2=${$("#customEntry2").val()}`;
-      let mul3 = `&mul3=${$("#customEntry3").val()}`;
-      let mul4 = `&mul4=${$("#customEntry4").val()}`;
-      let mul5 = `&mul5=${$("#customEntry5").val()}`;
-      let checkNewlines = `&newlines=${$("#checkBoxUseNewlines").is(':checked')}`;
-      let checkDeduplicate = `&dedupe=${$("#checkBoxNoDupes").is(':checked')}`;
-      let checkVerbose = `&verbose=${$("#checkBoxUseVerboseLogs").is(':checked')}`;
-      let checkScrollBottom = `&scroll=${$("#debugCheckBoxScrollBottom").is(':checked')}`;
+      const customURL = new URL(window.location.origin);
 
-      if (botSelected == "bot=1") { // If bot is default, remove the param
-        botSelected = "";
+      if ($("#regexList").val() !== "1") customURL.searchParams.append("bot", $("#regexList").val());
+      customURL.searchParams.append("start", $("#customEntry").val());
+
+      if ($("#checkBoxMultiple").is(":checked")) {
+        customURL.searchParams.append("multiple", $("#checkBoxMultiple").is(":checked"));
+        customURL.searchParams.append("mulCount", $("#multipleIDs").children("input").length);
+        customURL.searchParams.append("mul1", $("#customEntry1").val());
+        customURL.searchParams.append("mul2", $("#customEntry2").val());
+        customURL.searchParams.append("mul3", $("#customEntry3").val());
+        customURL.searchParams.append("mul4", $("#customEntry4").val());
+        customURL.searchParams.append("mul5", $("#customEntry5").val());
       }
 
-      if (firstNumber == "&start=") { // If starting number is empty, remove the param
-        firstNumber = "";
-      }
+      customURL.searchParams.append("newlines", $("#checkBoxUseNewlines").is(":checked"));
+      customURL.searchParams.append("dedupe", $("#checkBoxNoDupes").is(":checked"));
+      customURL.searchParams.append("verbose", $("#checkBoxUseVerboseLogs").is(":checked"));
+      customURL.searchParams.append("scroll", $("#debugCheckBoxScrollBottom").is(":checked"));
 
-      if (checkMultiple.includes("false")) { // If Multiples checkbox is disabled, remove all the related params. If checked, check each value and remove if empty
-        checkMultiple = ""; mulCount = ""; mul1 = ""; mul2 = ""; mul3 = ""; mul4 = ""; mul5 = "";
-      } else {
+      // Delete any param is is empty, false, or undefined
+      const keyToDelete = [];
+      customURL.searchParams.forEach((value, key) => {
+        if (!value || value === "false" || value === "undefined") keyToDelete.push(key);
+      });
+      keyToDelete.forEach(x => customURL.searchParams.delete(x));
 
-        // Go through each Multiple value and remove param if empty or undefined
-        if (mul1.includes("undefined") || mul1 == "&mul1=") {
-          mul1 = "";
-        }
-        if (mul2.includes("undefined") || mul2 == "&mul2=") {
-          mul2 = "";
-        }
-        if (mul3.includes("undefined") || mul3 == "&mul3=") {
-          mul3 = "";
-        }
-        if (mul4.includes("undefined") || mul4 == "&mul4=") {
-          mul4 = "";
-        }
-        if (mul5.includes("undefined") || mul5 == "&mul5=") {
-          mul5 = "";
-        }
-      }
-
-      // Remove Checkbox params if unchecked (default)
-      if (checkNewlines.includes("false")) {
-        checkNewlines = "";
-      }
-      if (checkDeduplicate.includes("false")) {
-        checkDeduplicate = "";
-      }
-      if (checkVerbose.includes("false")) {
-        checkVerbose = "";
-      }
-      if (checkScrollBottom.includes("false")) {
-        checkScrollBottom = "";
-      }
-
-      // Creates the custom URL based on the above information. Does some replacing for visual's sake. If no params, remove the trailing "?"
-      let customURL = `${window.location.origin + window.location.pathname + "?" + botSelected + firstNumber + mulCount + mul1 + mul2 + mul3 + mul4 + mul5 + checkNewlines + checkDeduplicate + checkVerbose + checkScrollBottom}`.replace("?&", "?");
-      if (customURL == window.location.origin + window.location.pathname + "?") {
-        customURL = customURL.replace("?", "");
-      }
-
-      const clipboard = new ClipboardJS('#debugCopyCustomURL', { // Copy the URL created
-        text: trigger => {
+      // Copy the URL created
+      const clipboard = new ClipboardJS('#debugCopyCustomURL', {
+        text: () => {
           return customURL;
         }
       });
@@ -1036,74 +999,63 @@
     $(document).ready(() => {
 
       // Run if URL has params
-      if (window.location.href.includes("?")) {
+      if (window.location.search) {
         console.log("[DEBUG] URL params found. Applying.");
 
-        // Gets the params
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
+        // Get the params
+        const params = new URLSearchParams(window.location.search);
 
-        // Read each param
-        let botSelected = urlParams.get("bot");
-        const firstNumber = urlParams.get(unescape("start"));
-        const mulCount = urlParams.get("mulCount");
-        const mul1 = urlParams.get("mul1");
-        const mul2 = urlParams.get("mul2");
-        const mul3 = urlParams.get("mul3");
-        const mul4 = urlParams.get("mul4");
-        const mul5 = urlParams.get("mul5");
-        const checkNewlines = urlParams.get("newlines");
-        const checkDeduplicate = urlParams.get("dedupe");
-        const checkVerbose = urlParams.get("verbose");
-        const checkScrollBottom = urlParams.get("scroll");
-        const debugEnabled = urlParams.get("debug"); // Checks for debug param
-
-        // Sets bot to default if nothing was selected
-        if (botSelected == null) {
-          botSelected = 1;
-        }
+        // Read params
+        const botSelected = params.get("bot") || 1;
+        const firstNumber = params.get("start");
+        const mulCount = params.get("mulCount");
+        const mul1 = params.get("mul1");
+        const mul2 = params.get("mul2");
+        const mul3 = params.get("mul3");
+        const mul4 = params.get("mul4");
+        const mul5 = params.get("mul5");
+        const checkNewlines = params.get("newlines");
+        const checkDeduplicate = params.get("dedupe");
+        const checkVerbose = params.get("verbose");
+        const checkScrollBottom = params.get("scroll");
+        const debugEnabled = params.get("debug");
 
         // Activate the Multiple checkbox if the mulCount param exists (exists when Multiples checkbox is checked)
-        if (mulCount) {
-          $("#checkBoxMultiple").prop("checked", true);
-        }
+        if (mulCount) $("#checkBoxMultiple").prop("checked", true);
 
         // Adds ID fields based on the setting. Starting from 2
-        if (mulCount == "3") {
+        if (mulCount === "3") {
           addIDField();
         }
-        if (mulCount == "4") {
+        if (mulCount === "4") {
           addIDField();
           addIDField();
         }
-        if (mulCount == "5") {
+        if (mulCount === "5") {
           addIDField();
           addIDField();
           addIDField();
         }
 
         // Apply changes
-        $("#regexList").val(botSelected).change();
+        $("#regexList").val(botSelected).change(); // This runs changeRegex() indirectly
         $("#customEntry").val(firstNumber);
         $("#customEntry1").val(mul1);
         $("#customEntry2").val(mul2);
         $("#customEntry3").val(mul3);
         $("#customEntry4").val(mul4);
         $("#customEntry5").val(mul5);
-        $("#checkBoxUseNewlines").prop("checked", String(checkNewlines) == "true");
-        $("#checkBoxNoDupes").prop("checked", String(checkDeduplicate) == "true");
-        $("#checkBoxUseVerboseLogs").prop("checked", String(checkVerbose) == "true");
-        $("#debugCheckBoxScrollBottom").prop("checked", String(checkScrollBottom) == "true");
+        $("#checkBoxUseNewlines").prop("checked", checkNewlines === "true");
+        $("#checkBoxNoDupes").prop("checked", checkDeduplicate === "true");
+        $("#checkBoxUseVerboseLogs").prop("checked", checkVerbose === "true");
+        $("#debugCheckBoxScrollBottom").prop("checked", checkScrollBottom === "true");
 
         // If "debug=true/1", activate debug mode
-        if (debugEnabled == "1" || debugEnabled == "true") {
+        if (debugEnabled === "1" || debugEnabled === "true") {
           toggleDebugOptions();
         }
 
-        // Runs the check to expand the Multiples section. .change() above somehow already does this?
-        multipleCheck();
-
-        // Runs the check to show the Verbose scroll.
+        // Runs the check to show the Verbose scroll
         scrollCheck();
 
         // Strips URL of the params
