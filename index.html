@@ -956,7 +956,7 @@
       customURL.searchParams.append("verbose", $("#checkBoxUseVerboseLogs").is(":checked"));
       customURL.searchParams.append("scroll", $("#debugCheckBoxScrollBottom").is(":checked"));
 
-      // Delete any param is is empty, false, or undefined
+      // Delete any param that is empty, false, or undefined
       const keyToDelete = [];
       customURL.searchParams.forEach((value, key) => {
         if (!value || value === "false" || value === "undefined") keyToDelete.push(key);
