@@ -1,4 +1,4 @@
-const Colors = {
+export const Colors = {
     Discord: {
         BLURPLE: "#5865F2",
         GREEN: "#57F287",
