@@ -279,7 +279,7 @@ input.lightMode[type="checkbox"]:checked {
   align-items: baseline;
   flex-wrap: wrap;
   background-color: #2f3136;
-  padding-top: 5px;
+  margin-top: 5px;
 }
 
 #multipleIDs.lightMode,

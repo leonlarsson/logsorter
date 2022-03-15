@@ -1,13 +1,17 @@
-function parseIDs(regex) {
+import getRegex from "./getRegex.js";
+import { editorLeft, editorRight } from "./createCodemirror.js";
+import { scrollText } from "./scrollOperations.js";
+import { Colors } from "./constants.js";
+
+/** Matches the left editor and parses to the right editor according to the regex selected. */
+export default () => {
+
+  const regex = getRegex();
 
   if (editorLeft.getValue() == "") { // Returns if there is no text to match
     alert("Please input some text into the 'Input' textbox below or upload a file.");
     return;
   }
-
-  // if (customEntry == "") { // Warn about no IDs were selected -- Disabled in favor of placeholder text in customEntry box. Enable if unclear still
-  //   alert("You did not select any ID to filter.\n\nBe aware that this includes every found ID.");
-  // }
 
   const today = new Date().toISOString().substring(0, 19); // Gets date for Verbose logs
   const dateTime = today.replace("T", " ");
@@ -48,7 +52,7 @@ function parseIDs(regex) {
     }
 
     // NO MATCHES
-    if (allIDs.length === 0 && uniqueIDs.size === 0) { // If no matches, return
+    if (!allIDs.length && !uniqueIDs.size) { // If no matches, return
 
       if ($("#checkBoxUseVerboseLogs").is(":checked")) { // If checked, use verbose logs. Currently hidden by default
         if (editorRight.getValue() == "") { // Verbose logging. If textarea is empty, add no newlines at the top
@@ -67,7 +71,8 @@ function parseIDs(regex) {
       $("#outputStatusTextCol").css({ color: Colors.RED }); // Set status to red
       $(".CodeMirror.cm-s-right").css({ borderColor: bgColor }); // Reset the Output border
 
-      scrollText(lastLine); // Perform the scroll
+      // Perform the scroll
+      scrollText(lastLine);
       return; // Return and do not continue
     }
 
@@ -114,18 +119,9 @@ function parseIDs(regex) {
     $("#outputStatusTextCol").css({ color: "" }); // Set status to default depending on light theme. Removes the style.
     $(".CodeMirror.cm-s-right").css({ borderColor: bgColor }); // Reset the Output border
 
-    scrollText(lastLine); // Perform the scroll
+    // Perform the scroll
+    scrollText(lastLine);
   }, 0)
 };
-
-function scrollText(lastLine) {
-  if ($("#debugCheckBoxScrollBottom").is(":checked")) { // Make this only available with newlines checked. Add button to scroll to last pos
-    scrollBottom();
-  }
-
-  if ($("#debugCheckBoxScroll").is(":checked")) { // Make this only available with newlines checked. Add button to scroll to last pos
-    scrollVerbose(lastLine);
-  }
-}
 
 // stop snooping at the spaghetti
