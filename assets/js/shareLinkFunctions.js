@@ -1,5 +1,7 @@
-import { Colors } from "./constants.js";
+import { toggleDebug } from "./debugFunctions.js";
+import { addIDField } from "./handleMultipleIDFields.js";
 import { scrollCheck } from "./scrollOperations.js";
+import { Colors } from "./constants.js";
 
 /** Builds the custom share link from the current settings. Then copies it to clipboard. */
 export function createShareLink() {
@@ -117,7 +119,7 @@ export function readUrlParams() {
 
         // If "debug=true/1", activate debug mode
         if (debugEnabled === "1" || debugEnabled === "true") {
-            toggleDebugOptions();
+            toggleDebug()
         }
 
         // Runs the check to show the Verbose scroll
