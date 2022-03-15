@@ -7,6 +7,7 @@ import { Colors } from "./constants.js";
 export default () => {
 
   const regex = getRegex();
+  if (!regex) return;
 
   if (editorLeft.getValue() == "") { // Returns if there is no text to match
     alert("Please input some text into the 'Input' textbox below or upload a file.");
