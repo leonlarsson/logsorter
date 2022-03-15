@@ -1,4 +1,11 @@
-$("#files").on("change", evt => {
+import parseTextBox from "./parseTextBox.js";
+import { editorLeft } from "./createCodemirror.js";
+
+/** 
+ * Populates the right editor with the file contents.
+ * @param {Event} evt The event, with the file received.
+ */
+export default evt => {
   const file = evt.target.files[0]; // Gets the selected file
 
   // Infinite file size if debug mode is active
@@ -11,13 +18,13 @@ $("#files").on("change", evt => {
     const reader = new FileReader();
     reader.onload = evt => {
       editorLeft.setValue(evt.target.result);
-      getRegex(); // Might want to make this optional in the future
+      parseTextBox(); // Might want to make this optional in the future
     };
 
     reader.readAsText(file);
 
   } else {
-    alert(`Incorrect file type, file was too big, or the file is empty.\n\nCheck the console for a hint :)`);
+    alert("Incorrect file type, file was too big, or the file is empty.\n\nCheck the console for a hint :)");
     return;
   }
-});
+};
