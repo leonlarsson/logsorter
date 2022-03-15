@@ -6,13 +6,15 @@ import { Colors } from "./constants.js";
 /** Matches the left editor and parses to the right editor according to the regex selected. */
 export default () => {
 
-  const regex = getRegex();
-  if (!regex) return;
+  const { regex, regexId } = getRegex();
+  if (!regex || !regexId) return;
 
-  if (editorLeft.getValue() == "") { // Returns if there is no text to match
+  if (!editorLeft.getValue()) { // Returns if there is no text to match
     alert("Please input some text into the 'Input' textbox below or upload a file.");
     return;
   }
+
+  console.log(`--------------------------------------\n[DEBUG] RegEx ${regexId} was selected.`);
 
   const today = new Date().toISOString().substring(0, 19); // Gets date for Verbose logs
   const dateTime = today.replace("T", " ");
@@ -79,14 +81,18 @@ export default () => {
 
     // MATCHES FOUND
     let lastLine;
-    if ($("#checkBoxNoDupes").is(":checked")) { // Append depending on checkbox. If no dupes, append the set.
+    // Append depending on checkbox. If no dupes, append the set.
+    if ($("#checkBoxNoDupes").is(":checked")) {
 
       currentIDs += uniqueIDs.size;
 
-      if ($("#checkBoxUseVerboseLogs").is(":checked")) { // If checked, use verbose logs. Currently hidden by default
-        if (editorRight.getValue() == "") { // Verbose logging. If textarea is empty, add no newlines at the top
+      // If checked, use verbose logs. Currently hidden by default
+      if ($("#checkBoxUseVerboseLogs").is(":checked")) {
+        // Verbose logging. If textarea is empty, add no newlines at the top
+        if (!editorRight.getValue()) {
           editorRight.replaceRange(`Generated on ${dateTime} UTC. Found ${uniqueIDs.size} unique matches using pattern ${regex} separated with ${idSeparatorText}:\n`, CodeMirror.Pos(editorRight.lastLine()));
-        } else { // If it isn't empty, add newlines
+          // If it isn't empty, add newlines
+        } else {
           editorRight.replaceRange(`\n\nGenerated on ${dateTime} UTC. Found ${uniqueIDs.size} unique matches using pattern ${regex} separated with ${idSeparatorText}:\n`, CodeMirror.Pos(editorRight.lastLine()));
         }
         lastLine = editorRight.lastLine();
@@ -99,10 +105,13 @@ export default () => {
 
       currentIDs += allIDs.length;
 
-      if ($("#checkBoxUseVerboseLogs").is(":checked")) { // If checked, use verbose logs. Currently hidden by default
-        if (editorRight.getValue() == "") { // Verbose logging. If textarea is empty, add no newlines at the top
+      // If checked, use verbose logs. Currently hidden by default
+      if ($("#checkBoxUseVerboseLogs").is(":checked")) {
+        // Verbose logging. If textarea is empty, add no newlines at the top
+        if (!editorRight.getValue()) {
           editorRight.replaceRange(`Generated on ${dateTime} UTC. Found ${allIDs.length} matches using pattern ${regex} separated with ${idSeparatorText}:\n`, CodeMirror.Pos(editorRight.lastLine()));
-        } else { // If it isn't empty, add newlines
+          // If it isn't empty, add newlines
+        } else {
           editorRight.replaceRange(`\n\nGenerated on ${dateTime} UTC. Found ${allIDs.length} matches using pattern ${regex} separated with ${idSeparatorText}:\n`, CodeMirror.Pos(editorRight.lastLine()));
         }
         lastLine = editorRight.lastLine();
@@ -115,7 +124,7 @@ export default () => {
 
     // REGARDLESS OF MATCHES FOUND
     const operationFinish = new Date();
-    console.log(`%c[DEBUG] Found ${allIDs.length} matches (${uniqueIDs.size} unique) in ` + ((operationFinish - operationStart) / 1000).toFixed(2) + ` seconds. ${currentIDs} current IDs.\n--------------------------------------`, `color: ${Colors.GREEN}`); // Once done, console.log the amount of found matches
+    console.log(`%c[DEBUG] Found ${allIDs.length} matches (${uniqueIDs.size} unique) in ${((operationFinish - operationStart) / 1000).toFixed(2)} seconds. ${currentIDs} current IDs.\n--------------------------------------`, `color: ${Colors.GREEN}`); // Once done, console.log the amount of found matches
     $("#outputStatusText").css({ color: "" }); // Set status to default depending on light theme. Removes the style.
     $("#outputStatusTextCol").css({ color: "" }); // Set status to default depending on light theme. Removes the style.
     $(".CodeMirror.cm-s-right").css({ borderColor: bgColor }); // Reset the Output border
