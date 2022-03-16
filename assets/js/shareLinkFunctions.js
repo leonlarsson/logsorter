@@ -9,7 +9,7 @@ export function createShareLink() {
 
     const customURL = new URL(window.location.origin);
 
-    if ($("#regexList").val() !== "1") customURL.searchParams.append("bot", $("#regexList").val());
+    customURL.searchParams.append("bot", $("#regexList").val());
     customURL.searchParams.append("start", $("#customEntry").val());
 
     if ($("#checkBoxMultiple").is(":checked")) {
@@ -74,7 +74,7 @@ export function readUrlParams() {
         const params = new URLSearchParams(window.location.search);
 
         // Read params
-        const botSelected = params.get("bot") || 1;
+        const botSelected = params.get("bot");
         const firstNumber = params.get("start");
         const mulCount = params.get("mulCount");
         const mul1 = params.get("mul1");

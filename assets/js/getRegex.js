@@ -15,6 +15,12 @@ export default () => {
   let regex = null;
   const regexId = $("#regexList").val();
 
+  // Return if no bot was selected
+  if (!$("#regexList").val()) {
+    alert("Please select a bot first.");
+    return { regex, regexId };
+  }
+
   if ($("#checkBoxMultiple").is(":checked")) {
 
     // If there are empty ID fields, retun (as null)

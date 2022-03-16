@@ -55,6 +55,7 @@ function modelMatcher(params, data) {
  */
 export default theme => {
     $("#regexList").select2({
+        placeholder: "Select a bot",
         dropdownAutoWidth: true,
         width: "style",
         matcher: modelMatcher,
