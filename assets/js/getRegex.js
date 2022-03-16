@@ -1,3 +1,4 @@
+const botList = document.getElementById("regexList");
 /**
  * Determines which Regex is to use.
  * @typedef {Object} ReturnObject
@@ -13,10 +14,10 @@ export default () => {
   const customEntry5 = $("#customEntry5").val();
   let customEntry;
   let regex = null;
-  const regexId = $("#regexList").val();
+  const regexId = botList.value;
 
   // Return if no bot was selected
-  if (!$("#regexList").val()) {
+  if (!botList.value) {
     alert("Please select a bot first.");
     return { regex, regexId };
   }
@@ -44,83 +45,83 @@ export default () => {
 
   } else {
     // Get first ID numbers to match
-    customEntry = $("#customEntry").val();
+    customEntry = document.getElementById("customEntry").value;
   }
 
 
   // Zeppelin/Aperture/Auttaja - Join/Leave
-  if ($("#regexList").val() === "1") {
+  if (botList.value === "1") {
     regex = new RegExp(`#.+[^\\d](${customEntry}\\d+)\\).+(?:left|joined)`, "g");
   }
 
   // Zeppelin/Aperture/Auttaja - Join
-  if ($("#regexList").val() === "2") {
+  if (botList.value === "2") {
     regex = new RegExp(`#.+[^\\d](${customEntry}\\d+)\\).+joined`, "g");
   }
 
   // Zeppelin/Aperture/Auttaja - Leave
-  if ($("#regexList").val() === "3") {
+  if (botList.value === "3") {
     regex = new RegExp(`#.+[^\\d](${customEntry}\\d+)\\).+left`, "g")
   }
 
   // Utilibot - Join/Leave
-  if ($("#regexList").val() === "4") {
+  if (botList.value === "4") {
     regex = new RegExp(`ID:\\s(${customEntry}\\d+)[^#]+#[^#]+(?:left|joined)`, "g");
   }
 
   // Utilibot - Join
-  if ($("#regexList").val() === "5") {
+  if (botList.value === "5") {
     regex = new RegExp(`ID:\\s(${customEntry}\\d+)[^#]+#[^#]+joined`, "g");
   }
 
   // Utilibot - Leave
-  if ($("#regexList").val() === "6") {
+  if (botList.value === "6") {
     regex = new RegExp(`ID:\\s(${customEntry}\\d+)[^#]+#[^#]+left`, "g");
   }
 
   // Vortex - Join/Leave
-  if ($("#regexList").val() === "7") {
+  if (botList.value === "7") {
     regex = new RegExp(`(?::inbox|:outbox).+#\\d+\\s\\(ID:(${customEntry}\\d+)`, "g");
   }
 
   // Vortex - Join
-  if ($("#regexList").val() === "8") {
+  if (botList.value === "8") {
     regex = new RegExp(`:inbox.+#\\d+\\s\\(ID:(${customEntry}\\d+)`, "g");
   }
 
   // Vortex - Leave
-  if ($("#regexList").val() === "9") {
+  if (botList.value === "9") {
     regex = new RegExp(`:outbox.+#\\d+\\s\\(ID:(${customEntry}\\d+)`, "g");
   }
 
   // Vortex - Kicks
-  if ($("#regexList").val() === "10") {
+  if (botList.value === "10") {
     regex = new RegExp(`#\\d+\\skicked.+#\\d+\\s\\(ID:(${customEntry}\\d+)`, "g");
   }
 
   // Nexus - Join/Leave
-  if ($("#regexList").val() === "95") {
+  if (botList.value === "95") {
     regex = new RegExp(`#+\\d+\\s\\[(${customEntry}\\d+)]\\s(?:joined|left)`, "g");
   }
 
   // Nexus - Join
-  if ($("#regexList").val() === "96") {
+  if (botList.value === "96") {
     regex = new RegExp(`#+\\d+\\s\\[(${customEntry}\\d+)]\\sjoined`, "g");
   }
 
   // Nexus - Leave
-  if ($("#regexList").val() === "97") {
+  if (botList.value === "97") {
     regex = new RegExp(`#+\\d+\\s\\[(${customEntry}\\d+)]\\sleft`, "g");
   }
 
   // Mee6/GiselleBot/Dyno/Carl-bot
-  if ($("#regexList").val() === "98") {
+  if (botList.value === "98") {
     regex = new RegExp(`.*ID:\\s(${customEntry}\\d+)`, "g");
   }
 
   // Custom - Group 1
-  if ($("#regexList").val() === "99") {
-    if (customEntry == "") {
+  if (botList.value === "99") {
+    if (!customEntry) {
       alert("Please provide a RegEx when using Custom RegEx. Capturing group 1 will be matched.\n\nExamples:\n(\\d+)\nID: (\\d+)\n#\\d{4} \\((\\d{17,19})\\)");
     } else {
       regex = new RegExp(customEntry, "g");
@@ -131,12 +132,12 @@ export default () => {
   // Update - Oct 20, 2021: Updated regexs below to support up to 19.
 
   // All IDs - First occurrence
-  if ($("#regexList").val() === "100") {
+  if (botList.value === "100") {
     regex = new RegExp(`^.*?\\b(${customEntry}\\d{${17 - customEntry.length},${19 - customEntry.length}})\\b`, "gm");
   }
 
   // All IDs
-  if ($("#regexList").val() === "101") {
+  if (botList.value === "101") {
     regex = new RegExp(`\\b(${customEntry}\\d{${17 - customEntry.length},${19 - customEntry.length}})\\b`, "g");
   }
 
