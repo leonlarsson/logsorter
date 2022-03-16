@@ -24,7 +24,8 @@ export function createShareLink() {
     customURL.searchParams.append("newlines", $("#checkBoxUseNewlines").is(":checked"));
     customURL.searchParams.append("dedupe", $("#checkBoxNoDupes").is(":checked"));
     customURL.searchParams.append("verbose", $("#checkBoxUseVerboseLogs").is(":checked"));
-    customURL.searchParams.append("scroll", $("#checkBoxScrollBottom").is(":checked"));
+    customURL.searchParams.append("scrollVerbose", $("#checkBoxScrollVerbose").is(":checked"));
+    customURL.searchParams.append("scrollBottom", $("#checkBoxScrollBottom").is(":checked"));
     customURL.searchParams.append("debug", debugMode);
 
     // Delete any param that is empty, false, or undefined
@@ -85,7 +86,8 @@ export function readUrlParams() {
         const checkNewlines = params.get("newlines");
         const checkDeduplicate = params.get("dedupe");
         const checkVerbose = params.get("verbose");
-        const checkScrollBottom = params.get("scroll");
+        const checkScrollVerbose = params.get("scrollVerbose");
+        const checkScrollBottom = params.get("scrollBottom");
         const debugEnabled = params.get("debug");
 
         // Activate the Multiple checkbox if the mulCount param exists (exists when Multiples checkbox is checked)
@@ -116,6 +118,7 @@ export function readUrlParams() {
         $("#checkBoxUseNewlines").prop("checked", checkNewlines === "true");
         $("#checkBoxNoDupes").prop("checked", checkDeduplicate === "true");
         $("#checkBoxUseVerboseLogs").prop("checked", checkVerbose === "true");
+        $("#checkBoxScrollVerbose").prop("checked", checkScrollVerbose === "true");
         $("#checkBoxScrollBottom").prop("checked", checkScrollBottom === "true");
 
         // If "debug=true/1", activate debug mode
