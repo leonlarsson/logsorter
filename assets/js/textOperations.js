@@ -40,13 +40,9 @@ export function removeDuplicates() {
     $("#removeDupesButton").animate({ backgroundColor: Colors.GREEN }, "swing");
     $(".CodeMirror.cm-s-right").animate({ borderColor: Colors.GREEN }, "swing");
     setTimeout(() => {
-        $("#removeDupesButton").animate({ backgroundColor: Colors.BLUE }, "swing");
-        $(".CodeMirror.cm-s-right").animate({ borderColor: bgColor }, "swing");
-
-        // Remove the style to allow for the hover color again
-        setTimeout(() => {
-            $("#removeDupesButton").removeAttr("style");
-        }, 500);
+        const one = $("#removeDupesButton").animate({ backgroundColor: Colors.BLUE }, "swing").promise();
+        const two = $(".CodeMirror.cm-s-right").animate({ borderColor: bgColor }, "swing").promise();
+        Promise.all([one, two]).then(() => $("#removeDupesButton").removeAttr("style"));
     }, 1000);
 }
 
@@ -111,13 +107,9 @@ export function splitLines() {
     $("#splitLinesButton").animate({ backgroundColor: Colors.GREEN }, "swing");
     $(".CodeMirror.cm-s-right").animate({ borderColor: Colors.GREEN }, "swing");
     setTimeout(() => {
-        $("#splitLinesButton").animate({ backgroundColor: Colors.BLUE }, "swing");
-        $(".CodeMirror.cm-s-right").animate({ borderColor: bgColor }, "swing");
-
-        // Remove the style to allow for the hover color again
-        setTimeout(() => {
-            $("#splitLinesButton").removeAttr("style");
-        }, 500);
+        const one = $("#splitLinesButton").animate({ backgroundColor: Colors.BLUE }, "swing").promise();
+        const two = $(".CodeMirror.cm-s-right").animate({ borderColor: bgColor }, "swing").promise();
+        Promise.all([one, two]).then(() => $("#splitLinesButton").removeAttr("style"));
     }, 1000);
 }
 
@@ -129,7 +121,7 @@ export function copyText() {
 
     // Attempt to copy the Output into the clipboard. If successful, run visual change. If failed, alert the user
     const clipboard = new ClipboardJS('#copyOutputButton', {
-        text: trigger => {
+        text: () => {
             return editorRight.getValue();
         }
     });
@@ -137,7 +129,7 @@ export function copyText() {
     clipboard.on('error', () => {
         clipboard.destroy();
         console.log(`%c[DEBUG] Failed to copy text.`, `color: ${Colors.RED}`);
-        alert("Copy operation failed. Please copy manually.")
+        alert("Copy operation failed. Please copy manually.");
     });
 
     clipboard.on("success", () => {
@@ -148,13 +140,9 @@ export function copyText() {
         $("#copyOutputButton").animate({ backgroundColor: Colors.GREEN }, "swing");
         $(".CodeMirror.cm-s-right").animate({ borderColor: Colors.GREEN }, "swing");
         setTimeout(() => {
-            $("#copyOutputButton").animate({ backgroundColor: Colors.BLUE }, "swing");
-            $(".CodeMirror.cm-s-right").animate({ borderColor: bgColor }, "swing");
-
-            // Remove the style to allow for the hover color again
-            setTimeout(() => {
-                $("#copyOutputButton").removeAttr("style");
-            }, 500);
+            const one = $("#copyOutputButton").animate({ backgroundColor: Colors.BLUE }, "swing").promise();
+            const two = $(".CodeMirror.cm-s-right").animate({ borderColor: bgColor }, "swing").promise();
+            Promise.all([one, two]).then(() => $("#copyOutputButton").removeAttr("style"));
         }, 1000);
     });
 }
@@ -181,13 +169,9 @@ export function clearText() {
     $("#clearOutputButton").animate({ backgroundColor: Colors.GREEN }, "swing");
     $(".CodeMirror.cm-s-right").animate({ borderColor: Colors.RED }, "swing");
     setTimeout(() => {
-        $("#clearOutputButton").animate({ backgroundColor: Colors.RED }, "swing");
-        $(".CodeMirror.cm-s-right").animate({ borderColor: bgColor }, "swing");
-
-        // Remove the style to allow for the hover color again
-        setTimeout(() => {
-            $("#clearOutputButton").removeAttr("style");
-        }, 500);
+        const one = $("#clearOutputButton").animate({ backgroundColor: Colors.RED }, "swing").promise();
+        const two = $(".CodeMirror.cm-s-right").animate({ borderColor: bgColor }, "swing").promise();
+        Promise.all([one, two]).then(() => $("#clearOutputButton").removeAttr("style"));
     }, 1000);
 }
 
