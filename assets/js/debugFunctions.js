@@ -11,7 +11,6 @@ export function toggleDebug() {
 export function enableDebug() {
     debugMode = true;
     editorRight.setOption("readOnly", false);
-    $("#debugOptions").show();
     console.log(`[DEBUG] Debug mode set to ${debugMode}.`);
 }
 
@@ -19,7 +18,5 @@ export function enableDebug() {
 export function disableDebug() {
     debugMode = false;
     editorRight.setOption("readOnly", true);
-    // $("#checkBoxScrollBottom").prop("checked", false) // Uncheck
-    $("#debugOptions").hide();
     console.log(`[DEBUG] Debug mode set to ${debugMode}.`);
 }

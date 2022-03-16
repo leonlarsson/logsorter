@@ -9,6 +9,7 @@ import { createShareLink } from "./shareLinkFunctions.js";
 import { showExample } from "./showExample.js";
 import { removeDuplicates, splitLines, copyText, clearText, convertNewlines, convertSpaces } from "./textOperations.js";
 
+import { toggleExtraPanel } from "./handleExtraPanel.js";
 import { toggleDebug } from "./debugFunctions.js";
 import { toggleLight, deleteThemeSetting } from "./themeFunctions.js";
 import { hideNotice } from "./localStorageNotice.js";
@@ -36,7 +37,10 @@ document.getElementById("clearOutputButton").addEventListener("click", clearText
 document.getElementById("addIDFieldButton").addEventListener("click", addIDField);
 document.getElementById("removeIDFieldButton").addEventListener("click", removeIDField);
 
-// Buttons, 2nd row
+// Toggle extra panel button
+document.getElementById("openExtraPanelButton").addEventListener("click", toggleExtraPanel);
+
+// Buttons, extra panel
 document.getElementById("showExampleButton").addEventListener("click", showExample);
 document.getElementById("convertNewlinesButton").addEventListener("click", convertNewlines);
 document.getElementById("convertSpacesButton").addEventListener("click", convertSpaces);

@@ -308,7 +308,7 @@ input.lightMode[type="checkbox"]:checked {
   border-color: #40444b;
 }
 
-#debugOptions {
+#extraOptions {
   width: 100%;
   display: flex;
   flex-direction: row;
@@ -319,11 +319,11 @@ input.lightMode[type="checkbox"]:checked {
   padding-bottom: 10px;
 }
 
-#debugOptions.lightMode {
+#extraOptions.lightMode {
   background-color: #f2f3f5;
 }
 
-#debugOptions * {
+#extraOptions * {
   margin-left: 5px;
   margin-right: 5px;
   border-color: #40444b;
@@ -331,8 +331,10 @@ input.lightMode[type="checkbox"]:checked {
 
 #copyShareLinkButton {
   color: #b9bbbe;
-  margin-left: 5px;
+  margin-left: 10px !important;
+  margin-right: 0 !important;
   cursor: pointer;
+  align-self: center;
 }
 
 #copyShareLinkButton:hover {
@@ -345,6 +347,18 @@ input.lightMode[type="checkbox"]:checked {
 
 #copyShareLinkButton.lightMode:hover {
   color: #262b31;
+}
+
+#openExtraPanelButton {
+  color: #b9bbbe;
+  margin-left: 10px !important;
+  margin-right: 0 !important;
+  cursor: pointer;
+  align-self: center;
+}
+
+#openExtraPanelButton.lightMode {
+  color: #4f5660;
 }
 
 .optionText {
@@ -575,7 +589,7 @@ hr {
   }
 
   #bottomOptions,
-  #debugOptions,
+  #extraOptions,
   hr,
   #textBoxTitleText,
   #textBoxArea,
@@ -623,7 +637,7 @@ hr {
   }
 
   #bottomOptions,
-  #debugOptions,
+  #extraOptions,
   hr,
   #textBoxTitleText,
   #textBoxArea,
@@ -704,7 +718,7 @@ hr {
   }
 
   #bottomOptions,
-  #debugOptions,
+  #extraOptions,
   hr,
   #textBoxTitleText,
   #textBoxArea,

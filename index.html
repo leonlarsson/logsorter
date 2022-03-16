@@ -157,7 +157,7 @@
       <label class="optionText no-select" id="checkBoxUseVerboseLogsText" style="cursor: pointer;"
         title="Select if you want extra logging at the top of the results. &#013;&#013;Displays date/time, pattern used, and which separator used."><input
           style="cursor: pointer;" type="checkbox" id="checkBoxUseVerboseLogs">Verbose</label>
-      <i class="fa-solid fa-copy" id="copyShareLinkButton"
+      <i class="fa-solid fa-copy fa-xl no-select" id="copyShareLinkButton"
         title="Copies a URL with the current settings. &#013;Includes selected RegEx, first numbers, all checkboxes, and debug mode status."></i>
 
       <input type="file" class="optionText" id="files" name="files[]" onclick="this.value=null" accept="text/plain"
@@ -198,9 +198,10 @@
         title="Copies the content of the output textbox to your clipboard.">Copy output</button>
       <button class="buttonRedNew no-select" id="clearOutputButton" title="Clears the output textbox.">Clear
         output</button>
+      <i class="fa-solid fa-caret-right fa-xl no-select" id="openExtraPanelButton" title="Shows extra options."></i>
     </div>
 
-    <div id="debugOptions" style="display: none;">
+    <div id="extraOptions" style="display: none">
 
       <button class="buttonBlueNew no-select" id="showExampleButton"
         title="Populates the website with some example values.">Show example</button>
