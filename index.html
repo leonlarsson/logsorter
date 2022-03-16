@@ -74,48 +74,48 @@
 
     <div id="topOptions">
       <div class="optionText no-select" id="firstText" title="Select the RegEx pattern you want to match for.">1. Select
-        RegEx:
+        bot:
       </div>
       <select id="regexList">
-        <optgroup label="Zeppelin:" alt="Zeppelin" title="Default Zeppelin log formats. 'ping_user:' doesn't matter.">
+        <optgroup label="Zeppelin" alt="Zeppelin" title="Default Zeppelin log formats. 'ping_user:' doesn't matter.">
           <option value="1" alt="Zeppelin" title="This matches both joins and leaves.">Joins/Leaves</option>
           <option value="2" alt="Zeppelin" title="This matches only joins.">Joins</option>
           <option value="3" alt="Zeppelin" title="This matches only leaves.">Leaves</option>
         </optgroup>
-        <optgroup label="Aperture:" alt="Aperture" title="Default Aperture log formats.">
+        <optgroup label="Aperture" alt="Aperture" title="Default Aperture log formats.">
           <option value="1" alt="Aperture" title="This matches both joins and leaves.">Joins/Leaves</option>
           <option value="2" alt="Aperture" title="This matches only joins.">Joins</option>
           <option value="3" alt="Aperture" title="This matches only leaves.">Leaves</option>
         </optgroup>
-        <optgroup label="Auttaja (Compact Logs):" alt="Auttaja" title="Default (compact) Auttaja log formats.">
+        <optgroup label="Auttaja (Compact Logs)" alt="Auttaja" title="Default (compact) Auttaja log formats.">
           <option value="1" alt="Auttaja" title="This matches both joins and leaves.">Joins/Leaves</option>
           <option value="2" alt="Auttaja" title="This matches only joins.">Joins</option>
           <option value="3" alt="Auttaja" title="This matches only leaves.">Leaves</option>
         </optgroup>
-        <optgroup label="Utilibot(!):" alt="Utilibot"
+        <optgroup label="Utilibot(!)" alt="Utilibot"
           title="Default Utilibot log formats. &#013;&#013;This SHOULD only match joins and leaves, but I haven't seen every form of Utilibot format.">
           <option value="4" alt="Utilibot" title="This matches both joins and leaves.">Joins/Leaves</option>
           <option value="5" alt="Utilibot" title="This matches only joins.">Joins</option>
           <option value="6" alt="Utilibot" title="This matches only leaves.">Leaves</option>
         </optgroup>
-        <optgroup label="Vortex:" alt="Vortex" title="Default Vortex log formats.">
+        <optgroup label="Vortex" alt="Vortex" title="Default Vortex log formats.">
           <option value="7" alt="Vortex" title="This matches both joins and leaves.">Joins/Leaves</option>
           <option value="8" alt="Vortex" title="This matches only joins.">Joins</option>
           <option value="9" alt="Vortex" title="This matches only leaves.">Leaves</option>
           <option value="10" alt="Vortex" title="This matches kicks from Anti-Raid Mode.">Kicks (Anti-Raid)</option>
         </optgroup>
-        <optgroup label="Nexus:" alt="Nexus" title="Default Nexus log formats.">
+        <optgroup label="Nexus" alt="Nexus" title="Default Nexus log formats.">
           <option value="95" alt="Nexus" title="This matches both joins and leaves.">Joins/Leaves</option>
           <option value="96" alt="Nexus" title="This matches only joins.">Joins</option>
           <option value="97" alt="Nexus" title="This matches only leaves.">Leaves</option>
         </optgroup>
-        <optgroup label="Mee6/GiselleBot/Dyno/Carl-bot(!):" alt="EmbedBotsEw"
+        <optgroup label="Mee6/GiselleBot/Dyno/Carl-bot(!)" alt="EmbedBotsEw"
           title="Limited support because these bots use embed logs and most are not able to split logs into specific channels.">
           <option value="98" alt="EmbedBotsEw"
             title="This only grabs the ID (from any log message that has 'ID:' in it.) &#013;&#013;I do not recommend using this as you can't split the logging channels on all bots.">
             All IDs</option>
         </optgroup>
-        <optgroup label="Misc:" alt="Misc." title="Anything not specific to any bot.">
+        <optgroup label="Misc" alt="Misc." title="Anything not specific to any bot.">
           <option value="99"
             title="Select if you want to use your own RegEx. &#013;&#013;The contents of Capturing group 1 will be output."
             alt="Misc.">Custom - Group 1</option>
@@ -127,7 +127,7 @@
         </optgroup>
         <!-- <optgroup label="Embed logs are bad" title="It's true..."></optgroup>
         <optgroup label="Don't use them :)" title="And you know it."></optgroup> -->
-        <optgroup label="Want a bot added? Contact me."
+        <optgroup label="Want a bot added? Contact me"
           title="Click on the red 'Mozzy' or contact me on Discord. &#013;&#013;Only bots that use single line logs will be considered.">
         </optgroup>
 
@@ -225,7 +225,7 @@
         title="Paste text into this textbox.">Input</div>
 
       <textarea id="textBoxInput" rows="40" cols="80" style="resize:none"
-        placeholder="Paste your logs here, select a log type and change any settings you want, then press the Match Input button.&#10;&#10;Made with <3 by Mozzy."></textarea>
+        placeholder="Paste your logs here, select a bot and log type and change any settings you want, then press the Match Input button.&#10;&#10;Made with <3 by Mozzy."></textarea>
 
       <!-- <span class="optionText no-select" style="align-self: center; font-size: 30px;" title="No, I'm not a button.">></span> -->
       <i class="col-icon fas fa-arrow-right optionText no-select" style="align-self: center; font-size: 20px;"></i>
