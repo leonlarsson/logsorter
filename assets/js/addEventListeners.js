@@ -37,9 +37,9 @@ document.getElementById("addIDFieldButton").addEventListener("click", addIDField
 document.getElementById("removeIDFieldButton").addEventListener("click", removeIDField);
 
 // Buttons, 2nd row
-document.getElementById("debugShowExample").addEventListener("click", showExample);
-document.getElementById("debugConvertNewlines").addEventListener("click", convertNewlines);
-document.getElementById("debugConvertSpaces").addEventListener("click", convertSpaces);
+document.getElementById("showExampleButton").addEventListener("click", showExample);
+document.getElementById("convertNewlinesButton").addEventListener("click", convertNewlines);
+document.getElementById("convertSpacesButton").addEventListener("click", convertSpaces);
 
 // Toggle Debug
 document.getElementById("titleLogSorter").addEventListener("dblclick", toggleDebug);

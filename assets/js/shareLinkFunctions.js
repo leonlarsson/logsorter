@@ -24,7 +24,7 @@ export function createShareLink() {
     customURL.searchParams.append("newlines", $("#checkBoxUseNewlines").is(":checked"));
     customURL.searchParams.append("dedupe", $("#checkBoxNoDupes").is(":checked"));
     customURL.searchParams.append("verbose", $("#checkBoxUseVerboseLogs").is(":checked"));
-    customURL.searchParams.append("scroll", $("#debugCheckBoxScrollBottom").is(":checked"));
+    customURL.searchParams.append("scroll", $("#checkBoxScrollBottom").is(":checked"));
     customURL.searchParams.append("debug", debugMode);
 
     // Delete any param that is empty, false, or undefined
@@ -116,7 +116,7 @@ export function readUrlParams() {
         $("#checkBoxUseNewlines").prop("checked", checkNewlines === "true");
         $("#checkBoxNoDupes").prop("checked", checkDeduplicate === "true");
         $("#checkBoxUseVerboseLogs").prop("checked", checkVerbose === "true");
-        $("#debugCheckBoxScrollBottom").prop("checked", checkScrollBottom === "true");
+        $("#checkBoxScrollBottom").prop("checked", checkScrollBottom === "true");
 
         // If "debug=true/1", activate debug mode
         if (debugEnabled === "1" || debugEnabled === "true") enableDebug();

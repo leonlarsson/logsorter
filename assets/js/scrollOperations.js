@@ -6,12 +6,12 @@ import { editorRight } from "./createCodemirror.js";
  */
 export function scrollText(lastLine) {
     // Make this only available with newlines checked. Add button to scroll to last pos
-    if ($("#debugCheckBoxScrollBottom").is(":checked")) {
+    if ($("#checkBoxScrollBottom").is(":checked")) {
         scrollBottom();
     }
 
     // Make this only available with newlines checked. Add button to scroll to last pos
-    if ($("#debugCheckBoxScroll").is(":checked")) {
+    if ($("#checkBoxScrollVerbose").is(":checked")) {
         scrollVerbose(lastLine);
     }
 }
@@ -19,10 +19,10 @@ export function scrollText(lastLine) {
 /** Handles the visibility and status of the scroll checkboxes. */
 export function scrollCheck() {
     if ($("#checkBoxUseNewlines").is(":checked") && $("#checkBoxUseVerboseLogs").is(":checked")) {
-        $("#debugCheckBoxScrollText").show();
+        $("#checkBoxScrollVerboseText").show();
     } else {
-        $("#debugCheckBoxScrollText").hide();
-        $("#debugCheckBoxScroll").prop("checked", false);
+        $("#checkBoxScrollVerboseText").hide();
+        $("#checkBoxScrollVerbose").prop("checked", false);
     }
 }
 

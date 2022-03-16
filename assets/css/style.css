@@ -234,6 +234,7 @@ input.lightMode[type="checkbox"]:checked {
   font-family: inherit;
 } */
 
+#selectRegex,
 #firstText,
 #dynamicRegexPrefixText,
 #dynamicRegexPrefix,
@@ -247,11 +248,10 @@ input.lightMode[type="checkbox"]:checked {
 #checkBoxNoDupesText,
 #checkBoxUseVerboseLogs,
 #checkBoxUseVerboseLogsText,
-#selectRegex,
-#debugCheckBoxScrollBottom,
-#debugCheckBoxScrollBottomText,
-#debugCheckBoxScroll,
-#debugCheckBoxScrollText {
+#checkBoxScrollBottom,
+#checkBoxScrollBottomText,
+#checkBoxScrollVerbose,
+#checkBoxScrollVerboseText {
   margin-left: 5px;
   margin-right: 5px;
   border-color: #40444b;

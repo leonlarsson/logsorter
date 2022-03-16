@@ -202,11 +202,11 @@
 
     <div id="debugOptions" style="display: none;">
 
-      <button class="buttonBlueNew no-select" id="debugShowExample"
+      <button class="buttonBlueNew no-select" id="showExampleButton"
         title="Populates the website with some example values.">Show example</button>
-      <button class="buttonBlueNew no-select" id="debugConvertNewlines"
+      <button class="buttonBlueNew no-select" id="convertNewlinesButton"
         title="Converts the separator to newlines.">Newlines</button>
-      <button class="buttonBlueNew no-select" id="debugConvertSpaces"
+      <button class="buttonBlueNew no-select" id="convertSpacesButton"
         title="Converts the separator to spaces.">Spaces</button>
     </div>
 
@@ -239,14 +239,15 @@
 
     <div class="container-below">
       <span style="margin-top: 6px;" class="optionText no-select">Scroll to:</span>
-      <label class="optionText no-select" id="debugCheckBoxScrollText" style="display: none; cursor: pointer;"
-        title="Select if you want to scroll to the Verbose part on parse. &#013;&#013;This is very experimental and probably doesn't work great most times."><input
-          style="cursor: pointer;" type="checkbox" id="debugCheckBoxScroll"
-          onchange="$('#debugCheckBoxScrollBottom').prop('checked', false)">Verbose(!)</label>
 
-      <label class="optionText no-select" id="debugCheckBoxScrollBottomText" style="cursor: pointer;"
+      <label class="optionText no-select" id="checkBoxScrollVerboseText" style="display: none; cursor: pointer;"
+        title="Select if you want to scroll to the Verbose part on parse."><input style="cursor: pointer;"
+          type="checkbox" id="checkBoxScrollVerbose"
+          onchange="$('#checkBoxScrollBottom').prop('checked', false)">Verbose</label>
+
+      <label class="optionText no-select" id="checkBoxScrollBottomText" style="cursor: pointer;"
         title="Select if you want to scroll to the bottom on parse."><input style="cursor: pointer;" type="checkbox"
-          id="debugCheckBoxScrollBottom" onchange="$('#debugCheckBoxScroll').prop('checked', false)">Bottom</label>
+          id="checkBoxScrollBottom" onchange="$('#checkBoxScrollVerbose').prop('checked', false)">Bottom</label>
     </div>
 
     <div id="localStorageConsentNotice" class="no-select">
