@@ -329,6 +329,24 @@ input.lightMode[type="checkbox"]:checked {
   border-color: #40444b;
 }
 
+#copyShareLinkButton {
+  color: #b9bbbe;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+#copyShareLinkButton:hover {
+  color: #838383;
+}
+
+#copyShareLinkButton.lightMode {
+  color: #4f5660;
+}
+
+#copyShareLinkButton.lightMode:hover {
+  color: #262b31;
+}
+
 .optionText {
   color: #99aab5;
 }

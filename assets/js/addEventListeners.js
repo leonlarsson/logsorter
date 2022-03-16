@@ -17,12 +17,11 @@ import { scrollCheck } from "./scrollOperations.js";
 // Regex list
 document.getElementById("regexList").onchange = changeRegex;
 
-// Checkboxes
+// Checkboxes and copy button
 document.getElementById("checkBoxMultiple").addEventListener("click", multipleCheck);
 document.getElementById("checkBoxUseNewlines").addEventListener("click", scrollCheck);
 document.getElementById("checkBoxUseVerboseLogs").addEventListener("click", scrollCheck);
-document.getElementById("addIDFieldButton").addEventListener("click", addIDField);
-document.getElementById("removeIDFieldButton").addEventListener("click", removeIDField);
+document.getElementById("copyShareLinkButton").addEventListener("click", createShareLink);
 
 // Match text and load file buttons
 document.getElementById("matchTextButton").addEventListener("click", parseTextBox);
@@ -34,10 +33,11 @@ document.getElementById("removeDupesButton").addEventListener("click", removeDup
 document.getElementById("splitLinesButton").addEventListener("click", splitLines);
 document.getElementById("copyOutputButton").addEventListener("click", copyText);
 document.getElementById("clearOutputButton").addEventListener("click", clearText);
+document.getElementById("addIDFieldButton").addEventListener("click", addIDField);
+document.getElementById("removeIDFieldButton").addEventListener("click", removeIDField);
 
 // Buttons, 2nd row
 document.getElementById("debugShowExample").addEventListener("click", showExample);
-document.getElementById("debugCopyCustomURL").addEventListener("click", createShareLink);
 document.getElementById("debugConvertNewlines").addEventListener("click", convertNewlines);
 document.getElementById("debugConvertSpaces").addEventListener("click", convertSpaces);
 

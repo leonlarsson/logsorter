@@ -1,4 +1,4 @@
-import { toggleDebug } from "./debugFunctions.js";
+import { enableDebug } from "./debugFunctions.js";
 import { addIDField } from "./handleMultipleIDFields.js";
 import { scrollCheck } from "./scrollOperations.js";
 import { Colors } from "./constants.js";
@@ -25,6 +25,7 @@ export function createShareLink() {
     customURL.searchParams.append("dedupe", $("#checkBoxNoDupes").is(":checked"));
     customURL.searchParams.append("verbose", $("#checkBoxUseVerboseLogs").is(":checked"));
     customURL.searchParams.append("scroll", $("#debugCheckBoxScrollBottom").is(":checked"));
+    customURL.searchParams.append("debug", debugMode);
 
     // Delete any param that is empty, false, or undefined
     const keyToDelete = [];
@@ -34,7 +35,7 @@ export function createShareLink() {
     keyToDelete.forEach(x => customURL.searchParams.delete(x));
 
     // Copy the URL created
-    const clipboard = new ClipboardJS('#debugCopyCustomURL', {
+    const clipboard = new ClipboardJS('#copyShareLinkButton', {
         text: () => {
             return customURL;
         }
@@ -42,21 +43,21 @@ export function createShareLink() {
 
     clipboard.on('error', () => {
         clipboard.destroy();
-        console.log(`%c[DEBUG] Failed to copy settings link.`, `color: ${Colors.RED}`);
+        console.log("%c[DEBUG] Failed to copy settings link.", `color: ${Colors.RED}`);
     });
 
     clipboard.on("success", () => {
         clipboard.destroy();
         console.log(`%c[DEBUG] Copied settings link: ${customURL}`, `color: ${Colors.GREEN}`);
 
-        // Color change
-        $("#debugCopyCustomURL").animate({ backgroundColor: Colors.GREEN }, "swing");
+        // Color change, make green, then return to the non-hover color (by checking light mode status)
+        $("#copyShareLinkButton").animate({ color: Colors.GREEN }, "swing");
         setTimeout(() => {
-            $("#debugCopyCustomURL").animate({ backgroundColor: Colors.BLUE }, "swing");
+            $("#copyShareLinkButton").animate({ color: isLightMode ? "#4f5660 !important" : "#b9bbbe !important" }, "swing");
 
             // Remove the style to allow for the hover color again
             setTimeout(() => {
-                $("#debugCopyCustomURL").removeAttr("style");
+                $("#copyShareLinkButton").removeAttr("style");
             }, 500);
         }, 1000);
     });
@@ -118,9 +119,7 @@ export function readUrlParams() {
         $("#debugCheckBoxScrollBottom").prop("checked", checkScrollBottom === "true");
 
         // If "debug=true/1", activate debug mode
-        if (debugEnabled === "1" || debugEnabled === "true") {
-            toggleDebug()
-        }
+        if (debugEnabled === "1" || debugEnabled === "true") enableDebug();
 
         // Runs the check to show the Verbose scroll
         scrollCheck();
