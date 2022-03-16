@@ -56,27 +56,23 @@ export function splitLines() {
     const rawInput = prompt("After how many lines do you want to split?\n\nPlease enter a number above 0.", "100");
 
     // If no input, return
-    if (!rawInput) {
-        return;
-    }
+    if (!rawInput) return;
 
     // Make the input an int
     const splitEveryX = parseInt(rawInput);
 
     // If input is 0 or not a number, return
     if (splitEveryX == 0 || isNaN(splitEveryX)) {
-        alert("Not a number or 0.");
-        return;
+        return alert("Not a number or 0.");
+    }
+
+    // Prevent the user from splitting into groups of X when X is bigger than the total amount of lines
+    if (splitEveryX > editorRight.lineCount() - 2) {
+        return alert(`Only found ${editorRight.lineCount() - 1} lines after converting to newlines. Please select a number smaller than the amount of lines.`);
     }
 
     // Convert to newlines before proceeding
     convertNewlines();
-
-    // Prevent the user from splitting into groups of X when X is bigger than the total amount of lines
-    if (splitEveryX > editorRight.lineCount() - 2) {
-        alert(`Only found ${editorRight.lineCount() - 1} lines after converting to newlines. Please select a number smaller than the amount of lines.`);
-        return;
-    }
 
     // Sets the amount of splits needed based on the amount of lines and size of group
     const splitsNeeded = Math.trunc(editorRight.lineCount() / splitEveryX);
