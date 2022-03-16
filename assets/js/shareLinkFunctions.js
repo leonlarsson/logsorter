@@ -55,13 +55,10 @@ export function createShareLink() {
 
         // Color change, make green, then return to the non-hover color (by checking light mode status)
         $("#copyShareLinkButton").animate({ color: Colors.GREEN }, "swing");
-        setTimeout(() => {
-            $("#copyShareLinkButton").animate({ color: isLightMode ? "#4f5660 !important" : "#b9bbbe !important" }, "swing");
-
+        setTimeout(async () => {
+            await $("#copyShareLinkButton").animate({ color: isLightMode ? "#4f5660" : "#b9bbbe" }, "swing").promise();
             // Remove the style to allow for the hover color again
-            setTimeout(() => {
-                $("#copyShareLinkButton").removeAttr("style");
-            }, 500);
+            $("#copyShareLinkButton").removeAttr("style");
         }, 1000);
     });
 }
