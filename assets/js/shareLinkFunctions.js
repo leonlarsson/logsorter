@@ -1,6 +1,7 @@
-import { enableDebug } from "./debugFunctions.js";
 import { addIDField } from "./handleMultipleIDFields.js";
 import { scrollCheck } from "./scrollOperations.js";
+import { enableDebug } from "./debugFunctions.js";
+import { enableExtraPanel } from "./handleExtraPanel.js";
 import { Colors } from "./constants.js";
 
 /** Builds the custom share link from the current settings. Then copies it to clipboard. */
@@ -27,6 +28,7 @@ export function createShareLink() {
     customURL.searchParams.append("scrollVerbose", $("#checkBoxScrollVerbose").is(":checked"));
     customURL.searchParams.append("scrollBottom", $("#checkBoxScrollBottom").is(":checked"));
     customURL.searchParams.append("debug", debugMode);
+    customURL.searchParams.append("extra", extraPanelActive);
 
     // Delete any param that is empty, false, or undefined
     const keyToDelete = [];
@@ -89,6 +91,7 @@ export function readUrlParams() {
         const checkScrollVerbose = params.get("scrollVerbose");
         const checkScrollBottom = params.get("scrollBottom");
         const debugEnabled = params.get("debug");
+        const extraPanelEnabled = params.get("extra");
 
         // Activate the Multiple checkbox if the mulCount param exists (exists when Multiples checkbox is checked)
         if (mulCount) $("#checkBoxMultiple").prop("checked", true);
@@ -121,8 +124,11 @@ export function readUrlParams() {
         $("#checkBoxScrollVerbose").prop("checked", checkScrollVerbose === "true");
         $("#checkBoxScrollBottom").prop("checked", checkScrollBottom === "true");
 
-        // If "debug=true/1", activate debug mode
+        // If "debug=1/true", activate debug mode
         if (debugEnabled === "1" || debugEnabled === "true") enableDebug();
+
+        // If "extra=1/true", activate debug mode
+        if (extraPanelEnabled === "1" || extraPanelEnabled === "true") enableExtraPanel();
 
         // Runs the check to show the Verbose scroll
         scrollCheck();
