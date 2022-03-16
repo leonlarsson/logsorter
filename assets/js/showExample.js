@@ -1,4 +1,5 @@
 import { editorLeft } from "./createCodemirror.js";
+import { scrollCheck } from "./scrollOperations.js";
 
 /** Populates the website with some example settings. */
 export function showExample() {
@@ -17,5 +18,8 @@ export function showExample() {
     $("#checkBoxUseNewlines").prop("checked", true);
     $("#checkBoxUseVerboseLogs").prop("checked", true);
     $("#regexList").val(2).change();
+
+    // Activate the Verbose scroll button
+    scrollCheck();
 
 }
