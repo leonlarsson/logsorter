@@ -253,7 +253,7 @@
           id="checkBoxScrollBottom" onchange="$('#checkBoxScrollVerbose').prop('checked', false)">Bottom</label>
     </div>
 
-    <div id="localStorageConsentNotice" class="no-select">
+    <div id="localStorageConsentNotice" class="no-select" hidden>
       <button class="buttonBlueNew" id="localStorageOKButton">Stop bothering
         me</button>
       <div>💾 This website saves your preferred theme to local storage.
@@ -278,15 +278,16 @@
     window.debugMode = false;
     window.extraPanelActive = false;
 
-    $(window).on('load', () => {
-      $('#loading').fadeOut(200);
-    });
+    // On window load, fade out loading screen, show localStorage notice if it hasn't been acknowledged, AND read the URL for settings
+    window.onload = () => {
+      const loadingScreen = document.getElementById("loading");
+      loadingScreen.classList.add("hide");
+      loadingScreen.classList.remove("show");
+      setTimeout(() => loadingScreen.style.display = "none", 200);
 
-    // On document ready, show localStorage notice if it hasn't been acknowledged, AND read the URL for settings
-    $(document).ready(() => {
       if (localStorage.getItem("acknowledgedStorageNotice") !== "yup") showNotice();
       readUrlParams();
-    });
+    };
 
   </script>
 

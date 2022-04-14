@@ -817,7 +817,6 @@ hr {
   bottom: 0px;
   right: 0px;
   left: 0px;
-  display: none;
   text-align: center;
   font-size: 16px;
   border-radius: 10px;
@@ -875,4 +874,15 @@ hr {
 
 #loading-image {
   z-index: 10000;
+}
+
+/* HIDE TRANSITION */
+
+.show {
+  opacity: 1 !important;
+}
+
+.hide {
+  opacity: 0 !important;
+  transition: opacity 200ms;
 }
