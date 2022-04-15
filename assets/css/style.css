@@ -886,3 +886,8 @@ hr {
   opacity: 0 !important;
   transition: opacity 200ms;
 }
+
+/* Apply display: none to hidden elements. Ultra hacky */
+*[hidden] {
+  display: none !important;
+}
