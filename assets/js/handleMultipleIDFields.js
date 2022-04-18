@@ -11,9 +11,9 @@ export function addIDField() {
     }
 
     if (window.isLightMode) {
-        $("#multipleIDs").append(`<label class="optionText lightMode">&</label><input class="inputBox lightMode" type="number" id="customEntry${number}" style="width: 60px; height: 20px; border-radius: 3px; margin-left: 5px; margin-right: 5px; border-color: #40444b; border: 0px; font-family: inherit;">`);
+        $("#multipleIDs").append(`<label class="optionText lightMode">&</label><input class="inputBox multiplesCustomEntry lightMode" type="number" id="customEntry${number}" style="width: 60px; height: 20px; border-radius: 3px; margin-left: 5px; margin-right: 5px; border-color: #40444b; border: 0px; font-family: inherit;">`);
     } else {
-        $("#multipleIDs").append(`<label class="optionText">&</label><input class="inputBox" type="number" id="customEntry${number}" style="width: 60px; height: 20px; border-radius: 3px; margin-left: 5px; margin-right: 5px; border-color: #40444b; border: 0px; font-family: inherit;">`);
+        $("#multipleIDs").append(`<label class="optionText">&</label><input class="inputBox multiplesCustomEntry" type="number" id="customEntry${number}" style="width: 60px; height: 20px; border-radius: 3px; margin-left: 5px; margin-right: 5px; border-color: #40444b; border: 0px; font-family: inherit;">`);
     }
 }
 

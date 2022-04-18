@@ -1,4 +1,6 @@
 const botList = document.getElementById("regexList");
+const checkBoxMultiple = document.getElementById("checkBoxMultiple");
+
 /**
  * Determines which Regex is to use.
  * @typedef {Object} ReturnObject
@@ -7,11 +9,7 @@ const botList = document.getElementById("regexList");
  * @returns {ReturnObject} { regex, regexNum }
  */
 export default () => {
-  const customEntry1 = $("#customEntry1").val();
-  const customEntry2 = $("#customEntry2").val();
-  const customEntry3 = $("#customEntry3").val();
-  const customEntry4 = $("#customEntry4").val();
-  const customEntry5 = $("#customEntry5").val();
+
   let customEntry;
   let regex = null;
   const regexId = botList.value;
@@ -22,7 +20,18 @@ export default () => {
     return { regex, regexId };
   }
 
-  if ($("#checkBoxMultiple").is(":checked")) {
+  // If multiples checkbox is checked, build the customEntry from the multiples
+  if (checkBoxMultiple.checked) {
+
+    // Get the values. Empty string if not filled in. Undefined if the element does not exist
+    const customEntry1 = document.getElementById("customEntry1")?.value;
+    const customEntry2 = document.getElementById("customEntry2")?.value;
+    const customEntry3 = document.getElementById("customEntry3")?.value;
+    const customEntry4 = document.getElementById("customEntry4")?.value;
+    const customEntry5 = document.getElementById("customEntry5")?.value;
+
+    // Get the amount of active custom entries
+    const amountOfCustomEntries = document.querySelectorAll(".multiplesCustomEntry").length;
 
     // If there are empty ID fields, retun (as null)
     if (customEntry1 === "" || customEntry2 === "" || customEntry3 === "" || customEntry4 === "" || customEntry5 === "") {
@@ -30,16 +39,16 @@ export default () => {
       return { regex, regexId };
     }
 
-    if ($("#multipleIDs").children("input").length === 2) {
+    if (amountOfCustomEntries === 2) {
       customEntry = `(?:${customEntry1}|${customEntry2})`;
     }
-    if ($("#multipleIDs").children("input").length === 3) {
+    if (amountOfCustomEntries === 3) {
       customEntry = `(?:${customEntry1}|${customEntry2}|${customEntry3})`;
     }
-    if ($("#multipleIDs").children("input").length === 4) {
+    if (amountOfCustomEntries === 4) {
       customEntry = `(?:${customEntry1}|${customEntry2}|${customEntry3}|${customEntry4})`;
     }
-    if ($("#multipleIDs").children("input").length === 5) {
+    if (amountOfCustomEntries === 5) {
       customEntry = `(?:${customEntry1}|${customEntry2}|${customEntry3}|${customEntry4}|${customEntry5})`;
     }
 
@@ -48,6 +57,7 @@ export default () => {
     customEntry = document.getElementById("customEntry").value;
   }
 
+  /* ASSIGN REGEX PATTERNS */
 
   // Zeppelin/Aperture/Auttaja - Join/Leave
   if (botList.value === "1") {
