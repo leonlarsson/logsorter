@@ -1,5 +1,8 @@
 import createSelectMenu from "./createSelectMenu.js";
 
+const toggleThemeButton = document.getElementById("toggleThemeButton");
+const deleteThemeSettingButton = document.getElementById("deleteThemeSettingButton");
+
 // Checks for theme setting on load, then sets theme accordingly. If no setting, check system preference and set to that
 if (localStorage.getItem("siteTheme") === "light") {
     console.log("[DEBUG] Detected light theme setting.");
@@ -13,8 +16,8 @@ if (localStorage.getItem("siteTheme") === "light") {
 
 // Set the theme button titles here to avoid the text flash
 window.onload = () => {
-    $("#toggleThemeButton").attr("title", "Toggles light/dark theme.\n\nUses a non-tracking localStorage key to save your preference.\nPress the trash can to clear setting.");
-    $("#deleteThemeSettingButton").attr("title", "Deletes the key that stores your theme preference and changes theme to system preference.");
+    toggleThemeButton.setAttribute("title", "Toggles light/dark theme.\n\nUses a non-tracking localStorage key to save your preference.\nPress the trash can to clear setting.");
+    deleteThemeSettingButton.setAttribute("title", "Deletes the key that stores your theme preference and changes theme to system preference.");
 };
 
 // Detects changes in the system theme preference. Ignores if localStorage setting exists
@@ -41,7 +44,7 @@ window.matchMedia('(prefers-color-scheme: dark)').addEventListener("change", e =
 export function toggleLight() {
 
     // If light mode is active, set to dark mode
-    if ($("body").hasClass("lightMode")) {
+    if (document.body.classList.contains("lightMode")) {
         localStorage.setItem("siteTheme", "dark");
         useDarkMode();
     } else {
@@ -69,19 +72,15 @@ export function checkSystemThemePref() {
 /** Enable light theme. */
 export function useLightMode() {
     window.isLightMode = true;
-    $("*").addClass("lightMode");
-    $("#toggleThemeButton").addClass("fas fa-moon");
-    $("#toggleThemeButton").removeClass("fa-sun");
-    $("#toggleThemeButton").css("color", "#2f3136");
-    $("#deleteThemeSettingButton").css("color", "#2f3136");
     window.bgColor = "#ffffff";
-    $(".CodeMirror").css("border-color", bgColor);
+    toggleThemeButton.classList.add("fas", "fa-moon");
+    toggleThemeButton.classList.remove("fa-sun");
+    toggleThemeButton.style.color = "#2f3136";
+    deleteThemeSettingButton.style.color = "#2f3136";
+    document.querySelectorAll("*").forEach(element => element.classList.add("lightMode"));
+    document.querySelectorAll(".CodeMirror").forEach(element => element.style.borderColor = window.bgColor);
 
-    if (!localStorage.getItem("siteTheme")) {
-        $("#deleteThemeSettingButton").hide();
-    } else {
-        $("#deleteThemeSettingButton").show();
-    }
+    deleteThemeSettingButton.hidden = localStorage.getItem("siteTheme") ? false : true;
 
     // Makes the RegEx selector a searchable Select2 box
     createSelectMenu("default");
@@ -90,19 +89,15 @@ export function useLightMode() {
 /** Enable dark theme. */
 export function useDarkMode() {
     window.isLightMode = false;
-    $("*").removeClass("lightMode");
-    $("#toggleThemeButton").addClass("fas fa-sun");
-    $("#toggleThemeButton").removeClass("fa-moon");
-    $("#toggleThemeButton").css("color", "#f2f3f5");
-    $("#deleteThemeSettingButton").css("color", "#f2f3f5");
     window.bgColor = "#36393f";
-    $(".CodeMirror").css("border-color", bgColor);
+    toggleThemeButton.classList.add("fas", "fa-sun");
+    toggleThemeButton.classList.remove("fa-moon");
+    toggleThemeButton.style.color = "#f2f3f5";
+    deleteThemeSettingButton.style.color = "#f2f3f5";
+    document.querySelectorAll("*").forEach(element => element.classList.remove("lightMode"));
+    document.querySelectorAll(".CodeMirror").forEach(element => element.style.borderColor = window.bgColor);
 
-    if (!localStorage.getItem("siteTheme")) {
-        $("#deleteThemeSettingButton").hide();
-    } else {
-        $("#deleteThemeSettingButton").show();
-    }
+    deleteThemeSettingButton.hidden = localStorage.getItem("siteTheme") ? false : true;
 
     // Makes the RegEx selector a searchable Select2 box
     createSelectMenu("mozzy");
@@ -111,7 +106,7 @@ export function useDarkMode() {
 /** Deletes the theme setting, hides the delete button and changes theme to system preference. */
 export function deleteThemeSetting() {
     localStorage.removeItem("siteTheme");
-    $("#deleteThemeSettingButton").hide();
+    deleteThemeSettingButton.hidden = true;
     console.log("[DEBUG] Deleted theme setting. Setting to system preference.");
     checkSystemThemePref();
 }
