@@ -1,37 +1,26 @@
 /**
- * 
+ * Animates an object's CSS property.
  * @param {HTMLElement} element The element.
+ * @param {string} property The CSS style property to animate in camelCase ("color", "colorBackground").
+ * @param {string} value The value to animate the property to ("#bf2042", "0.4").
  * @param {Number} duration The duration in milliseconds.
  */
-export const animateElementColor = (element, duration) => {
+export const animateElement = (element, property, value, duration) => {
 
-    // Transition to the chosen color after holding shortly on the element's original color
     const animation = [
-        { color: element.style.color },
-        { color: Colors.GREEN },
-        { color: Colors.GREEN },
-        { color: Colors.GREEN },
-        { color: element.style.color }
+        { [property]: element.style[property] },
+        { [property]: value },
+        { [property]: value },
+        { [property]: element.style[property] }
     ];
 
-    element.animate(animation, { duration });
+    element.animate(animation, duration);
 }
 
-/**
- * 
- * @param {HTMLElement} element The element.
- * @param {Number} duration The duration in milliseconds.
- */
-export const animateElementBorderColor = (element, duration) => {
-    element.animate(animation, { duration });
-}
-
-// Example below is for the copy button in shareLinkFunctions.js
-// const animation = [
-//     { color: Colors.GREEN },
-//     { color: Colors.GREEN },
-//     { color: Colors.GREEN },
-//     { color: isLightMode ? "#4f5660" : "#b9bbbe" }
+// Example to animate the box-shadow (border)
+// [
+//     { boxShadow: `0px 0px 0px 0px ${Colors.GREEN}` },
+//     { boxShadow: `0px 0px 0px 3px ${Colors.GREEN}` },
+//     { boxShadow: `0px 0px 0px 3px ${Colors.GREEN}` },
+//     { boxShadow: `0px 0px 0px 0px ${Colors.GREEN}` }
 // ]
-
-// copyShareLinkButton.animate(animation, { duration: 1000 })

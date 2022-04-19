@@ -2,8 +2,10 @@ import { addIDField } from "./handleMultipleIDFields.js";
 import { scrollCheck } from "./scrollOperations.js";
 import { enableDebug } from "./debugFunctions.js";
 import { enableExtraPanel } from "./handleExtraPanel.js";
+import { animateElement } from "./utils.js";
 import { Colors } from "./constants.js";
 
+const copyShareLinkButton = document.getElementById("copyShareLinkButton");
 const regexList = document.getElementById("regexList");
 const customEntry = document.getElementById("customEntry");
 const checkBoxMultiple = document.getElementById("checkBoxMultiple");
@@ -62,15 +64,7 @@ export function createShareLink() {
     clipboard.on("success", () => {
         clipboard.destroy();
         console.log(`%c[DEBUG] Copied settings link: ${customURL}`, `color: ${Colors.GREEN}`);
-
-        // TODO: Update jQuery.animate to native JS
-        // Color change, make green, then return to the non-hover color (by checking light mode status)
-        $("#copyShareLinkButton").animate({ color: Colors.GREEN }, "swing");
-        setTimeout(async () => {
-            await $("#copyShareLinkButton").animate({ color: isLightMode ? "#4f5660" : "#b9bbbe" }, "swing").promise();
-            // Remove the style to allow for the hover color again
-            $("#copyShareLinkButton").removeAttr("style");
-        }, 1000);
+        animateElement(copyShareLinkButton, "color", Colors.GREEN, 1800);
     });
 }
 

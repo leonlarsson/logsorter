@@ -1,12 +1,16 @@
 import { editorRight } from "./createCodemirror.js";
+import { animateElement } from "./utils.js";
 import { Colors } from "./constants.js";
 
 const checkBoxUseNewlines = document.getElementById("checkBoxUseNewlines");
 const checkBoxUseVerboseLogs = document.getElementById("checkBoxUseVerboseLogs");
+const removeDupesButton = document.getElementById("removeDupesButton");
+const splitLinesButton = document.getElementById("splitLinesButton");
+const copyOutputButton = document.getElementById("copyOutputButton");
+const clearOutputButton = document.getElementById("clearOutputButton");
 const outputStatusText = document.getElementById("outputStatusText");
 const outputStatusTextCol = document.getElementById("outputStatusTextCol");
-
-// TODO: Remove all of jQuery's .animate() here and replace with vanilla JS.
+const editorRightElement = editorRight.getWrapperElement();
 
 /** Removes duplicates in right editor. */
 export function removeDuplicates() {
@@ -43,14 +47,8 @@ export function removeDuplicates() {
     // Adjust the total IDs length to the current value
     window.currentIDs = window.uniqueIDs_Const.size;
 
-    // Color change
-    $("#removeDupesButton").animate({ backgroundColor: Colors.GREEN }, "swing");
-    $(".CodeMirror.cm-s-right").animate({ borderColor: Colors.GREEN }, "swing");
-    setTimeout(() => {
-        const one = $("#removeDupesButton").animate({ backgroundColor: Colors.BLUE }, "swing").promise();
-        const two = $(".CodeMirror.cm-s-right").animate({ borderColor: bgColor }, "swing").promise();
-        Promise.all([one, two]).then(() => $("#removeDupesButton").removeAttr("style"));
-    }, 1000);
+    animateElement(removeDupesButton, "backgroundColor", Colors.GREEN, 1800);
+    animateElement(editorRightElement, "borderColor", Colors.GREEN, 1800);
 }
 
 /** Splits lines in right editor. */
@@ -104,14 +102,8 @@ export function splitLines() {
 
     console.log(`[DEBUG] Splitting into groups of ${splitEveryX}.`);
 
-    // Color change
-    $("#splitLinesButton").animate({ backgroundColor: Colors.GREEN }, "swing");
-    $(".CodeMirror.cm-s-right").animate({ borderColor: Colors.GREEN }, "swing");
-    setTimeout(() => {
-        const one = $("#splitLinesButton").animate({ backgroundColor: Colors.BLUE }, "swing").promise();
-        const two = $(".CodeMirror.cm-s-right").animate({ borderColor: bgColor }, "swing").promise();
-        Promise.all([one, two]).then(() => $("#splitLinesButton").removeAttr("style"));
-    }, 1000);
+    animateElement(splitLinesButton, "backgroundColor", Colors.GREEN, 1800);
+    animateElement(editorRightElement, "borderColor", Colors.GREEN, 1800);
 }
 
 /** Copies contents of the right editor. */
@@ -135,14 +127,8 @@ export function copyText() {
         clipboard.destroy();
         console.log("[DEBUG] Copied text.");
 
-        // Color change
-        $("#copyOutputButton").animate({ backgroundColor: Colors.GREEN }, "swing");
-        $(".CodeMirror.cm-s-right").animate({ borderColor: Colors.GREEN }, "swing");
-        setTimeout(() => {
-            const one = $("#copyOutputButton").animate({ backgroundColor: Colors.BLUE }, "swing").promise();
-            const two = $(".CodeMirror.cm-s-right").animate({ borderColor: bgColor }, "swing").promise();
-            Promise.all([one, two]).then(() => $("#copyOutputButton").removeAttr("style"));
-        }, 1000);
+        animateElement(copyOutputButton, "backgroundColor", Colors.GREEN, 1800);
+        animateElement(editorRightElement, "borderColor", Colors.GREEN, 1800);
     });
 }
 
@@ -164,14 +150,8 @@ export function clearText() {
 
     console.log("[DEBUG] Cleared text");
 
-    // Color change
-    $("#clearOutputButton").animate({ backgroundColor: Colors.GREEN }, "swing");
-    $(".CodeMirror.cm-s-right").animate({ borderColor: Colors.RED }, "swing");
-    setTimeout(() => {
-        const one = $("#clearOutputButton").animate({ backgroundColor: Colors.RED }, "swing").promise();
-        const two = $(".CodeMirror.cm-s-right").animate({ borderColor: bgColor }, "swing").promise();
-        Promise.all([one, two]).then(() => $("#clearOutputButton").removeAttr("style"));
-    }, 1000);
+    animateElement(clearOutputButton, "backgroundColor", Colors.GREEN, 1800);
+    animateElement(editorRightElement, "borderColor", Colors.RED, 1800);
 }
 
 /** Convert the right editor to newlines. */
