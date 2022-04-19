@@ -4,29 +4,41 @@ import { enableDebug } from "./debugFunctions.js";
 import { enableExtraPanel } from "./handleExtraPanel.js";
 import { Colors } from "./constants.js";
 
+const regexList = document.getElementById("regexList");
+const customEntry = document.getElementById("customEntry");
+const checkBoxMultiple = document.getElementById("checkBoxMultiple");
+const multipleIDs = document.getElementById("multipleIDs");
+const customEntries = document.getElementsByClassName("multiplesCustomEntry");
+const checkBoxUseNewlines = document.getElementById("checkBoxUseNewlines");
+const checkBoxNoDupes = document.getElementById("checkBoxNoDupes");
+const checkBoxUseVerboseLogs = document.getElementById("checkBoxUseVerboseLogs");
+const checkBoxScrollVerbose = document.getElementById("checkBoxScrollVerbose");
+const checkBoxScrollBottom = document.getElementById("checkBoxScrollBottom");
+
+
 /** Builds the custom share link from the current settings. Then copies it to clipboard. */
 export function createShareLink() {
 
     const customURL = new URL(window.location.origin);
 
-    customURL.searchParams.append("bot", $("#regexList").val());
-    customURL.searchParams.append("start", $("#customEntry").val());
+    customURL.searchParams.append("bot", regexList.value);
+    customURL.searchParams.append("start", customEntry.value);
 
-    if ($("#checkBoxMultiple").is(":checked")) {
-        customURL.searchParams.append("multiple", $("#checkBoxMultiple").is(":checked"));
-        customURL.searchParams.append("mulCount", $("#multipleIDs").children("input").length);
-        customURL.searchParams.append("mul1", $("#customEntry1").val());
-        customURL.searchParams.append("mul2", $("#customEntry2").val());
-        customURL.searchParams.append("mul3", $("#customEntry3").val());
-        customURL.searchParams.append("mul4", $("#customEntry4").val());
-        customURL.searchParams.append("mul5", $("#customEntry5").val());
+    if (checkBoxMultiple.checked) {
+        customURL.searchParams.append("multiple", checkBoxMultiple.checked);
+        customURL.searchParams.append("mulCount", document.querySelectorAll(".multiplesCustomEntry").length);
+        customURL.searchParams.append("mul1", customEntries[0]?.value);
+        customURL.searchParams.append("mul2", customEntries[1]?.value);
+        customURL.searchParams.append("mul3", customEntries[2]?.value);
+        customURL.searchParams.append("mul4", customEntries[3]?.value);
+        customURL.searchParams.append("mul5", customEntries[4]?.value);
     }
 
-    customURL.searchParams.append("newlines", $("#checkBoxUseNewlines").is(":checked"));
-    customURL.searchParams.append("dedupe", $("#checkBoxNoDupes").is(":checked"));
-    customURL.searchParams.append("verbose", $("#checkBoxUseVerboseLogs").is(":checked"));
-    customURL.searchParams.append("scrollVerbose", $("#checkBoxScrollVerbose").is(":checked"));
-    customURL.searchParams.append("scrollBottom", $("#checkBoxScrollBottom").is(":checked"));
+    customURL.searchParams.append("newlines", checkBoxUseNewlines.checked);
+    customURL.searchParams.append("dedupe", checkBoxNoDupes.checked);
+    customURL.searchParams.append("verbose", checkBoxUseVerboseLogs.checked);
+    customURL.searchParams.append("scrollVerbose", checkBoxScrollVerbose.checked);
+    customURL.searchParams.append("scrollBottom", checkBoxScrollBottom.checked);
     customURL.searchParams.append("debug", debugMode);
     customURL.searchParams.append("extra", extraPanelActive);
 
@@ -39,9 +51,7 @@ export function createShareLink() {
 
     // Copy the URL created
     const clipboard = new ClipboardJS('#copyShareLinkButton', {
-        text: () => {
-            return customURL;
-        }
+        text: () => customURL
     });
 
     clipboard.on('error', () => {
@@ -53,6 +63,7 @@ export function createShareLink() {
         clipboard.destroy();
         console.log(`%c[DEBUG] Copied settings link: ${customURL}`, `color: ${Colors.GREEN}`);
 
+        // TODO: Update jQuery.animate to native JS
         // Color change, make green, then return to the non-hover color (by checking light mode status)
         $("#copyShareLinkButton").animate({ color: Colors.GREEN }, "swing");
         setTimeout(async () => {
@@ -91,7 +102,7 @@ export function readUrlParams() {
         const extraPanelEnabled = params.get("extra");
 
         // Activate the Multiple checkbox if the mulCount param exists (exists when Multiples checkbox is checked)
-        if (mulCount) $("#checkBoxMultiple").prop("checked", true);
+        if (mulCount) checkBoxMultiple.checked = true;
 
         // Adds ID fields based on the setting. Starting from 2
         if (mulCount === "3") {
@@ -108,18 +119,19 @@ export function readUrlParams() {
         }
 
         // Apply changes
+        // TODO: Still uses jQuery due to select2. Try removing this with the TS variant once that one has less issues. Then use window.select2.dataAdapter.triggerChange()
         $("#regexList").val(botSelected).change(); // This runs changeRegex() indirectly
-        $("#customEntry").val(firstNumber);
-        $("#customEntry1").val(mul1);
-        $("#customEntry2").val(mul2);
-        $("#customEntry3").val(mul3);
-        $("#customEntry4").val(mul4);
-        $("#customEntry5").val(mul5);
-        $("#checkBoxUseNewlines").prop("checked", checkNewlines === "true");
-        $("#checkBoxNoDupes").prop("checked", checkDeduplicate === "true");
-        $("#checkBoxUseVerboseLogs").prop("checked", checkVerbose === "true");
-        $("#checkBoxScrollVerbose").prop("checked", checkScrollVerbose === "true");
-        $("#checkBoxScrollBottom").prop("checked", checkScrollBottom === "true");
+        customEntry.value = firstNumber;
+        if (customEntries[0]) customEntries[0].value = mul1;
+        if (customEntries[1]) customEntries[1].value = mul2;
+        if (customEntries[2]) customEntries[2].value = mul3;
+        if (customEntries[3]) customEntries[3].value = mul4;
+        if (customEntries[4]) customEntries[4].value = mul5;
+        checkBoxUseNewlines.checked = checkNewlines === "true";
+        checkBoxNoDupes.checked = checkDeduplicate === "true";
+        checkBoxUseVerboseLogs.checked = checkVerbose === "true";
+        checkBoxScrollVerbose.checked = checkScrollVerbose === "true";
+        checkBoxScrollBottom.checked = checkScrollBottom === "true";
 
         // If "debug=1/true", activate debug mode
         if (debugEnabled === "1" || debugEnabled === "true") enableDebug();
