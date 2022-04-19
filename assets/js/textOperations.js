@@ -1,6 +1,13 @@
 import { editorRight } from "./createCodemirror.js";
 import { Colors } from "./constants.js";
 
+const checkBoxUseNewlines = document.getElementById("checkBoxUseNewlines");
+const checkBoxUseVerboseLogs = document.getElementById("checkBoxUseVerboseLogs");
+const outputStatusText = document.getElementById("outputStatusText");
+const outputStatusTextCol = document.getElementById("outputStatusTextCol");
+
+// TODO: Remove all of jQuery's .animate() here and replace with vanilla JS.
+
 /** Removes duplicates in right editor. */
 export function removeDuplicates() {
 
@@ -11,7 +18,7 @@ export function removeDuplicates() {
     let idSeparatorText;
 
     // If checked, use newlines instead of spaces as the ID separator
-    if ($("#checkBoxUseNewlines").is(':checked')) {
+    if (checkBoxUseNewlines.checked) {
         idSeparator = "\n";
         idSeparatorText = "newlines";
     } else {
@@ -23,15 +30,15 @@ export function removeDuplicates() {
     const today = new Date().toISOString().substring(0, 19);
     const dateTime = today.replace("T", " ");
 
-    if ($("#checkBoxUseVerboseLogs").is(":checked")) {
+    if (checkBoxUseVerboseLogs.checked) {
         editorRight.setValue(`Generated on ${dateTime} UTC. Duplicates removed, ${uniqueIDs_Const.size} unique IDs. Separated with ${idSeparatorText}:\n${[...uniqueIDs_Const].join(idSeparator) + idSeparator}`);
     } else {
         editorRight.setValue(`${[...uniqueIDs_Const].join(idSeparator) + idSeparator}`);
     }
 
-    console.log(`[DEBUG] Removed duplicates. ${currentIDs - uniqueIDs_Const.size} duplicates removed. ${uniqueIDs_Const.size} left.`)
-    $("#outputStatusText").text(` (${currentIDs - uniqueIDs_Const.size} duplicates removed. ${uniqueIDs_Const.size} left)`);
-    $("#outputStatusTextCol").text(` (${currentIDs - uniqueIDs_Const.size} duplicates removed. ${uniqueIDs_Const.size} left)`);
+    console.log(`[DEBUG] Removed duplicates. ${currentIDs - uniqueIDs_Const.size} duplicates removed. ${uniqueIDs_Const.size} left.`);
+    outputStatusText.textContent = ` (${currentIDs - uniqueIDs_Const.size} duplicates removed. ${uniqueIDs_Const.size} left)`;
+    outputStatusTextCol.textContent = ` (${currentIDs - uniqueIDs_Const.size} duplicates removed. ${uniqueIDs_Const.size} left)`;
 
     // Adjust the total IDs length to the current value
     window.currentIDs = window.uniqueIDs_Const.size;
@@ -53,7 +60,7 @@ export function splitLines() {
     if (!editorRight.getValue()) return;
 
     // Gets the number to split by
-    const rawInput = prompt("After how many lines do you want to split?\n\nPlease enter a number above 0.", "100");
+    const rawInput = prompt("After how many lines do you want to split?\n\nPlease enter a number higher than 0.", "100");
 
     // If no input, return
     if (!rawInput) return;
@@ -62,17 +69,15 @@ export function splitLines() {
     const splitEveryX = parseInt(rawInput);
 
     // If input is 0 or not a number, return
-    if (splitEveryX == 0 || isNaN(splitEveryX)) {
-        return alert("Not a number or 0.");
-    }
+    if (splitEveryX == 0 || isNaN(splitEveryX)) return alert("Please enter a number higher than 0.");
+
+    // Convert to newlines before proceeding
+    convertNewlines();
 
     // Prevent the user from splitting into groups of X when X is bigger than the total amount of lines
     if (splitEveryX > editorRight.lineCount() - 2) {
         return alert(`Only found ${editorRight.lineCount() - 1} lines after converting to newlines. Please select a number smaller than the amount of lines.`);
     }
-
-    // Convert to newlines before proceeding
-    convertNewlines();
 
     // Sets the amount of splits needed based on the amount of lines and size of group
     const splitsNeeded = Math.trunc(editorRight.lineCount() / splitEveryX);
@@ -117,9 +122,7 @@ export function copyText() {
 
     // Attempt to copy the Output into the clipboard. If successful, run visual change. If failed, alert the user
     const clipboard = new ClipboardJS('#copyOutputButton', {
-        text: () => {
-            return editorRight.getValue();
-        }
+        text: () => editorRight.getValue()
     });
 
     clipboard.on('error', () => {
@@ -155,8 +158,8 @@ export function clearText() {
     window.allIDs.length = 0;
     window.currentIDs = 0;
 
-    $("#outputStatusText").text("");
-    $("#outputStatusTextCol").text("");
+    outputStatusText.textContent = "";
+    outputStatusTextCol.textContent = "";
     editorRight.setValue("");
 
     console.log("[DEBUG] Cleared text");
@@ -183,7 +186,7 @@ export function convertNewlines() {
 
     const str = editorRight.getValue().replaceAll(/Generated.*:/g, "").replaceAll(/^\s/g, "").replace(/\s+$/g, "").replaceAll(/\s+/g, "\n");
 
-    if ($("#checkBoxUseVerboseLogs").is(":checked")) {
+    if (checkBoxUseVerboseLogs.checked) {
         editorRight.setValue(`Generated on ${dateTime} UTC. ${currentIDs} IDs. Separated with newlines:\n${str}\n`);
     } else {
         editorRight.setValue(str + "\n");
@@ -203,7 +206,7 @@ export function convertSpaces() {
 
     const str = editorRight.getValue().replaceAll(/Generated.*:/g, "").replaceAll(/^\s/g, "").replace(/\s+$/g, "").replaceAll(/\s+/g, " ");
 
-    if ($("#checkBoxUseVerboseLogs").is(":checked")) {
+    if (checkBoxUseVerboseLogs.checked) {
         editorRight.setValue(`Generated on ${dateTime} UTC. ${currentIDs} IDs. Separated with spaces:\n${str}\n`);
     } else {
         editorRight.setValue(str + "\n");
