@@ -1,28 +1,30 @@
 import { editorRight } from "./createCodemirror.js";
 
+const checkBoxUseNewlines = document.getElementById("checkBoxUseNewlines");
+const checkBoxUseVerboseLogs = document.getElementById("checkBoxUseVerboseLogs");
+const checkBoxScrollBottom = document.getElementById("checkBoxScrollBottom");
+const checkBoxScrollVerbose = document.getElementById("checkBoxScrollVerbose");
+const checkBoxScrollVerboseText = document.getElementById("checkBoxScrollVerboseText");
+
 /**
  * Scrolls the right editor to the bottom, or verbose.
  * @param {Number} lastLine The last line of the editor.
  */
 export function scrollText(lastLine) {
     // Make this only available with newlines checked. Add button to scroll to last pos
-    if ($("#checkBoxScrollBottom").is(":checked")) {
-        scrollBottom();
-    }
+    if (checkBoxScrollBottom.checked) scrollBottom();
 
     // Make this only available with newlines checked. Add button to scroll to last pos
-    if ($("#checkBoxScrollVerbose").is(":checked")) {
-        scrollVerbose(lastLine);
-    }
+    if (checkBoxScrollVerbose.checked) scrollVerbose(lastLine);
 }
 
 /** Handles the visibility and status of the scroll checkboxes. */
 export function scrollCheck() {
-    if ($("#checkBoxUseNewlines").is(":checked") && $("#checkBoxUseVerboseLogs").is(":checked")) {
-        $("#checkBoxScrollVerboseText").show();
+    if (checkBoxUseNewlines.checked && checkBoxUseVerboseLogs.checked) {
+        checkBoxScrollVerboseText.hidden = false;
     } else {
-        $("#checkBoxScrollVerboseText").hide();
-        $("#checkBoxScrollVerbose").prop("checked", false);
+        checkBoxScrollVerboseText.hidden = true;
+        checkBoxScrollVerbose.checked = false;
     }
 }
 

@@ -243,14 +243,19 @@
     <div class="container-below">
       <span style="margin-top: 6px;" class="optionText no-select">Scroll to:</span>
 
-      <label class="optionText no-select" id="checkBoxScrollVerboseText" style="display: none; cursor: pointer;"
-        title="Select if you want to scroll to the Verbose part on parse."><input style="cursor: pointer;"
-          type="checkbox" id="checkBoxScrollVerbose"
-          onchange="$('#checkBoxScrollBottom').prop('checked', false)">Verbose</label>
+      <label class="optionText no-select" id="checkBoxScrollVerboseText" hidden style="cursor: pointer;"
+        title="Select if you want to scroll to the Verbose part on parse.">
+        <input style="cursor: pointer;" type="checkbox" id="checkBoxScrollVerbose"
+          onchange="document.getElementById('checkBoxScrollBottom').checked = false">
+        Verbose
+      </label>
 
       <label class="optionText no-select" id="checkBoxScrollBottomText" style="cursor: pointer;"
-        title="Select if you want to scroll to the bottom on parse."><input style="cursor: pointer;" type="checkbox"
-          id="checkBoxScrollBottom" onchange="$('#checkBoxScrollVerbose').prop('checked', false)">Bottom</label>
+        title="Select if you want to scroll to the bottom on parse.">
+        <input style="cursor: pointer;" type="checkbox" id="checkBoxScrollBottom"
+          onchange="document.getElementById('checkBoxScrollVerbose').checked = false">
+        Bottom
+      </label>
     </div>
 
     <div id="localStorageConsentNotice" class="no-select" hidden>
