@@ -1,6 +1,10 @@
 import { editorLeft } from "./createCodemirror.js";
 import { scrollCheck } from "./scrollOperations.js";
 
+const customEntry = document.getElementById("customEntry");
+const checkBoxUseNewlines = document.getElementById("checkBoxUseNewlines");
+const checkBoxUseVerboseLogs = document.getElementById("checkBoxUseVerboseLogs");
+
 /** Populates the website with some example settings. */
 export function showExample() {
 
@@ -14,9 +18,10 @@ export function showExample() {
 
 
     // Change bot, starting number, and checkboxes
-    $("#customEntry").val("94");
-    $("#checkBoxUseNewlines").prop("checked", true);
-    $("#checkBoxUseVerboseLogs").prop("checked", true);
+    customEntry.value = "94";
+    checkBoxUseNewlines.checked = true;
+    checkBoxUseVerboseLogs.checked = true;
+    // TODO: Still uses jQuery due to select2. Try removing this with the TS variant once that one has less issues. Then use window.select2.dataAdapter.triggerChange()
     $("#regexList").val(2).change();
 
     // Activate the Verbose scroll button
