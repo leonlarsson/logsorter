@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+  <!-- Thanks to Zobtzler for the RegEx guidance -->
+  <!-- Thanks to the creator of FileSaver.js and the countless Stack Overflow threads re-teaching me JavaScript -->
+
+  <!-- Primary Meta Tags -->
+  <title>Mozzy's Log Sorter</title>
+  <meta name="title" content="Mozzy's Log Sorter">
+  <meta name="description" content="A website used for extracting Discord IDs from raw logs.">
+  <meta name="theme-color" content="#5865F2">
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://logsorter.net/">
+  <meta property="og:title" content="Mozzy's Log Sorter">
+  <meta property="og:description" content="A website used for extracting Discord IDs from raw logs.">
+  <meta property="og:image" content="https://logsorter.net/assets/images/embed.png">
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:url" content="https://logsorter.net/">
+  <meta property="twitter:title" content="Mozzy's Log Sorter">
+  <meta property="twitter:description" content="A website used for extracting Discord IDs from raw logs.">
+  <meta property="twitter:image" content="https://logsorter.net/assets/images/embed.png">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link rel="icon" href="https://logsorter.net/assets/images/icon.ico" type="image/x-icon">
+  <link rel="shortcut icon" href="https://logsorter.net/assets/images/icon.ico" type="image/x-icon">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="assets/codemirror/lib/codemirror.css">
+  <link rel="stylesheet" href="assets/css/select2.css">
+  <script src="https://kit.fontawesome.com/7ebec69507.js" crossorigin="anonymous"></script>
+
+  <script src="assets/codemirror/lib/codemirror.js"></script>
+  <script src="assets/codemirror/lib/mark-selection.js"></script>
+  <script src="assets/codemirror/lib/placeholder.js"></script>
+  <script src="assets/js/packages/jquery.min.js"></script>
+  <script src="assets/js/packages/jquery-color-animation.js" type="text/javascript"></script>
+  <script src="assets/js/packages/select2.js"></script>
+  <script defer src="assets/js/packages/FileSaver.js"></script>
+  <script defer src="assets/js/packages/clipboard.min.js"></script>
+  <script defer type="module" src="assets/js/addEventListeners.js"></script>
+</head>
+
+<body>
+
+  <!-- Preload GIF -->
+  <div id="loading">
+    <img id="loading-image" src="assets/images/preloader.gif" alt="Loading..." />
+  </div>
+
+  <!-- #region Main HTML -->
+  <div id="main">
+    <i id="toggleThemeButton"
+      style="position: absolute; transform: scale(2);top: 20px; left: 20px; z-index: 999; cursor: pointer;"></i>
+    <i class="fas fa-trash-alt" id="deleteThemeSettingButton"
+      style="position: absolute; transform: scale(2);top: 20px; left: 60px; z-index: 999; cursor: pointer;display: none;"></i>
+
+    <div id="topTitle" class="no-select">
+      <div id="titleMain">
+        <a href="https://ko-fi.com/mozzy" target="_blank" title="A link to ko-fi.com" class="coffeeLink">☕</a><a
+          id="titleLink" href="https://twitter.com/MozzyFX" title="A link to Mozzy's Twitter.">Mozzy's</a> <span
+          id="titleLogSorter">Log sorter</span>
+      </div>
+      <a id="changelogText" title="Opens the changelog." href="/changelog">(changelog)</a>
+    </div>
+
+    <div id="topOptions">
+      <div class="optionText no-select" id="firstText" title="Select the RegEx pattern you want to match for.">1. Select
+        bot:
+      </div>
+      <select id="regexList">
+        <option></option>
+        <optgroup label="Zeppelin" alt="Zeppelin" title="Default Zeppelin log formats. 'ping_user:' doesn't matter.">
+          <option value="1" alt="Zeppelin" title="Zeppelin - This matches both joins and leaves.">Joins/Leaves</option>
+          <option value="2" alt="Zeppelin" title="Zeppelin - This matches only joins.">Joins</option>
+          <option value="3" alt="Zeppelin" title="Zeppelin - This matches only leaves.">Leaves</option>
+        </optgroup>
+        <optgroup label="Aperture" alt="Aperture" title="Default Aperture log formats.">
+          <option value="1" alt="Aperture" title="Aperture - This matches both joins and leaves.">Joins/Leaves</option>
+          <option value="2" alt="Aperture" title="Aperture - This matches only joins.">Joins</option>
+          <option value="3" alt="Aperture" title="Aperture - This matches only leaves.">Leaves</option>
+        </optgroup>
+        <optgroup label="Auttaja (Compact Logs)" alt="Auttaja" title="Default (compact) Auttaja log formats.">
+          <option value="1" alt="Auttaja" title="Auttaja - This matches both joins and leaves.">Joins/Leaves</option>
+          <option value="2" alt="Auttaja" title="Auttaja - This matches only joins.">Joins</option>
+          <option value="3" alt="Auttaja" title="Auttaja - This matches only leaves.">Leaves</option>
+        </optgroup>
+        <optgroup label="Utilibot(!)" alt="Utilibot"
+          title="Default Utilibot log formats. &#013;&#013;This SHOULD only match joins and leaves, but I haven't seen every form of Utilibot format.">
+          <option value="4" alt="Utilibot" title="Utilibot - This matches both joins and leaves.">Joins/Leaves</option>
+          <option value="5" alt="Utilibot" title="Utilibot - This matches only joins.">Joins</option>
+          <option value="6" alt="Utilibot" title="Utilibot - This matches only leaves.">Leaves</option>
+        </optgroup>
+        <optgroup label="Vortex" alt="Vortex" title="Default Vortex log formats.">
+          <option value="7" alt="Vortex" title="Vortex - This matches both joins and leaves.">Joins/Leaves</option>
+          <option value="8" alt="Vortex" title="Vortex - This matches only joins.">Joins</option>
+          <option value="9" alt="Vortex" title="Vortex - This matches only leaves.">Leaves</option>
+          <option value="10" alt="Vortex" title="Vortex - This matches kicks from Anti-Raid Mode.">Kicks (Anti-Raid)
+          </option>
+        </optgroup>
+        <optgroup label="Nexus" alt="Nexus" title="Default Nexus log formats.">
+          <option value="95" alt="Nexus" title="Nexus - This matches both joins and leaves.">Joins/Leaves</option>
+          <option value="96" alt="Nexus" title="Nexus - This matches only joins.">Joins</option>
+          <option value="97" alt="Nexus" title="Nexus - This matches only leaves.">Leaves</option>
+        </optgroup>
+        <optgroup label="Mee6/GiselleBot/Dyno/Carl-bot(!)" alt="EmbedBotsEw"
+          title="Limited support because these bots use embed logs and most are not able to split logs into specific channels.">
+          <option value="98" alt="EmbedBotsEw"
+            title="This only grabs the ID (from any log message that has 'ID:' in it.) &#013;&#013;I do not recommend using this as you can't split the logging channels on all bots.">
+            All IDs</option>
+        </optgroup>
+        <optgroup label="Misc" alt="Misc." title="Anything not specific to any bot.">
+          <option value="99"
+            title="Select if you want to use your own RegEx. &#013;&#013;The contents of Capturing group 1 will be output."
+            alt="Misc.">Custom - Group 1</option>
+          <option value="100"
+            title="This grabs the first ID in each line. &#013;&#013;Beware of false positives in case of usernames."
+            alt="Misc.">All IDs - First occurrence</option>
+          <option value="101" title="This grabs every ID. &#013;&#013;Beware of false positives in case of usernames."
+            alt="Misc.">All IDs</option>
+        </optgroup>
+        <!-- <optgroup label="Embed logs are bad" title="It's true..."></optgroup>
+        <optgroup label="Don't use them :)" title="And you know it."></optgroup> -->
+        <optgroup label="Want a bot added? Contact me"
+          title="Click on the red 'Mozzy' or contact me on Discord. &#013;&#013;Only bots that use single line logs will be considered.">
+        </optgroup>
+
+      </select>
+      <div id="dynamicRegexPrefixText" class="optionText no-select"
+        title="Select the beginning numbers of the IDs. &#013;&#013;Example: (991)82302885588992">2. IDs begin with:
+      </div>
+
+      <div id="dynamicRegexPrefix" class="optionText no-select" style="margin: 0px;">/</div>
+      <input type="number" class="inputBox" id="customEntry" min="0" placeholder="(0-9)"
+        style="width: 60px; height: 20px; border-radius: 3px;">
+      <div id="dynamicRegexSuffix" class="optionText no-select" style="margin-left: 0px;">/g</div>
+
+
+      <label class="optionText no-select" id="checkBoxMultipleText" style="cursor: pointer;"
+        title="Select if you want to match multiple starting numbers. Up to five."><input style="cursor: pointer;"
+          type="checkbox" id="checkBoxMultiple">Multiple</label>
+
+      <label class="optionText no-select" id="checkBoxUseNewlinesText" style="cursor: pointer;"
+        title="Select if you want the IDs to be separated by newlines instead of spaces."><input
+          style="cursor: pointer;" type="checkbox" id="checkBoxUseNewlines">Newlines</label>
+
+      <label class="optionText no-select" id="checkBoxNoDupesText" style="cursor: pointer;"
+        title="Select if you want to only output unique IDs."><input style="cursor: pointer;" type="checkbox"
+          id="checkBoxNoDupes">Deduplicate</label>
+
+      <label class="optionText no-select" id="checkBoxUseVerboseLogsText" style="cursor: pointer;"
+        title="Select if you want extra logging at the top of the results. &#013;&#013;Displays date/time, pattern used, and which separator used."><input
+          style="cursor: pointer;" type="checkbox" id="checkBoxUseVerboseLogs">Verbose</label>
+      <i class="fa-solid fa-copy fa-xl no-select" id="copyShareLinkButton"
+        title="Copies a URL with the current settings. &#013;Includes selected RegEx, first numbers, all checkboxes, and debug mode status."></i>
+
+      <input type="file" class="optionText" id="files" name="files[]" onclick="this.value=null" accept="text/plain"
+        style="display: none;">
+      <div id="multipleIDButtons" style="display: none;">
+        <button class="buttonBlueNew" id="addIDFieldButton" title="Adds one ID field."
+          style="height: 20px; width: 20px; font-size: 15px; margin-left: 5px; margin-right: 5px;">+</button>
+        <button class="buttonBlueNew" id="removeIDFieldButton" title="Removes one ID field."
+          style="height: 20px; width: 20px; font-size: 15px; margin-right: 10px;">-</button>
+      </div>
+      <div id="multipleIDs" style="display: none;">
+        <input class="inputBox" type="number" id="customEntry1"
+          style="width: 60px; height: 20px; border-radius: 3px; margin-left: 5px; margin-right: 5px; border-color: #40444b; border: 0px; font-family: inherit;">
+        <label class="optionText">&</label>
+        <input class="inputBox" type="number" id="customEntry2"
+          style="width: 60px; height: 20px; border-radius: 3px; margin-left: 5px; margin-right: 5px; border-color: #40444b; border: 0px; font-family: inherit;">
+      </div>
+    </div>
+
+    <div id="bottomOptions">
+      <!-- Perhaps move the 2 load button above and make them green? -->
+      <button class="buttonGreenNew no-select" id="matchTextButton"
+        title="Parses the left textbox into the right one.">Match Input</button>
+      <button class="buttonGreenNew no-select" id="loadFileButton"
+        title="Opens the file browser to select a txt file. Then populates the input with the contents."
+        onclick="document.getElementById('files').click()">Load .txt file</button>
+      <span style="padding: 0 5px;" id="buttonSeparator" class="optionText no-select">|</span>
+      <button class="buttonBlueNew no-select" id="saveFileButton"
+        title="Prompts you to enter a filename, and then saves it as 'yourfilename'_LogSorter.txt">Save
+        .txt file</button>
+      <button class="buttonBlueNew no-select" id="removeDupesButton"
+        title="Populates the output with only the unique IDs. &#013;&#013;Takes both 'Newlines' and 'Verbose' options into account. Can be used to switch separator on the fly.">Remove
+        duplicates</button>
+      <button class="buttonBlueNew no-select" id="splitLinesButton"
+        title="Splits the lines into groups of X amount. &#013;&#013;This converts the output to newlines before splitting.">Split
+        lines</button>
+      <button class="buttonBlueNew no-select" data-clipboard-target="#textBoxOutput" id="copyOutputButton"
+        title="Copies the content of the output textbox to your clipboard.">Copy output</button>
+      <button class="buttonRedNew no-select" id="clearOutputButton" title="Clears the output textbox.">Clear
+        output</button>
+      <i class="fa-solid fa-caret-right fa-xl no-select" id="openExtraPanelButton" title="Shows extra options."></i>
+    </div>
+
+    <div id="extraOptions" style="display: none">
+
+      <button class="buttonBlueNew no-select" id="showExampleButton"
+        title="Populates the website with some example values.">Show example</button>
+      <button class="buttonBlueNew no-select" id="convertNewlinesButton"
+        title="Converts the separator to newlines.">Newlines</button>
+      <button class="buttonBlueNew no-select" id="convertSpacesButton"
+        title="Converts the separator to spaces.">Spaces</button>
+    </div>
+
+    <hr>
+
+    <div id="textBoxTitleText">
+      <div class="optionText no-select" id="textBoxTitleTextLeft" title="Paste text into this textbox.">Input</div>
+      <div class="optionText no-select" id="textBoxTitleTextRight" title="The output will be appended to this textbox.">
+        Output<span id="outputStatusText"></span></div>
+    </div>
+
+    <div id="textBoxArea">
+
+      <div style="display: none;" class="col-text optionText no-select" id="textBoxTitleTextLeftCol"
+        title="Paste text into this textbox.">Input</div>
+
+      <textarea id="textBoxInput" rows="40" cols="80" style="resize:none"
+        placeholder="Paste your logs here, select a bot and log type and change any settings you want, then press the Match Input button.&#10;&#10;Made with <3 by Mozzy."></textarea>
+
+      <!-- <span class="optionText no-select" style="align-self: center; font-size: 30px;" title="No, I'm not a button.">></span> -->
+      <i class="col-icon fas fa-arrow-right optionText no-select" style="align-self: center; font-size: 20px;"></i>
+
+      <div style="display: none;" class="col-text optionText no-select" id="textBoxTitleTextRightCol"
+        title="The output will be appended to this textbox.">Output<span id="outputStatusTextCol"></span></div>
+
+      <textarea id="textBoxOutput" rows="40" cols="80" readonly style="resize:none"
+        placeholder="This is where you will find your parsed logs."></textarea>
+
+    </div>
+
+    <div class="container-below">
+      <span style="margin-top: 6px;" class="optionText no-select">Scroll to:</span>
+
+      <label class="optionText no-select" id="checkBoxScrollVerboseText" style="display: none; cursor: pointer;"
+        title="Select if you want to scroll to the Verbose part on parse."><input style="cursor: pointer;"
+          type="checkbox" id="checkBoxScrollVerbose"
+          onchange="$('#checkBoxScrollBottom').prop('checked', false)">Verbose</label>
+
+      <label class="optionText no-select" id="checkBoxScrollBottomText" style="cursor: pointer;"
+        title="Select if you want to scroll to the bottom on parse."><input style="cursor: pointer;" type="checkbox"
+          id="checkBoxScrollBottom" onchange="$('#checkBoxScrollVerbose').prop('checked', false)">Bottom</label>
+    </div>
+
+    <div id="localStorageConsentNotice" class="no-select">
+      <button class="buttonBlueNew" id="localStorageOKButton">Stop bothering
+        me</button>
+      <div>💾 This website saves your preferred theme to local storage.
+        <a style="text-decoration: underline; cursor: pointer;"
+          onclick="alert('When selecting a theme, the website saves a localStorage key with that preference.\n\nThis setting can be deleted by clicking the trash icon to the right of the theme button.\n\nBy manually selecting a theme, you agree to this.')">More
+          details</a>
+      </div>
+    </div>
+
+  </div>
+  <!-- #endregion Main HTML -->
+
+  <script type="module">
+    import { readUrlParams } from "./assets/js/shareLinkFunctions.js";
+    import { showNotice } from "./assets/js/localStorageNotice.js";
+
+    // Set global variables and handle initial functions
+    window.uniqueIDs = new Set();
+    window.uniqueIDs_Const = new Set(); // I use this for the Remove Duplicates function since the one above is cleared every time a parse is run. 
+    window.allIDs = [];
+    window.currentIDs = 0;
+    window.debugMode = false;
+    window.extraPanelActive = false;
+
+    $(window).on('load', () => {
+      $('#loading').fadeOut(200);
+    });
+
+    // On document ready, show localStorage notice if it hasn't been acknowledged, AND read the URL for settings
+    $(document).ready(() => {
+      if (localStorage.getItem("acknowledgedStorageNotice") !== "yup") showNotice();
+      readUrlParams();
+    });
+
+  </script>
+
+</body>
+
+</html>

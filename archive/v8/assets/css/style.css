@@ -1,0 +1,878 @@
+/* THINGS THAT ARE IMPACTED BY DISCORD REBRAND */
+
+/* Changed in CSS */
+/* #titleMain */
+/* input[type="checkbox"]:checked */
+/* input.lightMode[type="checkbox"]:checked */
+
+/* Below are changed in the class on the element in the HTML */
+/* buttonBlueNew */
+/* buttonRedNew */
+/* buttonGreenNew */
+
+body {
+  background-color: #36393f;
+  font-family: "Roboto", sans-serif;
+  /* text-align: center; */
+  width: 100%;
+  margin: 0;
+}
+
+body.lightMode {
+  background-color: #ffffff;
+}
+
+.no-select {
+  user-select: none;
+}
+
+::-webkit-scrollbar {
+  width: auto;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #282d31;
+  border-radius: 10px;
+}
+
+.lightMode *::-webkit-scrollbar-track {
+  background-color: #e0e0e0 !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #202225;
+  border-radius: 10px;
+}
+
+.lightMode *::-webkit-scrollbar-thumb {
+  background-color: #cccccc !important;
+}
+
+input[type="number"]::-webkit-inner-spin-button {
+  display: none;
+}
+
+#main {
+  height: 100vh;
+}
+
+#topTitle {
+  width: 100%;
+  background-color: #2f3136;
+  text-align: center;
+  /* padding-bottom: 10px; */ /* removed to have the changelog go here */
+}
+
+#topTitle.lightMode {
+  background-color: #f2f3f5;
+}
+
+#titleMain {
+  /* color: #7289da; OLD */
+  color: #5865f2;
+  font-size: 5em;
+  line-height: 75px;
+}
+
+.coffeeLink,
+.coffeeLink:visited,
+.coffeeLink:active {
+  font-size: 0.8em;
+  margin-right: 10px;
+  text-decoration: none;
+}
+
+#titleLink,
+#titleLink:visited,
+#titleLink:active {
+  text-decoration: none;
+  color: #ed4245;
+  /* color: #00acee; */ /* Twitter Hex */
+}
+
+#titleLink:hover {
+  text-decoration: none;
+  color: #00acee;
+}
+
+#changelogText {
+  text-decoration-line: none;
+  color: #99aab5;
+  position: relative;
+  top: -10px;
+}
+
+#changelogText.lightMode {
+  color: #060607;
+}
+
+.inputBox {
+  background-color: #303339;
+  border: 1px solid #000000 !important;
+  color: #99aab5;
+}
+
+.inputBox:disabled {
+  background-color: #696a6e;
+}
+
+.inputBox.lightMode {
+  background-color: #ffffff;
+  border: 1px solid #aaaaaa !important;
+  color: black;
+}
+
+.inputBox:disabled.lightMode {
+  background-color: #cccccc;
+  color: #5c6066;
+}
+
+#topOptions {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: baseline;
+  flex-wrap: wrap;
+  background-color: #2f3136;
+  padding-bottom: 15px;
+}
+
+#topOptions.lightMode {
+  background-color: #f2f3f5;
+}
+
+/* .checkbox-label input {
+  position: absolute;
+  opacity: 0;
+}
+
+.checkbox-custom {
+  position: relative;
+  top: 0px;
+  left: 00px;
+  height: 15px;
+  width: 15px;
+  background-color: transparent;
+  border-radius: 5px;
+  border: 2px solid #fff;
+} */
+
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  /* Styling checkbox */
+  position: relative;
+  width: 16px;
+  height: 16px;
+
+  background-color: #303339;
+  border: 1px solid #000000 !important;
+
+  /* background-color: #f04747 !important;
+  background: transparent url("../images/unchecked.png");
+  background-size: contain; */
+
+  border-radius: 3px;
+  top: 5px;
+}
+
+input[type="checkbox"]:checked {
+  /* background-color: #43b581 !important; OLD */
+  background-color: #3ba55c !important;
+  background: transparent url("../images/checked.png");
+  background-size: contain;
+  border: 0px !important;
+}
+
+input.lightMode[type="checkbox"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+
+  /* Styling checkbox */
+  position: relative;
+  width: 16px;
+  height: 16px;
+
+  background-color: #ffffff;
+  border: 1px solid #aaaaaa !important;
+
+  /* background-color: #f04747 !important;
+  background: transparent url("../images/unchecked.png");
+  background-size: contain; */
+
+  border-radius: 3px;
+  top: 5px;
+}
+
+input.lightMode[type="checkbox"]:checked {
+  /* background-color: #43b581 !important; OLD */
+  background-color: #3ba55c !important;
+  background: transparent url("../images/checked.png");
+  background-size: contain;
+  border: 0px !important;
+}
+
+#checkBoxMultiple,
+#checkBoxUseNewlines,
+#checkBoxNoDupes,
+#checkBoxUseVerboseLogs {
+  margin-right: 3px !important;
+  margin-left: 0px !important;
+}
+
+/* this selects all the elements, including the ones created by select2, disabled in favor of the one below*/
+/* #topOptions *{
+  margin-left: 5px;
+  margin-right: 5px;
+  border-color: #40444b;
+  border: 0px;
+  outline: 0px;
+  font-family: inherit;
+} */
+
+#selectRegex,
+#firstText,
+#dynamicRegexPrefixText,
+#dynamicRegexPrefix,
+#dynamicRegexSuffix,
+#customEntry,
+#checkBoxMultiple,
+#checkBoxMultipleText,
+#checkBoxUseNewlines,
+#checkBoxUseNewlinesText,
+#checkBoxNoDupes,
+#checkBoxNoDupesText,
+#checkBoxUseVerboseLogs,
+#checkBoxUseVerboseLogsText,
+#checkBoxScrollBottom,
+#checkBoxScrollBottomText,
+#checkBoxScrollVerbose,
+#checkBoxScrollVerboseText {
+  margin-left: 5px;
+  margin-right: 5px;
+  border-color: #40444b;
+  border: 0px;
+  /* outline: 0px; DISABLED FOR ACCESSIBILITY */
+  font-family: inherit;
+}
+
+#selectRegex {
+  text-align: left;
+  font-size: 10px;
+}
+
+#checkBoxCustomRegex {
+  margin-right: 0px !important;
+  margin-left: 5px;
+}
+
+#multipleIDs,
+#multipleIDButtons {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: baseline;
+  flex-wrap: wrap;
+  background-color: #2f3136;
+  margin-top: 5px;
+}
+
+#multipleIDs.lightMode,
+#multipleIDButtons.lightMode {
+  background-color: #f2f3f5;
+}
+
+#bottomOptions {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: baseline;
+  flex-wrap: wrap;
+  background-color: #2f3136;
+  padding-bottom: 10px;
+}
+
+#bottomOptions.lightMode {
+  background-color: #f2f3f5;
+}
+
+#bottomOptions *:not(#buttonSeparator) {
+  margin-left: 5px;
+  margin-right: 5px;
+  border-color: #40444b;
+}
+
+#extraOptions {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: baseline;
+  flex-wrap: wrap;
+  background-color: #2f3136;
+  padding-bottom: 10px;
+}
+
+#extraOptions.lightMode {
+  background-color: #f2f3f5;
+}
+
+#extraOptions * {
+  margin-left: 5px;
+  margin-right: 5px;
+  border-color: #40444b;
+}
+
+#copyShareLinkButton {
+  color: #b9bbbe;
+  margin-left: 10px !important;
+  margin-right: 0 !important;
+  cursor: pointer;
+  align-self: center;
+}
+
+#copyShareLinkButton:hover {
+  color: #838383;
+}
+
+#copyShareLinkButton.lightMode {
+  color: #4f5660;
+}
+
+#copyShareLinkButton.lightMode:hover {
+  color: #262b31;
+}
+
+#openExtraPanelButton {
+  color: #b9bbbe;
+  margin-left: 10px !important;
+  margin-right: 0 !important;
+  cursor: pointer;
+  align-self: center;
+}
+
+#openExtraPanelButton.lightMode {
+  color: #4f5660;
+}
+
+.optionText {
+  color: #99aab5;
+}
+
+.optionText.lightMode {
+  color: #2f3136;
+}
+
+button {
+  color: white;
+  border-radius: 3px;
+  width: auto;
+  height: 30px;
+  font-family: "Roboto", sans-serif;
+  border: 0px;
+  /* outline: 0px; DISABLED FOR ACCESSIBILITY */
+}
+
+/* BUTTONS */
+.buttonBlue {
+  background-color: #7289da;
+}
+
+.buttonBlue:hover {
+  background-color: #677bc4;
+  cursor: pointer;
+}
+
+.buttonBlue:active {
+  background-color: #5b6eae;
+}
+
+.buttonRed {
+  background-color: #f04747;
+}
+
+.buttonRed:hover {
+  background-color: #d84040;
+  cursor: pointer;
+}
+
+.buttonRed:active {
+  background-color: #c03939;
+}
+
+.buttonGreen {
+  background-color: #43b581;
+}
+
+.buttonGreen:hover {
+  background-color: #3ca374;
+  cursor: pointer;
+}
+
+.buttonGreen:active {
+  background-color: #369167;
+}
+
+/* v REBRAND v */
+
+.buttonBlueNew {
+  background-color: #5865f2;
+}
+
+.buttonBlueNew:hover {
+  background-color: #4752c4;
+  cursor: pointer;
+}
+
+.buttonBlueNew:active {
+  background-color: #3c45a5;
+}
+
+.buttonRedNew {
+  background-color: #ed4245;
+}
+
+.buttonRedNew:hover {
+  background-color: #d53b3e;
+  cursor: pointer;
+}
+
+.buttonRedNew:active {
+  background-color: #be3537;
+}
+
+.buttonGreenNew {
+  background-color: #3ba55c;
+}
+
+.buttonGreenNew:hover {
+  background-color: #359553;
+  cursor: pointer;
+}
+
+.buttonGreenNew:active {
+  background-color: #2f844a;
+}
+/* BUTTONS */
+
+hr {
+  margin-top: 0px;
+  margin-bottom: 15px;
+  height: 3px;
+  /* background-color: #f04747; */
+  background-color: #ed4245;
+  border: 0px;
+  outline: 0px;
+}
+
+#textBoxTitleText {
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+}
+
+#textBoxTitleTextLeft {
+  width: 100%;
+  padding-right: 30px;
+  padding-left: 5%;
+}
+
+#textBoxTitleTextRight {
+  width: 100%;
+  padding-right: 5%; /* Usually 5% */
+  padding-left: 30px;
+}
+
+#outputStatusText,
+#outputStatusTextCol {
+  color: #43b581;
+}
+#outputStatusText.lightMode,
+#outputStatusTextCol.lightMode {
+  color: #008000;
+}
+
+#textBoxArea {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  height: 50vh;
+}
+
+#textBoxInput {
+  background-color: #40444b;
+  color: #99aab5;
+  font-size: 12px;
+  width: 50%; /* Usually 50% */
+  border-radius: 10px;
+  border: 2px solid #36393f;
+  /* padding: 5px 10px; */
+  padding: 5px 0 0 10px; /* Usually 5px 10px */
+  margin-right: 15px;
+  margin-left: 5%;
+  min-width: 1px; /* For Firefox */
+}
+
+#textBoxInput.lightMode {
+  background-color: #ebedef;
+  color: #060607;
+  border: 2px solid #ffffff;
+}
+
+#textBoxOutput {
+  background-color: #40444b;
+  color: #99aab5;
+  font-size: 12px;
+  width: 50%;
+  border-radius: 10px;
+  border: 2px solid #36393f;
+  padding: 5px 10px;
+  margin-right: 5%;
+  margin-left: 15px;
+
+  /* FOR THE COPY FUNCTION TO WORK WITH CM. NEEDS TO NOT BE HIDDEN */
+  /* opacity: 0.1; */
+  display: block !important;
+  position: absolute;
+  left: -9999em;
+  top: -9999em;
+}
+
+#textBoxOutput.lightMode {
+  background-color: #ebedef;
+  color: #060607;
+  border: 2px solid #ffffff;
+}
+
+#textBoxOutput:focus,
+#textBoxInput:focus {
+  outline: black;
+}
+
+.container-below {
+  display: flex;
+  justify-content: flex-end;
+  /* height: 0px; */
+  padding-right: 5%;
+  padding-left: 5%;
+}
+
+/* MEDIA SIZE */
+
+@media only screen and (max-height: 500px) {
+  /* When window height is less than 455px, move everything up slightly */
+  #topTitle {
+    font-size: 50%;
+    line-height: 0px;
+    padding-top: 0px;
+    position: relative;
+    top: -15px;
+  }
+
+  #changelogText {
+    font-size: 150%;
+    position: relative;
+    top: -30px;
+    left: 230px;
+  }
+
+  #topOptions {
+    position: relative;
+    top: -30px;
+  }
+
+  #bottomOptions,
+  #extraOptions,
+  hr,
+  #textBoxTitleText,
+  #textBoxArea,
+  .container-below {
+    position: relative;
+    top: -37px;
+  }
+
+  #textBoxArea {
+    height: 55vh;
+  }
+}
+
+@media only screen and (max-height: 430px) {
+  #textBoxArea {
+    height: 50vh;
+  }
+}
+
+@media only screen and (max-height: 390px) {
+  #textBoxArea {
+    height: 45vh;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  /* When window height is less than 440px, move everything up slightly more and remove the margin between textboxes */
+  #topTitle {
+    font-size: 50%;
+    line-height: 0px;
+    padding-top: 0px;
+    position: relative;
+    top: -15px;
+  }
+  #changelogText {
+    font-size: 150%;
+    position: relative;
+    top: -30px;
+    left: 230px;
+  }
+
+  #topOptions {
+    position: relative;
+    top: -30px;
+  }
+
+  #bottomOptions,
+  #extraOptions,
+  hr,
+  #textBoxTitleText,
+  #textBoxArea,
+  .container-below {
+    position: relative;
+    top: -37px;
+  }
+
+  #textBoxInput,
+  #textBoxTitleTextLeft {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+  }
+
+  #textBoxOutput,
+  #textBoxTitleTextRight {
+    padding-right: 0px !important;
+    padding-left: 0px !important;
+  }
+
+  .CodeMirror.cm-s-left {
+    margin-left: 10px !important;
+    margin-right: 0px !important;
+  }
+
+  .CodeMirror.cm-s-right {
+    margin-right: 10px !important;
+    margin-left: 0px !important;
+  }
+
+  .container-below {
+    padding-right: 5px;
+  }
+
+  #textBoxArea {
+    height: 60vh;
+  }
+
+  #localStorageConsentNotice {
+    margin: 0 10px 10px 10px !important;
+  }
+
+  @media only screen and (max-height: 480px) {
+    #textBoxArea {
+      height: 50vh;
+    }
+  }
+
+  @media only screen and (max-height: 385px) {
+    #textBoxArea {
+      height: 40vh;
+    }
+  }
+}
+
+@media only screen and (max-width: 630px) {
+  #toggleThemeButton,
+  #deleteThemeSettingButton {
+    top: 10px !important;
+  }
+
+  #topTitle {
+    font-size: 30%;
+    position: relative;
+    top: -25px;
+  }
+
+  #changelogText {
+    font-size: 250%;
+    position: relative;
+    top: -35px;
+    left: 155px;
+  }
+
+  #topOptions {
+    position: relative;
+    top: -45px;
+  }
+
+  #bottomOptions,
+  #extraOptions,
+  hr,
+  #textBoxTitleText,
+  #textBoxArea,
+  .container-below {
+    position: relative;
+    top: -55px;
+  }
+
+  .container-below {
+    padding-right: 5px !important;
+  }
+
+  /* Make the textarea a column. Better view for mobile devices */
+  #textBoxArea {
+    flex-direction: column;
+    align-items: center;
+    height: 60vh;
+  }
+
+  .CodeMirror {
+    width: 97% !important;
+    height: 50%;
+  }
+
+  .CodeMirror.cm-s-left {
+    margin-left: 3px !important;
+    margin-right: 3px !important;
+  }
+
+  .CodeMirror.cm-s-right {
+    margin-right: 3px !important;
+    margin-left: 3px !important;
+  }
+
+  #textBoxTitleText {
+    display: none;
+  }
+
+  .col-text {
+    display: initial !important;
+    text-align: center;
+  }
+
+  .col-icon {
+    display: none !important;
+    transform: rotate(90deg);
+    padding-left: 3px;
+  }
+
+  #localStorageConsentNotice {
+    margin: 0 6px 5px 6px !important;
+    text-align: left !important;
+  }
+
+  /* TO HIDE THE GUTTER AND NUMBERS */
+  /* .CodeMirror-vscrollbar {
+    display: none !important;
+    margin: 0 !important;
+  }
+  .CodeMirror-gutters, .CodeMirror-linenumber {
+    display: none;
+  }
+  .CodeMirror-sizer {
+    margin: 0px !important;
+    padding: 0px !important;
+  } */
+
+  @media only screen and (max-height: 600px) {
+    #textBoxArea {
+      height: 60vh;
+    }
+  }
+
+  @media only screen and (max-height: 525px) {
+    #textBoxArea {
+      height: 50vh;
+    }
+  }
+}
+
+@media only screen and (max-width: 370px) {
+  #changelogText {
+    display: none;
+  }
+}
+
+/* localStorage stuff lol */
+#localStorageConsentNotice {
+  z-index: 999;
+  min-height: 20px;
+  padding: 10px 20px;
+  background: rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  position: fixed;
+  color: #fff;
+  bottom: 0px;
+  right: 0px;
+  left: 0px;
+  display: none;
+  text-align: center;
+  font-size: 16px;
+  border-radius: 10px;
+  margin: 0 5% 10px 5%;
+}
+
+#localStorageConsentNotice.lightMode {
+  color: #000;
+  background: rgba(190, 190, 190, 0.9);
+}
+
+#localStorageConsentNotice div {
+  padding: 4px 0 0;
+}
+
+#localStorageConsentNotice a {
+  color: #43b581;
+  display: inline-block;
+  /* padding: 0 5px; */
+}
+
+#localStorageConsentNotice a.lightMode {
+  color: #008000;
+}
+
+#localStorageConsentNotice a:hover {
+  color: #3ca374;
+}
+
+#localStorageConsentNotice button#localStorageOKButton {
+  float: right;
+  margin-left: 5px;
+  height: auto !important;
+  padding: 7px;
+}
+
+/* PRELOAD */
+#loading {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  opacity: 1;
+  background-color: #36393f;
+  z-index: 99;
+}
+
+#loading.lightMode {
+  background-color: #ffffff;
+}
+
+#loading-image {
+  z-index: 10000;
+}
