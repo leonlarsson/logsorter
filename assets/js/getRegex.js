@@ -59,17 +59,17 @@ export default () => {
 
   /* ASSIGN REGEX PATTERNS */
 
-  // Zeppelin/Aperture/Auttaja - Join/Leave
+  // Zeppelin/Aperture/GearBot/Auttaja - Join/Leave
   if (botList.value === "1") {
     regex = new RegExp(`#.+[^\\d](${customEntry}\\d+)\\).+(?:left|joined)`, "g");
   }
 
-  // Zeppelin/Aperture/Auttaja - Join
+  // Zeppelin/Aperture/GearBot/Auttaja - Join
   if (botList.value === "2") {
     regex = new RegExp(`#.+[^\\d](${customEntry}\\d+)\\).+joined`, "g");
   }
 
-  // Zeppelin/Aperture/Auttaja - Leave
+  // Zeppelin/Aperture/GearBot/Auttaja - Leave
   if (botList.value === "3") {
     regex = new RegExp(`#.+[^\\d](${customEntry}\\d+)\\).+left`, "g")
   }
