@@ -1,5 +1,9 @@
 // Select2/Creates a custom matcher for Select2. Thanks to user 'willbradley' on SO for providing this custom matcher
 function modelMatcher(params, data) {
+
+    // Reset the data search result to avoid any leftovers. For some reason, this works
+    window.select2.dataAdapter.destroy();
+
     data.parentText = data.parentText || "";
 
     // Always return the object if there is nothing to compare
@@ -9,7 +13,7 @@ function modelMatcher(params, data) {
     if (data.children && data.children.length > 0) {
         // Clone the data object if there are children
         // This is required as we modify the object to remove any non-matches
-        const matchRegex = $.extend(true, {}, data);
+        const matchRegex = deepExtend(data);
 
         // Check each child of the option
         for (let c = data.children.length - 1; c >= 0; c--) {
@@ -54,4 +58,32 @@ export default theme => {
         matcher: modelMatcher,
         theme: theme
     });
+
+    // On close, reset the data search results
+    window.select2.on("close", () => {
+        window.select2.dataAdapter.destroy()
+    });
+}
+
+function deepExtend(out, ...arguments_) {
+    if (!out) return {};
+
+    for (const obj of arguments_) {
+        if (!obj) continue;
+
+        for (const [key, value] of Object.entries(obj)) {
+            switch (Object.prototype.toString.call(value)) {
+                case "[object Object]":
+                    out[key] = deepExtend(out[key], value);
+                    break;
+                case "[object Array]":
+                    out[key] = deepExtend(new Array(value.length), value);
+                    break;
+                default:
+                    out[key] = value;
+            }
+        }
+    }
+
+    return out;
 }
