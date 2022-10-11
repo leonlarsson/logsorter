@@ -113,8 +113,8 @@ export function readUrlParams() {
         }
 
         // Apply changes
-        // TODO: Still uses jQuery due to select2. Try removing this with the TS variant once that one has less issues. Then use window.select2.dataAdapter.triggerChange()
-        $("#regexList").val(botSelected).change(); // This runs changeRegex() indirectly
+        regexList.value = botSelected;
+        window.select2.dataAdapter.triggerChange();
         customEntry.value = firstNumber;
         if (customEntries[0]) customEntries[0].value = mul1;
         if (customEntries[1]) customEntries[1].value = mul2;

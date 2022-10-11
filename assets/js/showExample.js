@@ -1,6 +1,7 @@
 import { editorLeft } from "./createCodemirror.js";
 import { scrollCheck } from "./scrollOperations.js";
 
+const regexList = document.getElementById("regexList");
 const customEntry = document.getElementById("customEntry");
 const checkBoxUseNewlines = document.getElementById("checkBoxUseNewlines");
 const checkBoxUseVerboseLogs = document.getElementById("checkBoxUseVerboseLogs");
@@ -21,8 +22,8 @@ export function showExample() {
     customEntry.value = "94";
     checkBoxUseNewlines.checked = true;
     checkBoxUseVerboseLogs.checked = true;
-    // TODO: Still uses jQuery due to select2. Try removing this with the TS variant once that one has less issues. Then use window.select2.dataAdapter.triggerChange()
-    $("#regexList").val(2).change();
+    regexList.value = "2";
+    window.select2.dataAdapter.triggerChange();
 
     // Activate the Verbose scroll button
     scrollCheck();
