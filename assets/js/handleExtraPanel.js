@@ -8,7 +8,7 @@ export function toggleExtraPanel() {
 export function enableExtraPanel() {
     extraPanelActive = true;
     // Rotate extra panel button
-    toggleButton.style.transform = "rotate(90deg)";
+    toggleButton.classList.add("fa-rotate-90");
 
     // Show panel
     extraPanel.style.display = null;
@@ -17,7 +17,7 @@ export function enableExtraPanel() {
 export function disableExtraPanel() {
     extraPanelActive = false;
     // Reset the rotation for the open extra panel button
-    toggleButton.style.transform = null;
+    toggleButton.classList.remove("fa-rotate-90");
 
     // Hide panel
     extraPanel.style.display = "none";
