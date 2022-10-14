@@ -330,6 +330,7 @@ input.lightMode[type="checkbox"]:checked {
 }
 
 #copyShareLinkButton {
+  line-height: inherit !important;
   color: #b9bbbe;
   margin-left: 10px !important;
   margin-right: 0 !important;
@@ -350,6 +351,7 @@ input.lightMode[type="checkbox"]:checked {
 }
 
 #openExtraPanelButton {
+  line-height: inherit !important;
   color: #b9bbbe;
   margin-left: 10px !important;
   margin-right: 0 !important;
