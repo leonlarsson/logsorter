@@ -73,13 +73,11 @@ export function checkSystemThemePref() {
 export function useLightMode() {
     window.isLightMode = true;
     window.bgColor = "#ffffff";
-    toggleThemeButton.classList.add("fas", "fa-moon");
-    toggleThemeButton.classList.remove("fa-sun");
-    toggleThemeButton.style.color = "#2f3136";
-    deleteThemeSettingButton.style.color = "#2f3136";
     document.querySelectorAll("*").forEach(element => element.classList.add("lightMode"));
     document.querySelectorAll(".CodeMirror").forEach(element => element.style.borderColor = window.bgColor);
-
+    toggleThemeButton.classList = "fas fa-moon";
+    toggleThemeButton.style.color = "#2f3136";
+    deleteThemeSettingButton.style.color = "#2f3136";
     deleteThemeSettingButton.hidden = localStorage.getItem("siteTheme") ? false : true;
 
     // Makes the RegEx selector a searchable Select2 box
@@ -90,13 +88,11 @@ export function useLightMode() {
 export function useDarkMode() {
     window.isLightMode = false;
     window.bgColor = "#36393f";
-    toggleThemeButton.classList.add("fas", "fa-sun");
-    toggleThemeButton.classList.remove("fa-moon");
-    toggleThemeButton.style.color = "#f2f3f5";
-    deleteThemeSettingButton.style.color = "#f2f3f5";
     document.querySelectorAll("*").forEach(element => element.classList.remove("lightMode"));
     document.querySelectorAll(".CodeMirror").forEach(element => element.style.borderColor = window.bgColor);
-
+    toggleThemeButton.classList = "fas fa-sun";
+    toggleThemeButton.style.color = "#f2f3f5";
+    deleteThemeSettingButton.style.color = "#f2f3f5";
     deleteThemeSettingButton.hidden = localStorage.getItem("siteTheme") ? false : true;
 
     // Makes the RegEx selector a searchable Select2 box
