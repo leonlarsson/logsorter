@@ -74,14 +74,6 @@ input[type="number"]::-webkit-inner-spin-button {
   line-height: 75px;
 }
 
-.coffeeLink,
-.coffeeLink:visited,
-.coffeeLink:active {
-  font-size: 0.8em;
-  margin-right: 10px;
-  text-decoration: none;
-}
-
 #titleLink,
 #titleLink:visited,
 #titleLink:active {
@@ -99,7 +91,7 @@ input[type="number"]::-webkit-inner-spin-button {
   text-decoration-line: none;
   color: #99aab5;
   position: relative;
-  top: -10px;
+  top: -5px;
 }
 
 #changelogText.lightMode {
@@ -569,7 +561,7 @@ hr {
 /* MEDIA SIZE */
 
 @media only screen and (max-height: 500px) {
-  /* When window height is less than 455px, move everything up slightly */
+  /* When window height is less than 500px, move everything up slightly */
   #topTitle {
     font-size: 50%;
     line-height: 0px;
@@ -582,7 +574,7 @@ hr {
     font-size: 150%;
     position: relative;
     top: -30px;
-    left: 230px;
+    left: 210px;
   }
 
   #topOptions {
@@ -618,7 +610,7 @@ hr {
 }
 
 @media only screen and (max-width: 1000px) {
-  /* When window height is less than 440px, move everything up slightly more and remove the margin between textboxes */
+  /* When window height is less than 1000px, move everything up slightly more and remove the margin between textboxes */
   #topTitle {
     font-size: 50%;
     line-height: 0px;
@@ -630,7 +622,7 @@ hr {
     font-size: 150%;
     position: relative;
     top: -30px;
-    left: 230px;
+    left: 210px;
   }
 
   #topOptions {
@@ -711,7 +703,7 @@ hr {
     font-size: 250%;
     position: relative;
     top: -35px;
-    left: 155px;
+    left: 140px;
   }
 
   #topOptions {
