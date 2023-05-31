@@ -60,7 +60,7 @@ input[type="number"]::-webkit-inner-spin-button {
   width: 100%;
   background-color: #2f3136;
   text-align: center;
-  /* padding-bottom: 10px; */ /* removed to have the changelog go here */
+  padding-bottom: 5px;
 }
 
 #topTitle.lightMode {
@@ -70,8 +70,8 @@ input[type="number"]::-webkit-inner-spin-button {
 #titleMain {
   /* color: #7289da; OLD */
   color: #5865f2;
-  font-size: 5em;
-  line-height: 75px;
+  font-size: 3rem;
+  line-height: 3rem;
 }
 
 #titleLink,
@@ -79,7 +79,8 @@ input[type="number"]::-webkit-inner-spin-button {
 #titleLink:active {
   text-decoration: none;
   color: #ed4245;
-  /* color: #00acee; */ /* Twitter Hex */
+  /* color: #00acee; */
+  /* Twitter Hex */
 }
 
 #titleLink:hover {
@@ -90,8 +91,11 @@ input[type="number"]::-webkit-inner-spin-button {
 #changelogText {
   text-decoration-line: none;
   color: #99aab5;
-  position: relative;
-  top: -5px;
+  margin-top: 6px;
+}
+
+#changelogText:hover {
+  text-decoration-line: underline;
 }
 
 #changelogText.lightMode {
@@ -239,11 +243,7 @@ input.lightMode[type="checkbox"]:checked {
 #checkBoxNoDupes,
 #checkBoxNoDupesText,
 #checkBoxUseVerboseLogs,
-#checkBoxUseVerboseLogsText,
-#checkBoxScrollBottom,
-#checkBoxScrollBottomText,
-#checkBoxScrollVerbose,
-#checkBoxScrollVerboseText {
+#checkBoxUseVerboseLogsText {
   margin-left: 5px;
   margin-right: 5px;
   border-color: #40444b;
@@ -453,6 +453,7 @@ button {
 .buttonGreenNew:active {
   background-color: #2f844a;
 }
+
 /* BUTTONS */
 
 hr {
@@ -479,7 +480,8 @@ hr {
 
 #textBoxTitleTextRight {
   width: 100%;
-  padding-right: 5%; /* Usually 5% */
+  padding-right: 5%;
+  /* Usually 5% */
   padding-left: 30px;
 }
 
@@ -487,6 +489,7 @@ hr {
 #outputStatusTextCol {
   color: #43b581;
 }
+
 #outputStatusText.lightMode,
 #outputStatusTextCol.lightMode {
   color: #008000;
@@ -504,14 +507,17 @@ hr {
   background-color: #40444b;
   color: #99aab5;
   font-size: 12px;
-  width: 50%; /* Usually 50% */
+  width: 50%;
+  /* Usually 50% */
   border-radius: 10px;
   border: 2px solid #36393f;
   /* padding: 5px 10px; */
-  padding: 5px 0 0 10px; /* Usually 5px 10px */
+  padding: 5px 0 0 10px;
+  /* Usually 5px 10px */
   margin-right: 15px;
   margin-left: 5%;
-  min-width: 1px; /* For Firefox */
+  min-width: 1px;
+  /* For Firefox */
 }
 
 #textBoxInput.lightMode {
@@ -552,44 +558,17 @@ hr {
 
 .container-below {
   display: flex;
-  justify-content: flex-end;
-  /* height: 0px; */
-  padding-right: 5%;
-  padding-left: 5%;
+  justify-content: space-between;
+  margin: 0 5%;
 }
 
 /* MEDIA SIZE */
 
 @media only screen and (max-height: 500px) {
-  /* When window height is less than 500px, move everything up slightly */
-  #topTitle {
-    font-size: 50%;
-    line-height: 0px;
-    padding-top: 0px;
-    position: relative;
-    top: -15px;
-  }
 
-  #changelogText {
-    font-size: 150%;
-    position: relative;
-    top: -30px;
-    left: 210px;
-  }
-
-  #topOptions {
-    position: relative;
-    top: -30px;
-  }
-
-  #bottomOptions,
-  #extraOptions,
-  hr,
-  #textBoxTitleText,
-  #textBoxArea,
-  .container-below {
-    position: relative;
-    top: -37px;
+  #titleMain {
+    font-size: 2.3rem;
+    line-height: 2.3rem;
   }
 
   #textBoxArea {
@@ -610,34 +589,10 @@ hr {
 }
 
 @media only screen and (max-width: 1000px) {
-  /* When window height is less than 1000px, move everything up slightly more and remove the margin between textboxes */
-  #topTitle {
-    font-size: 50%;
-    line-height: 0px;
-    padding-top: 0px;
-    position: relative;
-    top: -15px;
-  }
-  #changelogText {
-    font-size: 150%;
-    position: relative;
-    top: -30px;
-    left: 210px;
-  }
 
-  #topOptions {
-    position: relative;
-    top: -30px;
-  }
-
-  #bottomOptions,
-  #extraOptions,
-  hr,
-  #textBoxTitleText,
-  #textBoxArea,
-  .container-below {
-    position: relative;
-    top: -37px;
+  #titleMain {
+    font-size: 2.3rem;
+    line-height: 2.3rem;
   }
 
   #textBoxInput,
@@ -663,7 +618,8 @@ hr {
   }
 
   .container-below {
-    padding-right: 5px;
+    margin: 0 10px;
+    padding: 0;
   }
 
   #textBoxArea {
@@ -688,37 +644,15 @@ hr {
 }
 
 @media only screen and (max-width: 630px) {
+
   #toggleThemeButton,
   #deleteThemeSettingButton {
     top: 10px !important;
   }
 
-  #topTitle {
-    font-size: 30%;
-    position: relative;
-    top: -25px;
-  }
-
-  #changelogText {
-    font-size: 250%;
-    position: relative;
-    top: -35px;
-    left: 140px;
-  }
-
-  #topOptions {
-    position: relative;
-    top: -45px;
-  }
-
-  #bottomOptions,
-  #extraOptions,
-  hr,
-  #textBoxTitleText,
-  #textBoxArea,
-  .container-below {
-    position: relative;
-    top: -55px;
+  #titleMain {
+    font-size: 1.8rem;
+    line-height: 1.8rem;
   }
 
   .container-below {
@@ -790,12 +724,6 @@ hr {
     #textBoxArea {
       height: 50vh;
     }
-  }
-}
-
-@media only screen and (max-width: 370px) {
-  #changelogText {
-    display: none;
   }
 }
 

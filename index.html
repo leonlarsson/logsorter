@@ -66,7 +66,6 @@
         <a id="titleLink" href="https://twitter.com/MozzyFX" title="A link to Mozzy's Twitter.">Mozzy's</a> <span
           id="titleLogSorter">Log sorter</span>
       </div>
-      <a id="changelogText" title="Opens the changelog." href="/changelog">(changelog)</a>
     </div>
 
     <div id="topOptions">
@@ -252,21 +251,25 @@
     </div>
 
     <div class="container-below">
-      <span style="margin-top: 6px;" class="optionText no-select">Scroll to:</span>
+      <a id="changelogText" title="Opens the changelog." href="/changelog">Changelog</a>
 
-      <label class="optionText no-select" id="checkBoxScrollVerboseText" hidden style="cursor: pointer;"
-        title="Select if you want to scroll to the Verbose part on parse.">
-        <input style="cursor: pointer;" type="checkbox" id="checkBoxScrollVerbose"
-          onchange="document.getElementById('checkBoxScrollBottom').checked = false">
-        Verbose
-      </label>
+      <div id="scrollSettings">
+        <span class="optionText no-select">Scroll to:</span>
 
-      <label class="optionText no-select" id="checkBoxScrollBottomText" style="cursor: pointer;"
-        title="Select if you want to scroll to the bottom on parse.">
-        <input style="cursor: pointer;" type="checkbox" id="checkBoxScrollBottom"
-          onchange="document.getElementById('checkBoxScrollVerbose').checked = false">
-        Bottom
-      </label>
+        <label class="optionText no-select" id="checkBoxScrollVerboseText" hidden style="cursor: pointer;"
+          title="Select if you want to scroll to the Verbose part on parse.">
+          <input style="cursor: pointer;" type="checkbox" id="checkBoxScrollVerbose"
+            onchange="document.getElementById('checkBoxScrollBottom').checked = false">
+          Verbose
+        </label>
+
+        <label class="optionText no-select" id="checkBoxScrollBottomText" style="cursor: pointer;"
+          title="Select if you want to scroll to the bottom on parse.">
+          <input style="cursor: pointer;" type="checkbox" id="checkBoxScrollBottom"
+            onchange="document.getElementById('checkBoxScrollVerbose').checked = false">
+          Bottom
+        </label>
+      </div>
     </div>
 
     <div id="localStorageConsentNotice" class="no-select" hidden>
