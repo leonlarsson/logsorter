@@ -66,18 +66,18 @@ export default () => {
 
       if (checkBoxUseVerboseLogs.checked) { // If checked, use verbose logs. Currently hidden by default
         if (editorRight.getValue() == "") { // Verbose logging. If textarea is empty, add no newlines at the top
-          editorRight.replaceRange(`Generated on ${dateTime} UTC. Found ${allIDs.length} matches using pattern ${regex} separated with ${idSeparatorText}:\n`, CodeMirror.Pos(editorRight.lastLine()));
+          editorRight.replaceRange(`Generated on ${dateTime} UTC. Found ${allIDs.length.toLocaleString("en")} matches using pattern ${regex} separated with ${idSeparatorText}:\n`, CodeMirror.Pos(editorRight.lastLine()));
         } else { // If it isn't empty, add newlines
-          editorRight.replaceRange(`\n\nGenerated on ${dateTime} UTC. Found ${allIDs.length} matches using pattern ${regex} separated with ${idSeparatorText}:\n`, CodeMirror.Pos(editorRight.lastLine()));
+          editorRight.replaceRange(`\n\nGenerated on ${dateTime} UTC. Found ${allIDs.length.toLocaleString("en")} matches using pattern ${regex} separated with ${idSeparatorText}:\n`, CodeMirror.Pos(editorRight.lastLine()));
         }
       }
 
       const lastLine = editorRight.lastLine();
       const operationFinish = new Date();
-      console.log(`%c[DEBUG] Found ${allIDs.length} matches (${uniqueIDs.size} unique) in ` + ((operationFinish - operationStart) / 1000).toFixed(2) + ` seconds. ${currentIDs} current IDs.\n--------------------------------------`, `color: ${Colors.RED}`); // Once done, console.log the amount of found matches
-      outputStatusText.textContent = ` (${allIDs.length} matches || ${uniqueIDs.size} unique || ${currentIDs} total)`; // Sets the status label to mention how many matches were found
+      console.log(`%c[DEBUG] Found ${allIDs.length.toLocaleString("en")} matches (${uniqueIDs.size.toLocaleString("en")} unique) in ` + ((operationFinish - operationStart) / 1000).toFixed(2) + ` seconds. ${currentIDs.toLocaleString("en")} current IDs.\n--------------------------------------`, `color: ${Colors.RED}`); // Once done, console.log the amount of found matches
+      outputStatusText.textContent = ` (${allIDs.length.toLocaleString("en")} matches || ${uniqueIDs.size.toLocaleString("en")} unique || ${currentIDs.toLocaleString("en")} total)`; // Sets the status label to mention how many matches were found
       outputStatusText.style.color = Colors.RED; // Set status to red
-      outputStatusTextCol.textContent = ` (${allIDs.length} matches || ${uniqueIDs.size} unique || ${currentIDs} total)`; // Sets the status label to mention how many matches were found
+      outputStatusTextCol.textContent = ` (${allIDs.length.toLocaleString("en")} matches || ${uniqueIDs.size.toLocaleString("en")} unique || ${currentIDs.toLocaleString("en")} total)`; // Sets the status label to mention how many matches were found
       outputStatusTextCol.style.color = Colors.RED; // Set status to red
       editorRightElement.style.borderColor = bgColor; // Reset the Output border
 
@@ -97,17 +97,17 @@ export default () => {
       if (checkBoxUseVerboseLogs.checked) {
         // Verbose logging. If textarea is empty, add no newlines at the top
         if (!editorRight.getValue()) {
-          editorRight.replaceRange(`Generated on ${dateTime} UTC. Found ${uniqueIDs.size} unique matches using pattern ${regex} separated with ${idSeparatorText}:\n`, CodeMirror.Pos(editorRight.lastLine()));
+          editorRight.replaceRange(`Generated on ${dateTime} UTC. Found ${uniqueIDs.size.toLocaleString("en")} unique matches using pattern ${regex} separated with ${idSeparatorText}:\n`, CodeMirror.Pos(editorRight.lastLine()));
           // If it isn't empty, add newlines
         } else {
-          editorRight.replaceRange(`\n\nGenerated on ${dateTime} UTC. Found ${uniqueIDs.size} unique matches using pattern ${regex} separated with ${idSeparatorText}:\n`, CodeMirror.Pos(editorRight.lastLine()));
+          editorRight.replaceRange(`\n\nGenerated on ${dateTime} UTC. Found ${uniqueIDs.size.toLocaleString("en")} unique matches using pattern ${regex} separated with ${idSeparatorText}:\n`, CodeMirror.Pos(editorRight.lastLine()));
         }
         lastLine = editorRight.lastLine();
       }
 
       editorRight.replaceRange([...uniqueIDs].join(idSeparator) + idSeparator, CodeMirror.Pos(editorRight.lastLine()));
-      outputStatusText.textContent = ` (${allIDs.length} matches || ${uniqueIDs.size} unique posted || ${currentIDs} total)`; // Sets the status label to mention how many matches were found
-      outputStatusTextCol.textContent = ` (${allIDs.length} matches || ${uniqueIDs.size} unique posted || ${currentIDs} total)`; // Sets the status label to mention how many matches were found
+      outputStatusText.textContent = ` (${allIDs.length.toLocaleString("en")} matches || ${uniqueIDs.size.toLocaleString("en")} unique posted || ${currentIDs.toLocaleString("en")} total)`; // Sets the status label to mention how many matches were found
+      outputStatusTextCol.textContent = ` (${allIDs.length.toLocaleString("en")} matches || ${uniqueIDs.size.toLocaleString("en")} unique posted || ${currentIDs.toLocaleString("en")} total)`; // Sets the status label to mention how many matches were found
     } else {
 
       currentIDs += allIDs.length;
@@ -116,22 +116,22 @@ export default () => {
       if (checkBoxUseVerboseLogs.checked) {
         // Verbose logging. If textarea is empty, add no newlines at the top
         if (!editorRight.getValue()) {
-          editorRight.replaceRange(`Generated on ${dateTime} UTC. Found ${allIDs.length} matches using pattern ${regex} separated with ${idSeparatorText}:\n`, CodeMirror.Pos(editorRight.lastLine()));
+          editorRight.replaceRange(`Generated on ${dateTime} UTC. Found ${allIDs.length.toLocaleString("en")} matches using pattern ${regex} separated with ${idSeparatorText}:\n`, CodeMirror.Pos(editorRight.lastLine()));
           // If it isn't empty, add newlines
         } else {
-          editorRight.replaceRange(`\n\nGenerated on ${dateTime} UTC. Found ${allIDs.length} matches using pattern ${regex} separated with ${idSeparatorText}:\n`, CodeMirror.Pos(editorRight.lastLine()));
+          editorRight.replaceRange(`\n\nGenerated on ${dateTime} UTC. Found ${allIDs.length.toLocaleString("en")} matches using pattern ${regex} separated with ${idSeparatorText}:\n`, CodeMirror.Pos(editorRight.lastLine()));
         }
         lastLine = editorRight.lastLine();
       }
 
       editorRight.replaceRange(allIDs.join(idSeparator) + idSeparator, CodeMirror.Pos(editorRight.lastLine()));
-      outputStatusText.textContent = ` (${allIDs.length} matches posted || ${uniqueIDs.size} unique || ${currentIDs} total)`; // Sets the status label to mention how many matches were found
-      outputStatusTextCol.textContent = ` (${allIDs.length} matches posted || ${uniqueIDs.size} unique || ${currentIDs} total)`; // Sets the status label to mention how many matches were found
+      outputStatusText.textContent = ` (${allIDs.length.toLocaleString("en")} matches posted || ${uniqueIDs.size.toLocaleString("en")} unique || ${currentIDs.toLocaleString("en")} total)`; // Sets the status label to mention how many matches were found
+      outputStatusTextCol.textContent = ` (${allIDs.length.toLocaleString("en")} matches posted || ${uniqueIDs.size.toLocaleString("en")} unique || ${currentIDs.toLocaleString("en")} total)`; // Sets the status label to mention how many matches were found
     }
 
     // REGARDLESS OF MATCHES FOUND
     const operationFinish = new Date();
-    console.log(`%c[DEBUG] Found ${allIDs.length} matches (${uniqueIDs.size} unique) in ${((operationFinish - operationStart) / 1000).toFixed(2)} seconds. ${currentIDs} current IDs.\n--------------------------------------`, `color: ${Colors.GREEN}`); // Once done, console.log the amount of found matches
+    console.log(`%c[DEBUG] Found ${allIDs.length.toLocaleString("en")} matches (${uniqueIDs.size.toLocaleString("en")} unique) in ${((operationFinish - operationStart) / 1000).toFixed(2)} seconds. ${currentIDs.toLocaleString("en")} current IDs.\n--------------------------------------`, `color: ${Colors.GREEN}`); // Once done, console.log the amount of found matches
     outputStatusText.style.color = ""; // Set status to default depending on light theme. Removes the style.
     outputStatusTextCol.style.color = ""; // Set status to default depending on light theme. Removes the style.
     editorRightElement.style.borderColor = bgColor; // Reset the Output border

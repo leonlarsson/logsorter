@@ -35,14 +35,14 @@ export function removeDuplicates() {
     const dateTime = today.replace("T", " ");
 
     if (checkBoxUseVerboseLogs.checked) {
-        editorRight.setValue(`Generated on ${dateTime} UTC. Duplicates removed, ${uniqueIDs_Const.size} unique IDs. Separated with ${idSeparatorText}:\n${[...uniqueIDs_Const].join(idSeparator) + idSeparator}`);
+        editorRight.setValue(`Generated on ${dateTime} UTC. Duplicates removed, ${uniqueIDs_Const.size.toLocaleString("en")} unique IDs. Separated with ${idSeparatorText}:\n${[...uniqueIDs_Const].join(idSeparator) + idSeparator}`);
     } else {
         editorRight.setValue(`${[...uniqueIDs_Const].join(idSeparator) + idSeparator}`);
     }
 
-    console.log(`[DEBUG] Removed duplicates. ${currentIDs - uniqueIDs_Const.size} duplicates removed. ${uniqueIDs_Const.size} left.`);
-    outputStatusText.textContent = ` (${currentIDs - uniqueIDs_Const.size} duplicates removed. ${uniqueIDs_Const.size} left)`;
-    outputStatusTextCol.textContent = ` (${currentIDs - uniqueIDs_Const.size} duplicates removed. ${uniqueIDs_Const.size} left)`;
+    console.log(`[DEBUG] Removed duplicates. ${(currentIDs - uniqueIDs_Const.size).toLocaleString("en")} duplicates removed. ${uniqueIDs_Const.size.toLocaleString("en")} left.`);
+    outputStatusText.textContent = ` (${(currentIDs - uniqueIDs_Const.size).toLocaleString("en")} duplicates removed. ${uniqueIDs_Const.size.toLocaleString("en")} left)`;
+    outputStatusTextCol.textContent = ` (${(currentIDs - uniqueIDs_Const.size).toLocaleString("en")} duplicates removed. ${uniqueIDs_Const.size.toLocaleString("en")} left)`;
 
     // Adjust the total IDs length to the current value
     window.currentIDs = window.uniqueIDs_Const.size;
@@ -167,7 +167,7 @@ export function convertNewlines() {
     const str = editorRight.getValue().replaceAll(/Generated.*:/g, "").replaceAll(/^\s/g, "").replace(/\s+$/g, "").replaceAll(/\s+/g, "\n");
 
     if (checkBoxUseVerboseLogs.checked) {
-        editorRight.setValue(`Generated on ${dateTime} UTC. ${currentIDs} IDs. Separated with newlines:\n${str}\n`);
+        editorRight.setValue(`Generated on ${dateTime} UTC. ${currentIDs.toLocaleString("en")} IDs. Separated with newlines:\n${str}\n`);
     } else {
         editorRight.setValue(str + "\n");
     }
@@ -187,7 +187,7 @@ export function convertSpaces() {
     const str = editorRight.getValue().replaceAll(/Generated.*:/g, "").replaceAll(/^\s/g, "").replace(/\s+$/g, "").replaceAll(/\s+/g, " ");
 
     if (checkBoxUseVerboseLogs.checked) {
-        editorRight.setValue(`Generated on ${dateTime} UTC. ${currentIDs} IDs. Separated with spaces:\n${str}\n`);
+        editorRight.setValue(`Generated on ${dateTime} UTC. ${currentIDs.toLocaleString("en")} IDs. Separated with spaces:\n${str}\n`);
     } else {
         editorRight.setValue(str + "\n");
     }
