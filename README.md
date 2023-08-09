@@ -2,4 +2,4 @@
 
 A website to sort your Discord logs. (Or any logs, I guess).
 
-Link: https://logsorter.net
+Link: https://logsorter.com
