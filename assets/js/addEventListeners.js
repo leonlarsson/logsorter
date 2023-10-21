@@ -12,7 +12,6 @@ import { removeDuplicates, splitLines, copyText, clearText, convertNewlines, con
 import { toggleExtraPanel } from "./handleExtraPanel.js";
 import { toggleDebug } from "./debugFunctions.js";
 import { toggleLight, deleteThemeSetting } from "./themeFunctions.js";
-import { hideNotice } from "./localStorageNotice.js";
 import { scrollCheck } from "./scrollOperations.js";
 
 // Regex list
@@ -52,6 +51,3 @@ document.getElementById("buttonSeparator").addEventListener("dblclick", toggleDe
 // Theme functions, including some local storage functions
 document.getElementById("toggleThemeButton").addEventListener("click", toggleLight);
 document.getElementById("deleteThemeSettingButton").addEventListener("click", deleteThemeSetting);
-
-// Accept and remove the local storage notice
-document.getElementById("localStorageOKButton").addEventListener("click", hideNotice);

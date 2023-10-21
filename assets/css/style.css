@@ -553,10 +553,6 @@ hr {
     height: 60vh;
   }
 
-  #localStorageConsentNotice {
-    margin: 0 10px 10px 10px !important;
-  }
-
   @media only screen and (max-height: 480px) {
     #textBoxArea {
       height: 50vh;
@@ -623,11 +619,6 @@ hr {
     padding-left: 3px;
   }
 
-  #localStorageConsentNotice {
-    margin: 0 6px 5px 6px !important;
-    text-align: left !important;
-  }
-
   /* TO HIDE THE GUTTER AND NUMBERS */
   /* .CodeMirror-vscrollbar {
     display: none !important;
@@ -652,54 +643,6 @@ hr {
       height: 50vh;
     }
   }
-}
-
-/* localStorage stuff lol */
-#localStorageConsentNotice {
-  z-index: 999;
-  min-height: 20px;
-  padding: 10px 20px;
-  background: rgba(0, 0, 0, 0.6);
-  overflow: hidden;
-  position: fixed;
-  color: #fff;
-  bottom: 0px;
-  right: 0px;
-  left: 0px;
-  text-align: center;
-  font-size: 16px;
-  border-radius: 10px;
-  margin: 0 5% 10px 5%;
-}
-
-#localStorageConsentNotice.lightMode {
-  color: #000;
-  background: rgba(190, 190, 190, 0.9);
-}
-
-#localStorageConsentNotice div {
-  padding: 4px 0 0;
-}
-
-#localStorageConsentNotice a {
-  color: #43b581;
-  display: inline-block;
-  /* padding: 0 5px; */
-}
-
-#localStorageConsentNotice a.lightMode {
-  color: #008000;
-}
-
-#localStorageConsentNotice a:hover {
-  color: #3ca374;
-}
-
-#localStorageConsentNotice button#localStorageOKButton {
-  float: right;
-  margin-left: 5px;
-  height: auto !important;
-  padding: 7px;
 }
 
 /* PRELOAD */
