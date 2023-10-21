@@ -72,10 +72,10 @@
       </div>
 
       <div id="topOptions">
-        <div class="optionText no-select" id="firstText" title="Select the RegEx pattern you want to match for.">1.
-          Select
-          bot:
-        </div>
+        <label class="optionText no-select" for="regexList" id="firstText"
+          title="Select the RegEx pattern you want to match for.">
+          1. Select bot:
+        </label>
         <select id="regexList">
           <option></option>
           <!-- <optgroup label="Zeppelin/Aperture/GearBot/Auttaja" alt="Zeppelin/Aperture/GearBot/Auttaja"
@@ -151,9 +151,9 @@
           </optgroup>
 
         </select>
-        <div id="dynamicRegexPrefixText" class="optionText no-select"
+        <label id="dynamicRegexPrefixText" for="customEntry" class="optionText no-select"
           title="Select the beginning numbers of the IDs. &#013;&#013;Example: (991)82302885588992">2. IDs begin with:
-        </div>
+        </label>
 
         <div id="dynamicRegexPrefix" class="optionText no-select" style="margin: 0px;">/</div>
         <input type="number" class="inputBox" id="customEntry" min="0" placeholder="(0-9)"
