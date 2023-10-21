@@ -56,15 +56,18 @@ input[type="number"]::-webkit-inner-spin-button {
   height: 100vh;
 }
 
-#topTitle {
-  width: 100%;
+#topPart {
   background-color: #2f3136;
-  text-align: center;
-  padding-bottom: 5px;
 }
 
-#topTitle.lightMode {
+#topPart.lightMode {
   background-color: #f2f3f5;
+}
+
+#topTitle {
+  width: 100%;
+  text-align: center;
+  padding-bottom: 5px;
 }
 
 #titleMain {
@@ -126,16 +129,11 @@ input[type="number"]::-webkit-inner-spin-button {
 #topOptions {
   width: 100%;
   display: flex;
-  flex-direction: row;
   justify-content: center;
-  align-items: baseline;
+  align-items: center;
   flex-wrap: wrap;
-  background-color: #2f3136;
-  padding-bottom: 15px;
-}
-
-#topOptions.lightMode {
-  background-color: #f2f3f5;
+  gap: 5px;
+  margin-bottom: 10px;
 }
 
 /* .checkbox-label input {
@@ -154,6 +152,15 @@ input[type="number"]::-webkit-inner-spin-button {
   border: 2px solid #fff;
 } */
 
+.checkbox-group {
+  display: flex;
+  align-self: center;
+}
+
+.checkbox-group > * {
+  cursor: pointer;
+}
+
 input[type="checkbox"] {
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -161,8 +168,8 @@ input[type="checkbox"] {
 
   /* Styling checkbox */
   position: relative;
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
 
   background-color: #303339;
   border: 1px solid #000000 !important;
@@ -172,7 +179,7 @@ input[type="checkbox"] {
   background-size: contain; */
 
   border-radius: 3px;
-  top: 5px;
+  /* top: 5px; */
 }
 
 input[type="checkbox"]:checked {
@@ -212,14 +219,6 @@ input.lightMode[type="checkbox"]:checked {
   border: 0px !important;
 }
 
-#checkBoxMultiple,
-#checkBoxUseNewlines,
-#checkBoxNoDupes,
-#checkBoxUseVerboseLogs {
-  margin-right: 3px !important;
-  margin-left: 0px !important;
-}
-
 /* this selects all the elements, including the ones created by select2, disabled in favor of the one below*/
 /* #topOptions *{
   margin-left: 5px;
@@ -230,36 +229,9 @@ input.lightMode[type="checkbox"]:checked {
   font-family: inherit;
 } */
 
-#selectRegex,
-#firstText,
-#dynamicRegexPrefixText,
-#dynamicRegexPrefix,
-#dynamicRegexSuffix,
-#customEntry,
-#checkBoxMultiple,
-#checkBoxMultipleText,
-#checkBoxUseNewlines,
-#checkBoxUseNewlinesText,
-#checkBoxNoDupes,
-#checkBoxNoDupesText,
-#checkBoxUseVerboseLogs,
-#checkBoxUseVerboseLogsText {
-  margin-left: 5px;
-  margin-right: 5px;
-  border-color: #40444b;
-  border: 0px;
-  /* outline: 0px; DISABLED FOR ACCESSIBILITY */
-  font-family: inherit;
-}
-
 #selectRegex {
   text-align: left;
   font-size: 10px;
-}
-
-#checkBoxCustomRegex {
-  margin-right: 0px !important;
-  margin-left: 5px;
 }
 
 #multipleIDs,
@@ -268,64 +240,38 @@ input.lightMode[type="checkbox"]:checked {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: baseline;
   flex-wrap: wrap;
-  background-color: #2f3136;
-  margin-top: 5px;
 }
 
-#multipleIDs.lightMode,
-#multipleIDButtons.lightMode {
-  background-color: #f2f3f5;
-}
-
-#bottomOptions {
-  width: 100%;
+#actionRow {
   display: flex;
-  flex-direction: row;
   justify-content: center;
-  align-items: baseline;
+  align-items: center;
   flex-wrap: wrap;
-  background-color: #2f3136;
+  gap: .5rem;
   padding-bottom: 10px;
 }
 
-#bottomOptions.lightMode {
+#actionRow.lightMode {
   background-color: #f2f3f5;
 }
 
-#bottomOptions *:not(#buttonSeparator) {
-  margin-left: 5px;
-  margin-right: 5px;
-  border-color: #40444b;
-}
-
-#extraOptions {
-  width: 100%;
+#extraActionRow {
   display: flex;
-  flex-direction: row;
   justify-content: center;
-  align-items: baseline;
   flex-wrap: wrap;
-  background-color: #2f3136;
+  gap: .5rem;
   padding-bottom: 10px;
 }
 
-#extraOptions.lightMode {
+#extraActionRow.lightMode {
   background-color: #f2f3f5;
-}
-
-#extraOptions * {
-  margin-left: 5px;
-  margin-right: 5px;
-  border-color: #40444b;
 }
 
 #copyShareLinkButton {
   line-height: inherit !important;
   color: #b9bbbe;
-  margin-left: 10px !important;
-  margin-right: 0 !important;
+  margin-left: 10px;
   cursor: pointer;
   align-self: center;
 }
@@ -343,12 +289,9 @@ input.lightMode[type="checkbox"]:checked {
 }
 
 #openExtraPanelButton {
-  line-height: inherit !important;
   color: #b9bbbe;
-  margin-left: 10px !important;
-  margin-right: 0 !important;
   cursor: pointer;
-  align-self: center;
+  margin-left: 5px !important;
 }
 
 #openExtraPanelButton.lightMode {

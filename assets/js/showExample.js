@@ -3,8 +3,8 @@ import { scrollCheck } from "./scrollOperations.js";
 
 const regexList = document.getElementById("regexList");
 const customEntry = document.getElementById("customEntry");
-const checkBoxUseNewlines = document.getElementById("checkBoxUseNewlines");
-const checkBoxUseVerboseLogs = document.getElementById("checkBoxUseVerboseLogs");
+const checkboxUseNewlines = document.getElementById("checkboxUseNewlines");
+const checkboxUseVerboseLogs = document.getElementById("checkboxUseVerboseLogs");
 
 /** Populates the website with some example settings. */
 export function showExample() {
@@ -20,8 +20,8 @@ export function showExample() {
 
     // Change bot, starting number, and checkboxes
     customEntry.value = "94";
-    checkBoxUseNewlines.checked = true;
-    checkBoxUseVerboseLogs.checked = true;
+    checkboxUseNewlines.checked = true;
+    checkboxUseVerboseLogs.checked = true;
     regexList.value = "2";
     window.select2.dataAdapter.triggerChange();
 

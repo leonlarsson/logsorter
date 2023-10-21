@@ -1,10 +1,10 @@
 import { editorRight } from "./createCodemirror.js";
 
-const checkBoxUseNewlines = document.getElementById("checkBoxUseNewlines");
-const checkBoxUseVerboseLogs = document.getElementById("checkBoxUseVerboseLogs");
-const checkBoxScrollBottom = document.getElementById("checkBoxScrollBottom");
-const checkBoxScrollVerbose = document.getElementById("checkBoxScrollVerbose");
-const checkBoxScrollVerboseText = document.getElementById("checkBoxScrollVerboseText");
+const checkboxUseNewlines = document.getElementById("checkboxUseNewlines");
+const checkboxUseVerboseLogs = document.getElementById("checkboxUseVerboseLogs");
+const checkboxScrollBottom = document.getElementById("checkboxScrollBottom");
+const checkboxScrollLogText = document.getElementById("checkboxScrollLogText");
+const checkboxScrollBottomGroup = document.getElementById("checkboxScrollBottomGroup");
 
 /**
  * Scrolls the right editor to the bottom, or verbose.
@@ -12,19 +12,19 @@ const checkBoxScrollVerboseText = document.getElementById("checkBoxScrollVerbose
  */
 export function scrollText(lastLine) {
     // Make this only available with newlines checked. Add button to scroll to last pos
-    if (checkBoxScrollBottom.checked) scrollBottom();
+    if (checkboxScrollBottom.checked) scrollBottom();
 
     // Make this only available with newlines checked. Add button to scroll to last pos
-    if (checkBoxScrollVerbose.checked) scrollVerbose(lastLine);
+    if (checkboxScrollLogText.checked) scrollVerbose(lastLine);
 }
 
 /** Handles the visibility and status of the scroll checkboxes. */
 export function scrollCheck() {
-    if (checkBoxUseNewlines.checked && checkBoxUseVerboseLogs.checked) {
-        checkBoxScrollVerboseText.hidden = false;
+    if (checkboxUseNewlines.checked && checkboxUseVerboseLogs.checked) {
+        checkboxScrollBottomGroup.hidden = false;
     } else {
-        checkBoxScrollVerboseText.hidden = true;
-        checkBoxScrollVerbose.checked = false;
+        checkboxScrollBottomGroup.hidden = true;
+        checkboxScrollLogText.checked = false;
     }
 }
 

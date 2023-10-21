@@ -1,5 +1,5 @@
 const botList = document.getElementById("regexList");
-const checkBoxMultiple = document.getElementById("checkBoxMultiple");
+const checkboxMultiple = document.getElementById("checkboxMultiple");
 
 /**
  * Determines which Regex is to use.
@@ -21,7 +21,7 @@ export default () => {
   }
 
   // If multiples checkbox is checked, build the customEntry from the multiples
-  if (checkBoxMultiple.checked) {
+  if (checkboxMultiple.checked) {
 
     // Get the values. Empty string if not filled in. Undefined if the element does not exist
     const customEntry1 = document.getElementById("customEntry1")?.value;

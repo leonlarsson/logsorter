@@ -8,14 +8,14 @@ import { Colors } from "./constants.js";
 const copyShareLinkButton = document.getElementById("copyShareLinkButton");
 const regexList = document.getElementById("regexList");
 const customEntry = document.getElementById("customEntry");
-const checkBoxMultiple = document.getElementById("checkBoxMultiple");
+const checkboxMultiple = document.getElementById("checkboxMultiple");
 const multipleIDs = document.getElementById("multipleIDs");
 const customEntries = document.getElementsByClassName("multiplesCustomEntry");
-const checkBoxUseNewlines = document.getElementById("checkBoxUseNewlines");
-const checkBoxNoDupes = document.getElementById("checkBoxNoDupes");
-const checkBoxUseVerboseLogs = document.getElementById("checkBoxUseVerboseLogs");
-const checkBoxScrollVerbose = document.getElementById("checkBoxScrollVerbose");
-const checkBoxScrollBottom = document.getElementById("checkBoxScrollBottom");
+const checkboxUseNewlines = document.getElementById("checkboxUseNewlines");
+const checkboxNoDupes = document.getElementById("checkboxNoDupes");
+const checkboxUseVerboseLogs = document.getElementById("checkboxUseVerboseLogs");
+const checkboxScrollLogText = document.getElementById("checkboxScrollLogText");
+const checkboxScrollBottom = document.getElementById("checkboxScrollBottom");
 
 
 /** Builds the custom share link from the current settings. Then copies it to clipboard. */
@@ -26,8 +26,8 @@ export function createShareLink() {
     customURL.searchParams.append("bot", regexList.value);
     customURL.searchParams.append("start", customEntry.value);
 
-    if (checkBoxMultiple.checked) {
-        customURL.searchParams.append("multiple", checkBoxMultiple.checked);
+    if (checkboxMultiple.checked) {
+        customURL.searchParams.append("multiple", checkboxMultiple.checked);
         customURL.searchParams.append("mulCount", document.querySelectorAll(".multiplesCustomEntry").length);
         customURL.searchParams.append("mul1", customEntries[0]?.value);
         customURL.searchParams.append("mul2", customEntries[1]?.value);
@@ -36,11 +36,11 @@ export function createShareLink() {
         customURL.searchParams.append("mul5", customEntries[4]?.value);
     }
 
-    customURL.searchParams.append("newlines", checkBoxUseNewlines.checked);
-    customURL.searchParams.append("dedupe", checkBoxNoDupes.checked);
-    customURL.searchParams.append("verbose", checkBoxUseVerboseLogs.checked);
-    customURL.searchParams.append("scrollVerbose", checkBoxScrollVerbose.checked);
-    customURL.searchParams.append("scrollBottom", checkBoxScrollBottom.checked);
+    customURL.searchParams.append("newlines", checkboxUseNewlines.checked);
+    customURL.searchParams.append("dedupe", checkboxNoDupes.checked);
+    customURL.searchParams.append("verbose", checkboxUseVerboseLogs.checked);
+    customURL.searchParams.append("scrollVerbose", checkboxScrollLogText.checked);
+    customURL.searchParams.append("scrollBottom", checkboxScrollBottom.checked);
     customURL.searchParams.append("debug", debugMode);
     customURL.searchParams.append("extra", extraPanelActive);
 
@@ -96,7 +96,7 @@ export function readUrlParams() {
         const extraPanelEnabled = params.get("extra");
 
         // Activate the Multiple checkbox if the mulCount param exists (exists when Multiples checkbox is checked)
-        if (mulCount) checkBoxMultiple.checked = true;
+        if (mulCount) checkboxMultiple.checked = true;
 
         // Adds ID fields based on the setting. Starting from 2
         if (mulCount === "3") {
@@ -121,11 +121,11 @@ export function readUrlParams() {
         if (customEntries[2]) customEntries[2].value = mul3;
         if (customEntries[3]) customEntries[3].value = mul4;
         if (customEntries[4]) customEntries[4].value = mul5;
-        checkBoxUseNewlines.checked = checkNewlines === "true";
-        checkBoxNoDupes.checked = checkDeduplicate === "true";
-        checkBoxUseVerboseLogs.checked = checkVerbose === "true";
-        checkBoxScrollVerbose.checked = checkScrollVerbose === "true";
-        checkBoxScrollBottom.checked = checkScrollBottom === "true";
+        checkboxUseNewlines.checked = checkNewlines === "true";
+        checkboxNoDupes.checked = checkDeduplicate === "true";
+        checkboxUseVerboseLogs.checked = checkVerbose === "true";
+        checkboxScrollLogText.checked = checkScrollVerbose === "true";
+        checkboxScrollBottom.checked = checkScrollBottom === "true";
 
         // If "debug=1/true", activate debug mode
         if (debugEnabled === "1" || debugEnabled === "true") enableDebug();

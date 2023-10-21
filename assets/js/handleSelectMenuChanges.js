@@ -3,10 +3,10 @@ const dynamicRegexPrefixText = document.getElementById("dynamicRegexPrefixText")
 const customEntry = document.getElementById("customEntry");
 const dynamicRegexPrefix = document.getElementById("dynamicRegexPrefix");
 const dynamicRegexSuffix = document.getElementById("dynamicRegexSuffix");
-const checkBoxMultiple = document.getElementById("checkBoxMultiple");
+const checkboxMultiple = document.getElementById("checkboxMultiple");
 const multipleIDs = document.getElementById("multipleIDs");
 const multipleIDButtons = document.getElementById("multipleIDButtons");
-const checkBoxMultipleText = document.getElementById("checkBoxMultipleText");
+const checkboxMultipleText = document.getElementById("checkboxMultipleText");
 
 
 // Hides the custom regex prefix and suffix on start
@@ -25,11 +25,11 @@ export default () => {
         customEntry.disabled = false; // Enables the entry box because we do not use multiples for custom Regex
         dynamicRegexPrefix.hidden = false;
         dynamicRegexSuffix.hidden = false;
-        checkBoxMultiple.checked = false; // Uncheck the Multiple checkbox
+        checkboxMultiple.checked = false; // Uncheck the Multiple checkbox
         multipleIDs.hidden = true;
         multipleIDButtons.hidden = true;
-        checkBoxMultiple.hidden = true;
-        checkBoxMultipleText.hidden = true;
+        checkboxMultiple.hidden = true;
+        checkboxMultipleText.hidden = true;
 
     } else if (regexList.value === "100" || regexList.value === "101") {
         dynamicRegexPrefixText.textContent = "2. IDs begin with:";
@@ -40,11 +40,11 @@ export default () => {
         customEntry.disabled = false; // Enable entry box
         dynamicRegexPrefix.hidden = true;
         dynamicRegexSuffix.hidden = true;
-        checkBoxMultiple.checked = false; // Uncheck the Multiple checkbox
+        checkboxMultiple.checked = false; // Uncheck the Multiple checkbox
         multipleIDs.hidden = true;
         multipleIDButtons.hidden = true;
-        checkBoxMultiple.hidden = true;
-        checkBoxMultipleText.hidden = true;
+        checkboxMultiple.hidden = true;
+        checkboxMultipleText.hidden = true;
 
     } else {
         dynamicRegexPrefixText.textContent = "2. IDs begin with:";
@@ -55,11 +55,11 @@ export default () => {
         customEntry.disabled = false; // Enable entry box
         dynamicRegexPrefix.hidden = true;
         dynamicRegexSuffix.hidden = true;
-        checkBoxMultiple.hidden = false;
-        checkBoxMultipleText.hidden = false;
+        checkboxMultiple.hidden = false;
+        checkboxMultipleText.hidden = false;
 
         // If not custom regex and multiples is checked, keep/disable the main entry box
-        if (checkBoxMultiple.checked) {
+        if (checkboxMultiple.checked) {
             customEntry.disabled = true;
             multipleIDs.hidden = false;
             multipleIDButtons.hidden = false;

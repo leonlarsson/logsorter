@@ -1,5 +1,5 @@
 const toggleButton = document.getElementById("openExtraPanelButton");
-const extraPanel = document.getElementById("extraOptions");
+const extraPanel = document.getElementById("extraActionRow");
 
 export function toggleExtraPanel() {
     extraPanel.style.display === "none" ? enableExtraPanel() : disableExtraPanel();

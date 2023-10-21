@@ -19,9 +19,9 @@ import { scrollCheck } from "./scrollOperations.js";
 document.getElementById("regexList").onchange = changeRegex;
 
 // Checkboxes and copy button
-document.getElementById("checkBoxMultiple").addEventListener("click", multipleCheck);
-document.getElementById("checkBoxUseNewlines").addEventListener("click", scrollCheck);
-document.getElementById("checkBoxUseVerboseLogs").addEventListener("click", scrollCheck);
+document.getElementById("checkboxMultiple").addEventListener("click", multipleCheck);
+document.getElementById("checkboxUseNewlines").addEventListener("click", scrollCheck);
+document.getElementById("checkboxUseVerboseLogs").addEventListener("click", scrollCheck);
 document.getElementById("copyShareLinkButton").addEventListener("click", createShareLink);
 
 // Match text and load file buttons

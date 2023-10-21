@@ -1,11 +1,11 @@
-const checkBoxMultiple = document.getElementById("checkBoxMultiple");
+const checkboxMultiple = document.getElementById("checkboxMultiple");
 const multipleIDs = document.getElementById("multipleIDs");
 const multipleIDButtons = document.getElementById("multipleIDButtons");
 const customEntry = document.getElementById("customEntry");
 
 /** Shows and hides the extra ID Fields based on the multiples checkbox. */
 export default () => {
-    if (checkBoxMultiple.checked) {
+    if (checkboxMultiple.checked) {
         multipleIDs.hidden = false;
         multipleIDButtons.hidden = false;
         customEntry.disabled = true;

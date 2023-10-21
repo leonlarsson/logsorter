@@ -3,9 +3,9 @@ import { editorLeft, editorRight } from "./createCodemirror.js";
 import { scrollText } from "./scrollOperations.js";
 import { Colors } from "./constants.js";
 
-const checkBoxUseNewlines = document.getElementById("checkBoxUseNewlines");
-const checkBoxNoDupes = document.getElementById("checkBoxNoDupes");
-const checkBoxUseVerboseLogs = document.getElementById("checkBoxUseVerboseLogs");
+const checkboxUseNewlines = document.getElementById("checkboxUseNewlines");
+const checkboxNoDupes = document.getElementById("checkboxNoDupes");
+const checkboxUseVerboseLogs = document.getElementById("checkboxUseVerboseLogs");
 const outputStatusText = document.getElementById("outputStatusText");
 const outputStatusTextCol = document.getElementById("outputStatusTextCol");
 const editorRightElement = editorRight.getWrapperElement();
@@ -28,7 +28,7 @@ export default () => {
 
   let idSeparator;
   let idSeparatorText;
-  if (checkBoxUseNewlines.checked) { // If checked, use newlines instead of spaces as the ID separator.
+  if (checkboxUseNewlines.checked) { // If checked, use newlines instead of spaces as the ID separator.
     idSeparator = "\n";
     idSeparatorText = "newlines";
   } else {
@@ -64,7 +64,7 @@ export default () => {
     // NO MATCHES
     if (!allIDs.length && !uniqueIDs.size) { // If no matches, return
 
-      if (checkBoxUseVerboseLogs.checked) { // If checked, use verbose logs. Currently hidden by default
+      if (checkboxUseVerboseLogs.checked) { // If checked, use verbose logs. Currently hidden by default
         if (editorRight.getValue() == "") { // Verbose logging. If textarea is empty, add no newlines at the top
           editorRight.replaceRange(`Generated on ${dateTime} UTC. Found ${allIDs.length.toLocaleString("en")} matches using pattern ${regex} separated with ${idSeparatorText}:\n`, CodeMirror.Pos(editorRight.lastLine()));
         } else { // If it isn't empty, add newlines
@@ -89,12 +89,12 @@ export default () => {
     // MATCHES FOUND
     let lastLine;
     // Append depending on checkbox. If no dupes, append the set.
-    if (checkBoxNoDupes.checked) {
+    if (checkboxNoDupes.checked) {
 
       currentIDs += uniqueIDs.size;
 
       // If checked, use verbose logs. Currently hidden by default
-      if (checkBoxUseVerboseLogs.checked) {
+      if (checkboxUseVerboseLogs.checked) {
         // Verbose logging. If textarea is empty, add no newlines at the top
         if (!editorRight.getValue()) {
           editorRight.replaceRange(`Generated on ${dateTime} UTC. Found ${uniqueIDs.size.toLocaleString("en")} unique matches using pattern ${regex} separated with ${idSeparatorText}:\n`, CodeMirror.Pos(editorRight.lastLine()));
@@ -113,7 +113,7 @@ export default () => {
       currentIDs += allIDs.length;
 
       // If checked, use verbose logs. Currently hidden by default
-      if (checkBoxUseVerboseLogs.checked) {
+      if (checkboxUseVerboseLogs.checked) {
         // Verbose logging. If textarea is empty, add no newlines at the top
         if (!editorRight.getValue()) {
           editorRight.replaceRange(`Generated on ${dateTime} UTC. Found ${allIDs.length.toLocaleString("en")} matches using pattern ${regex} separated with ${idSeparatorText}:\n`, CodeMirror.Pos(editorRight.lastLine()));

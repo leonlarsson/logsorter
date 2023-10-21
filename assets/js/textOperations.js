@@ -2,8 +2,8 @@ import { editorRight } from "./createCodemirror.js";
 import { animateElement } from "./utils.js";
 import { Colors } from "./constants.js";
 
-const checkBoxUseNewlines = document.getElementById("checkBoxUseNewlines");
-const checkBoxUseVerboseLogs = document.getElementById("checkBoxUseVerboseLogs");
+const checkboxUseNewlines = document.getElementById("checkboxUseNewlines");
+const checkboxUseVerboseLogs = document.getElementById("checkboxUseVerboseLogs");
 const removeDupesButton = document.getElementById("removeDupesButton");
 const splitLinesButton = document.getElementById("splitLinesButton");
 const copyOutputButton = document.getElementById("copyOutputButton");
@@ -22,7 +22,7 @@ export function removeDuplicates() {
     let idSeparatorText;
 
     // If checked, use newlines instead of spaces as the ID separator
-    if (checkBoxUseNewlines.checked) {
+    if (checkboxUseNewlines.checked) {
         idSeparator = "\n";
         idSeparatorText = "newlines";
     } else {
@@ -34,7 +34,7 @@ export function removeDuplicates() {
     const today = new Date().toISOString().substring(0, 19);
     const dateTime = today.replace("T", " ");
 
-    if (checkBoxUseVerboseLogs.checked) {
+    if (checkboxUseVerboseLogs.checked) {
         editorRight.setValue(`Generated on ${dateTime} UTC. Duplicates removed, ${uniqueIDs_Const.size.toLocaleString("en")} unique IDs. Separated with ${idSeparatorText}:\n${[...uniqueIDs_Const].join(idSeparator) + idSeparator}`);
     } else {
         editorRight.setValue(`${[...uniqueIDs_Const].join(idSeparator) + idSeparator}`);
@@ -166,7 +166,7 @@ export function convertNewlines() {
 
     const str = editorRight.getValue().replaceAll(/Generated.*:/g, "").replaceAll(/^\s/g, "").replace(/\s+$/g, "").replaceAll(/\s+/g, "\n");
 
-    if (checkBoxUseVerboseLogs.checked) {
+    if (checkboxUseVerboseLogs.checked) {
         editorRight.setValue(`Generated on ${dateTime} UTC. ${currentIDs.toLocaleString("en")} IDs. Separated with newlines:\n${str}\n`);
     } else {
         editorRight.setValue(str + "\n");
@@ -186,7 +186,7 @@ export function convertSpaces() {
 
     const str = editorRight.getValue().replaceAll(/Generated.*:/g, "").replaceAll(/^\s/g, "").replace(/\s+$/g, "").replaceAll(/\s+/g, " ");
 
-    if (checkBoxUseVerboseLogs.checked) {
+    if (checkboxUseVerboseLogs.checked) {
         editorRight.setValue(`Generated on ${dateTime} UTC. ${currentIDs.toLocaleString("en")} IDs. Separated with spaces:\n${str}\n`);
     } else {
         editorRight.setValue(str + "\n");
