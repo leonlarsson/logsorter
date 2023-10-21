@@ -191,24 +191,8 @@ input[type="checkbox"]:checked {
 }
 
 input.lightMode[type="checkbox"] {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-
-  /* Styling checkbox */
-  position: relative;
-  width: 16px;
-  height: 16px;
-
   background-color: #ffffff;
   border: 1px solid #aaaaaa !important;
-
-  /* background-color: #f04747 !important;
-  background: transparent url("../images/unchecked.png");
-  background-size: contain; */
-
-  border-radius: 3px;
-  top: 5px;
 }
 
 input.lightMode[type="checkbox"]:checked {
